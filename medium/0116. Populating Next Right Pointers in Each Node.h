@@ -3,7 +3,7 @@
 // Runtime: 24 ms, faster than 66.66% of C++ online submissions for Populating Next Right Pointers in Each Node.
 // Memory Usage: 19.3 MB, less than 100.00% of C++ online submissions for Populating Next Right Pointers in Each Node.
 
-// oh! it is a perfect binary tree
+// oh! it is a perfect binary tree 
 
 /*
 // Definition for a Node.
