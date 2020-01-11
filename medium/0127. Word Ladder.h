@@ -1,7 +1,57 @@
 // 127. Word Ladder
 
+// Runtime: 24 ms, faster than 99.61% of C++ online submissions for Word Ladder.
+// Memory Usage: 12.8 MB, less than 97.73% of C++ online submissions for Word Ladder.
+
 class Solution {
 public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        if (find(wordList.begin(), wordList.end(), endWord) == wordList.end()) return 0;
+        unordered_set<string> words(wordList.begin(), wordList.end());
+        
+        unordered_set<string> f, b, *pf, *pb;
+        f.insert(beginWord);
+        b.insert(endWord);
+        
+        int wl = beginWord.length();
+        
+        int len = 2;
+        while (!f.empty() && !b.empty()) {
+            if (f.size() <= b.size()) {
+                pf = &f;
+                pb = &b;
+            } else {
+                pf = &b;
+                pb = &f;
+            }
+            
+            unordered_set<string> tmp;
+            for (const string& cur : *pf) {
+                words.erase(cur);
+                
+                for (int i = 0; i < wl; ++i) {
+                    for (char c = 'a'; c <= 'z'; ++c) {
+                        string tf(cur);
+                        tf[i] = c;
+                        
+                        if (!words.count(tf)) continue;
+                        
+                        if (pb->count(tf)) {
+                            return len;
+                        }
+                        
+                        tmp.insert(tf);
+                    }
+                }
+            }
+            
+            pf->swap(tmp);
+            ++len;
+        }
+        
+        return 0;
+    }
+
 	// Time Limit Exceeded
     /*int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         if (find(wordList.begin(), wordList.end(), endWord) == wordList.end()) return 0;
