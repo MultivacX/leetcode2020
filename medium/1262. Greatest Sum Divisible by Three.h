@@ -1,7 +1,41 @@
 // 1262. Greatest Sum Divisible by Three
 
+// Runtime: 48 ms, faster than 90.75% of C++ online submissions for Greatest Sum Divisible by Three.
+// Memory Usage: 11.6 MB, less than 100.00% of C++ online submissions for Greatest Sum Divisible by Three.
+
 class Solution {
 public:
+	int maxSumDivThree(vector<int>& nums) {
+        /*
+        if sum % 3 == 1, sum -= min(A + B, C), when A % 3 == 2, B % 3 == 2, and C % 3 == 1
+        if sum % 3 == 2, sum -= min(A + B, C), when A % 3 == 1, B % 3 == 1, and C % 3 == 2
+        */
+        int sum = 0;
+        int left1 = 0;
+        int left2 = 0;
+        for (int i : nums) {
+            sum += i;
+            if (i % 3 == 1) {
+                if (left1 == 0) {
+                    left1 = i;
+                } else {
+                    left2 = left2 == 0 ? left1 + i : min(left2, left1 + i);
+                    left1 = min(left1, i);
+                }
+            } else if (i % 3 == 2) {
+                if (left2 == 0) {
+                    left2 = i;
+                } else {
+                    left1 = left1 == 0 ? left2 + i :  min(left1, left2 + i);
+                    left2 = min(left2, i);
+                }
+            }
+        }
+        if (sum % 3 == 1) sum -= left1;
+        else if (sum % 3 == 2) sum -= left2;
+        return sum % 3 == 0 ? sum : 0;
+    }
+
 	// ERROR: 36 / 40 test cases passed.
 	// [2,19,6,16,5,10,7,4,11,6]
     /*int maxSumDivThree(vector<int>& nums) {
