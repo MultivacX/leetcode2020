@@ -1,5 +1,10 @@
 // 765. Couples Holding Hands
 
+// int vi = row[i] + ((row[i] & 1) == 0 ? 1 : -1);
+// Runtime: 4 ms, faster than 58.16% of C++ online submissions for Couples Holding Hands.
+// Memory Usage: 8.4 MB, less than 76.92% of C++ online submissions for Couples Holding Hands.
+
+// int vi = row[i] + (row[i] % 2 == 0 ? 1 : -1);
 // Runtime: 8 ms, faster than 9.18% of C++ online submissions for Couples Holding Hands.
 // Memory Usage: 8.4 MB, less than 100.00% of C++ online submissions for Couples Holding Hands.
 
@@ -13,7 +18,7 @@ public:
         
         int ans = 0;
         for (int i = 0; i < n; i += 2) {
-            int vi = row[i] + (row[i] % 2 == 0 ? 1 : -1);
+        	int vi = row[i] + ((row[i] & 1) == 0 ? 1 : -1);
             if (vi == row[i + 1]) 
                 continue;
                         
