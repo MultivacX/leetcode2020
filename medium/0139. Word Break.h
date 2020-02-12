@@ -1,5 +1,27 @@
 // 139. Word Break
 
+// Runtime: 4 ms, faster than 94.25% of C++ online submissions for Word Break.
+// Memory Usage: 10.7 MB, less than 71.70% of C++ online submissions for Word Break.
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        if (s.empty() || wordDict.empty())
+            return false;
+        
+        vector<bool> dp(s.length() + 1, false);
+        dp[0] = true;
+        unordered_set<string> words(wordDict.begin(), wordDict.end());
+        for (int l = 1; l <= s.length(); ++l) {
+            for (int k = l - 1; k >= 0 && !dp[l]; --k) {
+                // cout << l << ", " << k << " = " << s.substr(k, l - k) << endl;
+                dp[l] = dp[k] && words.count(s.substr(k, l - k));
+            }
+        }
+        return dp.back();
+    }
+};
+
 // Time Limit Exceeded
 // 29 / 36 test cases passed.
 /*class Solution {
