@@ -1,10 +1,101 @@
 // 212. Word Search II
 
+// Runtime: 48 ms, faster than 84.93% of C++ online submissions for Word Search II.
+// Memory Usage: 35.9 MB, less than 25.00% of C++ online submissions for Word Search II.
+
+class Trie {
+public:
+    Trie(int i = -1, Trie* p = nullptr) : idx(i), parent(p) {}
+    
+    int idx;
+    Trie* parent;
+    Trie* children[26] = {nullptr};
+    int count = 0;
+    string word;
+    
+    static void buildTrie(const string& s, int idx, Trie* root) {
+        if (s.empty()) 
+            return;
+        if (idx == s.length()) {
+            root->word = s;
+            return;
+        }
+        
+        int i = s[idx] - 'a';
+        if (!root->children[i]) {
+            ++root->count;
+            root->children[i] = new Trie(i, root);   
+        }
+        buildTrie(s, idx + 1, root->children[i]);
+    }
+    
+    static void eraseTrie(Trie* node) {
+        node->word.clear();
+        while (node && node->idx > -1) {
+            auto parent = node->parent;
+            if (node->count == 0) {
+                if (parent) --parent->count;
+            } else {
+                break;
+            }
+            node = parent;
+        }
+    }
+};
+
 class Solution {
 public:
-	// Time Limit Exceeded
-	// 34 / 36 test cases passed.
-    /*int m;
+    int m;
+    int n;
+    Trie* root = new Trie;
+    
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        if (words.empty()) return {};
+        m = board.size();
+        if (m == 0) return {};
+        n = board[0].size();
+        if (n == 0) return {};
+        
+        for (const string& word : words)
+            Trie::buildTrie(word, 0, root);
+        
+        vector<string> ans;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                find(board, i, j, root, ans);
+            }
+        }
+        return ans;
+    }
+    
+    void find(vector<vector<char>>& board, int i, int j, Trie* root, vector<string>& ans) {
+        if (i < 0 || i >= m || j < 0 || j >= n || !root || root->count <= 0 || board[i][j] == '#') return;
+        
+        char c = board[i][j];
+        int idx = c - 'a';
+        auto node = root->children[idx];
+        if (!node) return;
+        if (!node->word.empty()) {
+            ans.push_back(node->word);
+            Trie::eraseTrie(node);
+        }
+
+        board[i][j] = '#';
+        
+        find(board, i - 1, j, node, ans);
+        find(board, i + 1, j, node, ans);
+        find(board, i, j - 1, node, ans);
+        find(board, i, j + 1, node, ans);
+        
+        board[i][j] = c;
+    }
+};
+
+// Time Limit Exceeded
+// 34 / 36 test cases passed.
+/*class Solution {
+public:	
+    int m;
     int n;
     array<unordered_set<int>, 26> a;
     
@@ -58,5 +149,5 @@ public:
         
         visited.erase(rc);
         return false;
-    }*/
-};
+    }
+};*/
