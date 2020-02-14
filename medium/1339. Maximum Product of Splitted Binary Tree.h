@@ -1,5 +1,8 @@
 // 1339. Maximum Product of Splitted Binary Tree
 
+// Runtime: 208 ms, faster than 35.69% of C++ online submissions for Maximum Product of Splitted Binary Tree.
+// Memory Usage: 88.4 MB, less than 100.00% of C++ online submissions for Maximum Product of Splitted Binary Tree.
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -9,16 +12,32 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+class Solution {
+public:
+    unordered_set<int64_t> sums;
+    
+    int maxProduct(TreeNode* root) {
+        int64_t total = sum(root);
+        int64_t ans = 0;
+        for (int64_t s : sums) ans = max(ans, s * (total - s));
+        return ans % 1000000007;
+    }
+    
+    int64_t sum(TreeNode* root) {
+        return !root ? 0 : *sums.insert(sum(root->left) + root->val + sum(root->right)).first;
+    }
+};
+
 /* class Solution {
 public:
     unordered_map<TreeNode*, int64_t> sums;
     int64_t total = 0;
-    int ans = 0;
+    int64_t ans = 0;
     
-    int maxProduct(TreeNode* root) {
+    int64_t maxProduct(TreeNode* root) {
         total = sum(root);
         product(root);
-        return ans;
+        return ans % 1000000007;
     }
     
     int64_t sum(TreeNode* root) {
@@ -36,7 +55,7 @@ public:
     void product(TreeNode* root) {
         if (!root) return;
         
-        int p = (sums[root] % 1000000007) * ((total - sums[root]) % 1000000007) % 1000000007;
+        int64_t p = (sums[root]) * (total - sums[root]);
         ans = max(ans, p);
         product(root->left);
         product(root->right);
