@@ -1,42 +1,47 @@
 // 97. Interleaving String
 
+// Runtime: 4 ms, faster than 79.95% of C++ online submissions for Interleaving String.
+// Memory Usage: 9.1 MB, less than 7.14% of C++ online submissions for Interleaving String.
+
 class Solution {
 public:
-    /*bool isInterleave(string s1, string s2, string s3) {
+    bool isInterleave(string s1, string s2, string s3) {
         const int l1 = s1.length();
         const int l2 = s2.length();
         const int l3 = s3.length();
         if (l1 + l2 != l3) return false;
         
-        // length of interleaved
         vector<vector<int>> dp(l1 + 1, vector<int>(l2 + 1, 0));
-        interleave(s1, s2, s3, dp, 0, 0, 0);
-        return dp.back().back() == l3;
-    }
-    
-    void interleave(const string& s1, 
-                    const string& s2, 
-                    const string& s3,
-                    vector<vector<int>>& dp,
-                    int i1,
-                    int i2,
-                    int i3) {
-        static const int l1 = s1.length();
-        static const int l2 = s2.length();
-        static const int l3 = s3.length();
+        for (int i = 1; i <= l1 && s1[i - 1] == s3[i - 1]; ++i) {
+            dp[i][0] = dp[i - 1][0] + 1;
+        }
+        for (int j = 1; j <= l2 && s2[j - 1] == s3[j - 1]; ++j) {
+            dp[0][j] = dp[0][j - 1] + 1;
+        }
         
-        if (i3 >= l3 || dp.back().back() == l3) return;
-        if (i1 >= l1 || i2 >= l2) return;
-            
-        if (s1[i1] == s3[i3]) {
-            dp[i1 + 1][i2] = dp[i1][i2] + 1;
-            interleave(s1, s2, s3, dp, i1 + 1, i2, i3 + 1);
+        for (int i = 1; i <= l1; ++i) {
+            for (int j = 1; j <= l2; ++j) {
+                // cout << dp[i - 1][j] << ", " << s1[i - 1] << endl;
+                if (s1[i - 1] == s3[dp[i - 1][j]]) {
+                    dp[i][j] = dp[i - 1][j] + 1;
+                } 
+                
+                // cout << dp[i][j - 1] << ", " << s2[j - 1] << endl;
+                if (s2[j - 1] == s3[dp[i][j - 1]]) {
+                    dp[i][j] = max(dp[i][j], dp[i][j - 1] + 1);
+                }
+            }
         }
-        if (s2[i2] == s3[i3]) {
-            dp[i1][i2 + 1] = dp[i1][i2] + 1;
-            interleave(s1, s2, s3, dp, i1, i2 + 1, i3 + 1);
-        }
-    }*/
+        
+        // for (int i = 0; i <= l1; ++i) {
+        //     for (int j = 0; j <= l2; ++j) {
+        //         cout << dp[i][j] << ", ";
+        //     }
+        //     cout << endl;
+        // }
+        
+        return dp[l1][l2] == l3;
+    }
 };
 
 // Time Limit Exceeded
