@@ -1,4 +1,4 @@
-// 207. Course Schedule
+// 207. Course Schedule 
 
 // Runtime: 24 ms, faster than 64.90% of C++ online submissions for Course Schedule.
 // Memory Usage: 14.3 MB, less than 45.45% of C++ online submissions for Course Schedule.
