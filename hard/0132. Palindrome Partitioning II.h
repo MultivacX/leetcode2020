@@ -2,7 +2,7 @@
 
 // Time Limit Exceeded
 // 26 / 29 test cases passed.
-class Solution {
+/*class Solution {
 public:
     int minCut(string s) {
         return cut(s, 0, s.length());
@@ -46,4 +46,38 @@ public:
     
     unordered_map<int, unordered_map<int, bool>> m;
     unordered_map<int, unordered_map<int, int>> c;
-};
+};*/
+/*class Solution {
+public:
+    unordered_map<string, int> m;
+    
+    int minCut(string s) {
+        auto it = m.find(s);
+        if (it != m.end()) 
+            return m[s];
+        
+        if (isPalindrome(s)) {
+            m.insert({s, 0});
+            return 0;
+        }
+        
+        int ans = INT_MAX;
+        for (int l = 1; l < s.length(); ++l) {
+            ans = min(ans, minCut(s.substr(0, l)) + 1 + minCut(s.substr(l)));
+        }
+        m.insert({s, ans});
+        return m[s];
+    }
+    
+    bool isPalindrome(const string& s) {
+        int begin = 0;
+        int end = s.length();
+        while (begin < end) {
+            if (s[begin] != s[end - 1])
+                return false;
+            ++begin;
+            --end;
+        }
+        return true;
+    }
+};*/
