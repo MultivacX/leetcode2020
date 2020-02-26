@@ -1,5 +1,53 @@
 // 407. Trapping Rain Water II
 
+// Runtime: 196 ms, faster than 5.22% of C++ online submissions for Trapping Rain Water II.
+// Memory Usage: 19.3 MB, less than 12.50% of C++ online submissions for Trapping Rain Water II.
+
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        const int m = heightMap.size();
+        if (m <= 2) return 0;
+        const int n = heightMap[0].size();
+        if (n <= 2) return 0;
+        
+        static const vector<vector<int>> directions{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        auto cmp = [&](vector<int>& left, vector<int>& right) { 
+            return heightMap[left[0]][left[1]] > heightMap[right[0]][right[1]]; 
+        };
+        priority_queue<vector<int>, vector<vector<int>>, decltype(cmp)> q(cmp);
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        for (int i = 0; i < m; ++i) {q.push({i, 0}); visited[i][0] = true; }
+        for (int i = 0; i < m; ++i) {q.push({i, n - 1}); visited[i][n - 1] = true; }
+        for (int j = 1; j < n - 1; ++j) {q.push({0, j}); visited[0][j] = true; }
+        for (int j = 1; j < n - 1; ++j) {q.push({m - 1, j}); visited[m - 1][j] = true; }
+        
+        int ans = 0;
+        int height = INT_MIN;
+        while (!q.empty()) {
+            int i = q.top()[0];
+            int j = q.top()[1];
+            q.pop();
+            
+            if (!visited[i][j]) {
+                ans += height > heightMap[i][j] ? height - heightMap[i][j] : 0;
+                visited[i][j] = true;
+            }
+            height = max(height, heightMap[i][j]);
+            
+            for (int d = 0; d < 4; ++d) {
+                int ti = i + directions[d][0];
+                int tj = j + directions[d][1];
+                if (ti < 0 || ti >= m || tj < 0 || tj >= n || visited[ti][tj])
+                        continue;
+                q.push({ti, tj});
+            }
+        }
+        return ans;
+    }
+};
+
 // WRONG
 // 23 / 40 test cases passed.
 /*class Solution {
