@@ -24,4 +24,23 @@ void printSinglyLinkedList(ListNode* head) {
     cout << "null" << endl;
 }
 
+void print(vector<vector<int>>& v) {
+    const int m = v.size();
+    const int n = v[0].size();
+    printf("    ");
+    for (int j = 0; j < n; ++j) {
+        printf("%2d ", j);
+    }
+    printf("\n");
+    for (int i = 0; i < m; ++i) {
+        printf("%2d: ", i);
+        for (int j = 0; j < n; ++j) {
+            printf("%2d,", v[i][j]);
+        }
+        printf("\n");
+    }    
+    printf("\n");
+    printf("\n");
+};
+
 #endif // _lclib_utils_h_
