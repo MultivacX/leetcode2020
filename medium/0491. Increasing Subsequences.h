@@ -35,5 +35,5 @@ public:
     }
 };
 
-// optim: The length of the given array will not exceed 15.
-// use a int mask NOT a set<vector<int>>
+// optim:
+// use int masks NOT a set<vector<int>>

@@ -1,45 +1,68 @@
 // 745. Prefix and Suffix Search
 
-// ["WordFilter","f"]
-// [[["apple"]],["app","ple"]]
-// [null,-1]
+// Runtime: 680 ms, faster than 32.84% of C++ online submissions for Prefix and Suffix Search.
+// Memory Usage: 262.1 MB, less than 33.33% of C++ online submissions for Prefix and Suffix Search.
 
 class Trie {
 public:
-    Trie(char _c = '/0', Trie* p = nullptr, bool e = false) : c(_c), parent(p), end(e) {}
+    Trie(int w = -1) 
+    : children(27, nullptr)
+    , weight(w) {
+        
+    }
     
-    char c;
-    Trie* parent;
-    bool end;
-    Trie* children[26] = {nullptr};
+    vector<Trie*> children;
+    int weight;
 };
 
 class WordFilter {
 public:
     WordFilter(vector<string>& words) {
-        for (int i = 0; i < words.size(); ++i) 
-            add(words[i], 0, &head);
+        for (int i = 0; i < words.size(); ++i) {
+            // cout << words[i] << ":" << endl << "  ";
+            const int n = words[i].length();
+            // ascii : behind z is {
+            for (int l = 0; l <= n; ++l) {
+                string prefix(words[i].substr(0, l));
+                for (int j = 0; j <= n; ++j) {
+                    string suffix(words[i].substr(j));
+                    string word(prefix + "{" + suffix);
+                    // cout << word << ", ";
+                    build(&root, 0, word, i);
+                }
+            }
+            // cout << endl;
+        }
     }
     
     int f(string prefix, string suffix) {
-        return -1;
+        string word(prefix + "{" + suffix);
+        return find(&root, 0, word);
     }
     
-    void add(const string& word, int wi, Trie* node) {
-        if (wi >= word.length()) {
-            node->end = true;
-            tails[node->c - 'a'].insert(node);
+    Trie root;
+    
+    void build(Trie* node, int idx, const string& word, int weight) {
+        const int n = word.length();
+        if (idx >= n) {
+            node->weight = max(node->weight, weight);
             return;
         }
         
-        int i = word[wi] - 'a';
-        if (!node->children[i]) 
-            node->children[i] = new Trie(word[wi], node);
-        add(word, wi + 1, node->children[i]);
+        if (node->children[word[idx] - 'a'] == nullptr)
+            node->children[word[idx] - 'a'] = new Trie();
+        build(node->children[word[idx] - 'a'], idx + 1, word, weight);
     }
     
-    Trie head;
-    unordered_set<Trie*> tails[26];
+    int find(Trie* node, int idx, const string& word) {
+        const int n = word.length();
+        if (idx >= n) 
+            return node->weight;
+        
+        if (node->children[word[idx] - 'a'] == nullptr)
+            return -1;
+        return find(node->children[word[idx] - 'a'], idx + 1, word);
+    }
 };
 
 /**
