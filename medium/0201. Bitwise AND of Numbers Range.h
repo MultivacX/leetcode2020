@@ -1,36 +1,34 @@
 // 201. Bitwise AND of Numbers Range
 
+// Runtime: 24 ms, faster than 19.27% of C++ online submissions for Bitwise AND of Numbers Range.
+// Memory Usage: 7.2 MB, less than 100.00% of C++ online submissions for Bitwise AND of Numbers Range.
+
 class Solution {
 public:
     int rangeBitwiseAnd(int m, int n) {
-        if (m == n) return m;
+        if (m >= n - 1) return m & n;
         
         int ans = 0;
-        int position = 30;
-        while (m > 0 && m < n) {
-            while (position >= 0) {
-                int bit = 1 << position;
-                --position;
-                
-                if ((n & bit) == 0) 
-                    continue;
-                
-                // cout << " " << endl;
-                // cout << "m   : " << bitset<32>(m) << endl;
-                // cout << "n   : " << bitset<32>(n) << endl;
-                // cout << "bit : " << bitset<32>(bit) << endl;
-                
-                int mask = position >= 0 ? (1 << position) - 1 : 0;
-                // cout << "mask: " << bitset<32>(mask) << endl;
-                if ((m & bit) == 0) {
-                    n = 0;
-                    break;
-                } else {
-                    n &= 0;
-                    m &= 0;
-                    ans |= bit;
-                }
+        int y = 0;
+        for (int i = 30; i >= 0; --i) {
+            int bit = 1 << i;
+            if ((m & bit) == 0 || (n & bit) == 0) {
+                if (n & bit)
+                    y |= bit;
+                continue;
             }
+            
+            int x = y | (bit - 1);
+            // cout << "" << endl;
+            // cout << "y: " << bitset<32>(y) << endl;
+            // cout << "   " << bitset<32>(bit - 1) << endl;
+            // cout << "m: " << bitset<32>(m) << endl;
+            // cout << "x: " << bitset<32>(x) << endl;
+            // cout << "n: " << bitset<32>(n) << endl;
+            if (x <= m || x >= n)
+                ans |= bit;
+            
+            y |= bit;
         }
         return ans;
     }
