@@ -9,7 +9,6 @@ public:
         // parent_count[root] = 0;
         // parent_count[non_root] = 1;
         vector<int> parent_count(n, 0);
-        vector<int> children_count(n, 0);
         for (int i = 0; i < n; ++i) {
             if (leftChild[i] != -1) {
                 if (parent_count[leftChild[i]] > 0 || leftChild[i] == i)
