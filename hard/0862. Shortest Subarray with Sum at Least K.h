@@ -16,11 +16,11 @@ public:
             sum += A[i - 1];
             
             while (!q.empty() && sum <= q.back().first) {
-                printf("idx:%d, cur:%d, del:%d,%d\n", i - 1, sum, q.back().first, q.back().second - 1);
+                // printf("idx:%d, cur:%d, del:%d,%d\n", i - 1, sum, q.back().first, q.back().second - 1);
                 q.pop_back();
             }
             while (!q.empty() && sum >= q.front().first + K) {
-                printf("idx:%d, cur:%d, ***:%d,%d\n", i - 1, sum, q.front().first, q.front().second - 1);
+                // printf("idx:%d, cur:%d, ***:%d,%d\n", i - 1, sum, q.front().first, q.front().second - 1);
                 len = min(len, i - q.front().second);
                 q.pop_front();
             }
