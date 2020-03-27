@@ -1,14 +1,14 @@
 // 907. Sum of Subarray Minimums
 
 // ERROR
-/* class Solution {
+class Solution {
 public:
     int sumSubarrayMins(vector<int>& A) {
         const int N = A.size();
         
         vector<int> L(N, 0);
         for (int i = 1; i < N; ++i)
-            L[i] = A[i] <= A[L[i - 1]] ? i : L[i - 1];
+            L[i] = A[i] < A[L[i - 1]] ? i : L[i - 1];
         
         vector<int> R(N, N - 1);
         for (int i = N - 2; i >= 0; --i)
@@ -36,7 +36,7 @@ public:
         }
         return ans;
     }
-}; */
+};
 
 // Time Limit Exceeded
 // 96 / 100 test cases passed.
