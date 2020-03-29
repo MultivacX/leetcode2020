@@ -1,38 +1,39 @@
 // 907. Sum of Subarray Minimums
 
-// ERROR
+// Runtime: 124 ms, faster than 23.77% of C++ online submissions for Sum of Subarray Minimums.
+// Memory Usage: 14 MB, less than 71.43% of C++ online submissions for Sum of Subarray Minimums.
+
 class Solution {
 public:
     int sumSubarrayMins(vector<int>& A) {
         const int N = A.size();
         
+        stack<int> S;
+        S.push(0);
         vector<int> L(N, 0);
-        for (int i = 1; i < N; ++i)
-            L[i] = A[i] < A[L[i - 1]] ? i : L[i - 1];
-        
+        for (int i = 1; i < N; ++i) {
+            while (!S.empty() && A[S.top()] >= A[i])
+                S.pop();
+            L[i] = S.empty() ? 0 : S.top() + 1;
+            S.push(i);
+        }
+            
+        S = stack<int>();
+        S.push(N - 1);
         vector<int> R(N, N - 1);
-        for (int i = N - 2; i >= 0; --i)
-            R[i] = A[i] < A[R[i + 1]] ? i : R[i + 1];
+        for (int i = N - 2; i >= 0; --i) {
+            while (!S.empty() && A[S.top()] > A[i])
+                S.pop();
+            R[i] = S.empty() ? N - 1 : S.top() - 1;
+            S.push(i);
+        }
         
         int ans = 0;
         for (int i = 0; i < N; ++i) {   
-            int l = 0;
-            if (i != L[i]) {
-                if (A[i] == A[L[i]]) l = L[i] + 1;
-                else l = i;
-            }
-
-            int r = N - 1;
-            if (i != R[i]) {
-                if (A[i] == A[R[i]]) r = R[i] - 1;
-                else r = i;
-            }
-
-            int lcnt = i - l + 1;
-            int rcnt = r + 1 - i;
-            ans = (ans + lcnt * rcnt % 1000000007 * A[i] % 1000000007) % 1000000007;
-            printf("L[%d]=%d, R[%d]=%d, \n", i, L[i], i, R[i]);
-            printf("[%d, %d] %d * %d * %d = %d\n\n", l, r, lcnt, rcnt, A[i], lcnt * rcnt * A[i]);
+            int64_t cnt = A[i] * (i - L[i] + 1) * (R[i] - i + 1) % 1000000007;
+            ans = (ans + cnt) % 1000000007;
+            
+            // printf("L[%d]=%d, R[%d]=%d, \n", i, L[i], i, R[i]);
         }
         return ans;
     }
