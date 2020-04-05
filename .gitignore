@@ -32,3 +32,5 @@
 *.app
 debbger/
 .vscode/
+log.py
+log.txt
