@@ -3,23 +3,37 @@
 class Solution {
 public:
     int findNumberOfLIS(vector<int>& nums) {
-        int n = nums.size();
+        const int n = nums.size();
         if (n <= 1) return n;
         
-        int max_len = 1;
-        vector<int> len(n, 1);
-        vector<int> dp{nums[0]};
-        for (int i = 1; i < n; ++i) {
-            auto it = upper_bound(dp.begin(), dp.end(), nums[i]);
-            if (it == dp.end()) {
-                dp.push_back(nums[i]);
-                len[i] = dp.size();
-            } else {
-                *it = nums[i];
-                len[i] = it - dp.begin() + 1;
+        int longest = 0;
+        int ans = 0;
+        // {begin num, {len, cnt}}
+        map<int, pair<int, int>> m;
+        for (int i = n - 1; i >= 0; --i) {
+            auto it = m.upper_bound(nums[i]);
+            int len = 1;
+            int cnt = 1;
+            while (it != m.end()) {
+                if (len < 1 + it->second.first) {
+                    len = 1 + it->second.first;
+                    cnt = it->second.second;
+                } else if (len == 1 + it->second.first) {
+                    cnt += it->second.second;
+                }
+                ++it;
             }
-            max_len = max(max_len, len[i]);
+            m[nums[i]].first = len;
+            m[nums[i]].second = cnt;
+            
+            if (longest < len) {
+                longest = len;
+                ans = cnt;
+            } else if (longest == len) {
+                longest = len;
+                ans += cnt;
+            }
         }
-        return count(len.begin(), len.end(), max_len);
+        return ans;
     }
 };
