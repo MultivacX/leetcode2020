@@ -1,5 +1,24 @@
 // 1008. Construct Binary Search Tree from Preorder Traversal
 
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int i = 0;
+        return construct(preorder, i, (int64_t)INT_MIN - 1, (int64_t)INT_MAX + 1);
+    }
+    
+    TreeNode* construct(const vector<int>& preorder, int& i, int64_t min_val, int64_t max_val) {
+        if (i >= preorder.size()) return nullptr;
+        if ((int64_t)preorder[i] < min_val) return nullptr;
+        if ((int64_t)preorder[i] > max_val) return nullptr;
+        
+        auto root = new TreeNode(preorder[i++]);
+        root->left = construct(preorder, i, min_val, root->val);
+        root->right = construct(preorder, i, root->val, max_val);
+        return root;
+    }
+};
+
 // Runtime: 12 ms, faster than 5.46% of C++ online submissions for Construct Binary Search Tree from Preorder Traversal.
 // Memory Usage: 10.8 MB, less than 95.24% of C++ online submissions for Construct Binary Search Tree from Preorder Traversal.
 
