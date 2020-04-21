@@ -1,5 +1,8 @@
 // 673. Number of Longest Increasing Subsequence
 
+// Runtime: 52 ms, faster than 72.09% of C++ online submissions for Number of Longest Increasing Subsequence.
+// Memory Usage: 7.1 MB, less than 100.00% of C++ online submissions for Number of Longest Increasing Subsequence.
+
 class Solution {
 public:
     int findNumberOfLIS(vector<int>& nums) {
@@ -8,31 +11,22 @@ public:
         
         int longest = 0;
         int ans = 0;
-        // {begin num, {len, cnt}}
-        map<int, pair<int, int>> m;
-        for (int i = n - 1; i >= 0; --i) {
-            auto it = m.upper_bound(nums[i]);
-            int len = 1;
-            int cnt = 1;
-            while (it != m.end()) {
-                if (len < 1 + it->second.first) {
-                    len = 1 + it->second.first;
-                    cnt = it->second.second;
-                } else if (len == 1 + it->second.first) {
-                    cnt += it->second.second;
+        vector<pair<int, int>> v(n, {0, 0});
+        for (int i = 0; i < n; ++i) {
+            int len = 0;
+            int cnt = 0;
+            for (int j = 0; j < i; ++j) {
+                if (nums[i] > nums[j]) {
+                    if (len == v[j].first) cnt += v[j].second;
+                    else if (len < v[j].first) len = v[j].first, cnt = v[j].second;   
                 }
-                ++it;
             }
-            m[nums[i]].first = len;
-            m[nums[i]].second = cnt;
-            
-            if (longest < len) {
-                longest = len;
-                ans = cnt;
-            } else if (longest == len) {
-                longest = len;
-                ans += cnt;
-            }
+            v[i].first = ++len;
+            v[i].second = cnt == 0 ? 1 : cnt;
+            longest = max(longest, len);
+        }
+        for (int i = 0; i < n; ++i) {
+            if (v[i].first == longest) ans += v[i].second;
         }
         return ans;
     }
