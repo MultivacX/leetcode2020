@@ -1,8 +1,44 @@
 // 519. Random Flip Matrix
 
+// Runtime: 24 ms, faster than 73.19% of C++ online submissions for Random Flip Matrix.
+// Memory Usage: 10.1 MB, less than 100.00% of C++ online submissions for Random Flip Matrix.
+
+class Solution {
+public:
+    Solution(int n_rows, int n_cols) 
+    : ROWS(n_rows)
+    , COLS(n_cols) {
+        
+    }
+    
+    vector<int> flip() {
+        const int N = ROWS * COLS;
+        if (fliped.size() == N) return {};
+        int r = rand() % (N - fliped.size());
+        while (fliped.count(r)) r = (++r) % N;
+        fliped.insert(r);
+        return {r / COLS, r % COLS};
+    }
+    
+    void reset() {
+        fliped = {};
+    }
+    
+    const int ROWS;
+    const int COLS;
+    unordered_set<int> fliped;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(n_rows, n_cols);
+ * vector<int> param_1 = obj->flip();
+ * obj->reset();
+ */
+
 // Wrong Answer
 // 12 / 19 test cases passed.
-class Solution {
+/*class Solution {
 public:
     Solution(int n_rows, int n_cols) 
     : ROWS(n_rows)
@@ -64,7 +100,7 @@ public:
     // [start, end)
     vector<pair<int, int>> intervals;
     vector<int> weights;
-};
+};*/
 
 /**
  * Your Solution object will be instantiated and called as such:
