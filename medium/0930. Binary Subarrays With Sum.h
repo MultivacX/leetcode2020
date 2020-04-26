@@ -3,6 +3,9 @@
 // Runtime: 20 ms, faster than 98.20% of C++ online submissions for Binary Subarrays With Sum.
 // Memory Usage: 8.9 MB, less than 100.00% of C++ online submissions for Binary Subarrays With Sum.
 
+// Time Complexity: O(N), where N is the length of A.
+// Space Complexity: O(1).
+
 class Solution {
 public:
     int numSubarraysWithSum(vector<int>& A, int S) {
