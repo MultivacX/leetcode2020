@@ -3,7 +3,7 @@
 // Runtime: 668 ms, faster than 15.30% of C++ online submissions for K Closest Points to Origin.
 // Memory Usage: 46.2 MB, less than 51.56% of C++ online submissions for K Closest Points to Origin.
 
-// Time Complexity: O(N + K*lgK).
+// Time Complexity: O(N*lgK).
 // Space Complexity: O(K).
 
 class Solution {
