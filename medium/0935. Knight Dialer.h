@@ -3,6 +3,11 @@
 // Runtime: 656 ms, faster than 10.57% of C++ online submissions for Knight Dialer.
 // Memory Usage: 43.5 MB, less than 14.29% of C++ online submissions for Knight Dialer.
 
+// Time Complexity: O(N).
+// (N - 1) * 20 + 10
+// Space Complexity: O(1).
+// 20 + 10 + 10
+
 class Solution {
 public:
     int knightDialer(int N) {
