@@ -3,7 +3,7 @@
 // Runtime: 28 ms, faster than 7.93% of C++ online submissions for Largest Number.
 // Memory Usage: 11.2 MB, less than 9.09% of C++ online submissions for Largest Number.
 
-// Time Complexity: O(N*lgN). N is size of nums
+// Time Complexity: O(N*lgN). N is size of nums.
 // Space Complexity: O(N).
 
 class Solution {
