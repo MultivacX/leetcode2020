@@ -43,3 +43,26 @@ public:
         ans = max(ans, v);
     }
 };
+
+// Runtime: 36 ms, faster than 33.76% of C++ online submissions for Binary Tree Maximum Path Sum.
+// Memory Usage: 28.8 MB, less than 6.06% of C++ online submissions for Binary Tree Maximum Path Sum.
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        if (!root) return 0;
+        ans = INT_MIN;
+        sum(root);
+        return ans;
+    }
+    
+    int ans;
+    int sum(TreeNode* root) {
+        if (!root) return 0;
+        int l = sum(root->left);
+        int r = sum(root->right);
+        int x = root->val + max(0, max(l, r));
+        // cout << l << ", " << x << ", " << r << endl;
+        ans = max(max(ans, x), root->val + l + r);
+        return x;
+    }
+};
