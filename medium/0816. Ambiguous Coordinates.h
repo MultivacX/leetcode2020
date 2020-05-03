@@ -3,8 +3,8 @@
 // Runtime: 28 ms, faster than 26.67% of C++ online submissions for Ambiguous Coordinates.
 // Memory Usage: 9.8 MB, less than 100.00% of C++ online submissions for Ambiguous Coordinates.
 
-// Time Complexity: O(S.length() * S.length()).
-// Space Complexity: O(S.length()).
+// Time Complexity: O(S.length() * S.length() * S.length()).
+// Space Complexity: O(S.length() * S.length() * S.length()).
 
 class Solution {
 public:
