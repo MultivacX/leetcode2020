@@ -3,8 +3,8 @@
 // Runtime: 4 ms, faster than 62.20% of C++ online submissions for Reorganize String.
 // Memory Usage: 6.6 MB, less than 100.00% of C++ online submissions for Reorganize String.
 
-// Time Complexity: O(S.length()).
-// Space Complexity: O(S.length()).
+// Time Complexity: O(26 * S.length() + 26 * lg26).
+// Space Complexity: O(26 + S.length()).
 
 class Solution {
 public:
