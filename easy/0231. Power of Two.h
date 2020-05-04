@@ -3,9 +3,6 @@
 // Runtime: 4 ms, faster than 34.67% of C++ online submissions for Power of Two.
 // Memory Usage: 5.9 MB, less than 100.00% of C++ online submissions for Power of Two.
 
-// Time Complexity: O(1).
-// Space Complexity: O(1).
-
 class Solution {
 public:
     bool isPowerOfTwo(int n) {        
@@ -20,6 +17,9 @@ public:
         return false;
     }
 };
+
+// Time Complexity: O(1).
+// Space Complexity: O(1).
 
 class Solution {
 public:
