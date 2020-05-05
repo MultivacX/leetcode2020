@@ -1,38 +1,36 @@
 // 29. Divide Two Integers
 
-// WRONG
-/*class Solution {
+// Runtime: 4 ms, faster than 64.70% of C++ online submissions for Divide Two Integers.
+// Memory Usage: 6 MB, less than 100.00% of C++ online submissions for Divide Two Integers.
+
+class Solution {
 public:
     int divide(int dividend, int divisor) {
-        if (dividend == 0) return 0;
-        
-        bool positive = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
+        // -INT_MIN = INT_MAX + 1
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;
         
         int64_t dd = abs((int64_t)dividend);
         int64_t dr = abs((int64_t)divisor);
         
+        bool positive = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0);
         return (positive ? 1 : -1) * f(dd, dr);
     }
     
-    int f(int64_t dividend, int64_t divisor) {
+    int64_t f(int64_t dividend, int64_t divisor) {
         if (dividend < divisor) return 0;
-        if (dividend == divisor) return 1;
-        if (divisor == 1) return dividend;
         
-        // dividend > divisor
-        int i = 1;
-        while (dividend > (divisor << i)) ++i;
-        
-        // divisor * 2^(i - 1) < dividend <= divisor * 2^i
-        int64_t l = divisor << (i - 1);
-        int64_t m = l + divisor;
-        int64_t r = divisor << i;
-        
-        cout << l << ", " << m << ", " << r << endl;
-        
-        if (dividend < m) return 1 << (i - 1);
-        if (dividend == m) return (1 << (i - 1)) + 1;
-        if (dividend < r) return (1 << i) - 1;
-        return 1 << i;
+        int64_t ans = 0;
+        while (dividend >= divisor) {
+            int64_t m = divisor;
+            int64_t i = 1;
+            while (dividend >= m) {
+                ans += i;
+                
+                dividend -= m;
+                m <<= 1;
+                i <<= 1;
+            }
+        }
+        return ans;
     }
-};*/
+};
