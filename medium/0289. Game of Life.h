@@ -1,59 +1,50 @@
 // 289. Game of Life
 
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Game of Life.
+// Memory Usage: 7 MB, less than 100.00% of C++ online submissions for Game of Life.
+
 // Time Complexity: O(M * N).
 // Space Complexity: O(1).
 
 class Solution {
 public:
-    enum {
-        dead = 0,
-        live = 1,
-        under_population = -1, // live + 0/1 -> dead
-        next_generation  =  2, // live + 2/3 -> live
-        over_population  = -4, // live +  4+ -> dead
-        reproduction     =  3, // dead +   3 -> live  
-    };
-    
     void gameOfLife(vector<vector<int>>& board) {
-        static const vector<vector<int>> directions{
-            {-1, -1}, {-1, 0}, {-1, 1},  
-            { 0, -1},          { 0, 1},
-            { 1, -1}, { 1, 0}, { 1, 1},
-        };
-        
-        static const int M = board.size();
-        if (M == 0) return;
-        static const int N = board[0].size();
-        if (N == 0) return;
-        
-        // update
-        for (int i = 0; i < M; ++i) {
-            for (int j = 0; j < N; ++j) {
-                int live_neighbors = 0;
-                for (const auto& d : directions) {
-                    int i_ = i + d[0];
-                    int j_ = j + d[1];
-                    if (i_ < 0 || i_ >= M || j_ < 0 || j_ >= N) continue;
-                    if (board[i_][j_] == dead || board[i_][j_] == reproduction) continue;
-                    ++live_neighbors;
-                }
-                
-                if (board[i][j]) {
-                    if (live_neighbors <= 1) board[i][j] = under_population;
-                    else if (live_neighbors == 2 || live_neighbors == 3) board[i][j] = next_generation;
-                    else if (live_neighbors >= 4) board[i][j] = over_population;
-                } else if (live_neighbors == 3) {
-                    board[i][j] = reproduction;
-                }
-            }    
-        }
-        
-        for (int i = 0; i < M; ++i) {
-            for (int j = 0; j < N; ++j) {
-                board[i][j] = board[i][j] > 0 ? 1 : 0;
-                cout << board[i][j] << " ";
-            }
-            cout << endl;
-        }
+    	static const int under_population =  2; // 1 -> 0
+    	static const int over_population  =  3; // 1 -> 0
+    	static const int becomes_live     = -1; // 0 -> 1
+
+    	int m = board.size();
+    	if (m == 0) return;
+    	int n = board.front().size();
+    	if (n == 0) return;
+    	for (int i = 0; i < m; ++i) {
+    		for (int j = 0; j < n; ++j) {
+    			int live_neighbors = 0;
+    			if (i > 0     && j > 0     && board[i - 1][j - 1] > 0) ++live_neighbors;
+    			if (i > 0                  && board[i - 1][j    ] > 0) ++live_neighbors;
+    			if (i > 0     && j < n - 1 && board[i - 1][j + 1] > 0) ++live_neighbors;
+
+    			if (             j > 0     && board[i    ][j - 1] > 0) ++live_neighbors;
+    			if (             j < n - 1 && board[i    ][j + 1] > 0) ++live_neighbors;
+
+    			if (i < m - 1 && j > 0     && board[i + 1][j - 1] > 0) ++live_neighbors;
+    			if (i < m - 1              && board[i + 1][j    ] > 0) ++live_neighbors;
+    			if (i < m - 1 && j < n - 1 && board[i + 1][j + 1] > 0) ++live_neighbors;
+
+    			if (board[i][j] <= 0 && live_neighbors == 3) {
+    				board[i][j] = becomes_live;
+    			} else if (board[i][j] > 0) {
+    				if (live_neighbors < 2) board[i][j] = under_population;
+    				else if (live_neighbors > 3) board[i][j] = over_population;
+    			}
+    		}
+    	}
+
+    	for (int i = 0; i < m; ++i) {
+    		for (int j = 0; j < n; ++j) {
+    			if (board[i][j] == becomes_live) board[i][j] = 1;
+    			else if (board[i][j] == under_population || board[i][j] == over_population) board[i][j] = 0;
+    		}
+    	}
     }
 };
