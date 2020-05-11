@@ -3,7 +3,7 @@
 // Runtime: 8 ms, faster than 51.31% of C++ online submissions for Find in Mountain Array.
 // Memory Usage: 7 MB, less than 100.00% of C++ online submissions for Find in Mountain Array.
 
-// Time Complexity: O(n * lg(n)).
+// Time Complexity: O(lg(n)).
 // Space Complexity: O(1).
 
 /**
