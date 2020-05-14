@@ -3,6 +3,9 @@
 // Runtime: 4 ms, faster than 98.02% of C++ online submissions for Palindromic Substrings.
 // Memory Usage: 6.4 MB, less than 100.00% of C++ online submissions for Palindromic Substrings.
 
+// Time Complexity: O(N * N).
+// Space Complexity: O(1).
+
 class Solution {
 public:
     int countSubstrings(string s) {
