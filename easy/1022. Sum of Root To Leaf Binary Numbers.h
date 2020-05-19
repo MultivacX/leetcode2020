@@ -1,5 +1,8 @@
 // 1022. Sum of Root To Leaf Binary Numbers
 
+// Runtime: 12 ms, faster than 29.71% of C++ online submissions for Sum of Root To Leaf Binary Numbers.
+// Memory Usage: 16.8 MB, less than 100.00% of C++ online submissions for Sum of Root To Leaf Binary Numbers.
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
