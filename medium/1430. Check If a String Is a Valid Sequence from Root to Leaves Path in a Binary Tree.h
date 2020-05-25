@@ -1,7 +1,4 @@
-// the 30-Day LeetCoding Challenge for the month of April
-// April 30th, 2020
-
-// Check If a String Is a Valid Sequence from Root to Leaves Path in a Binary Tree
+// 1430. Check If a String Is a Valid Sequence from Root to Leaves Path in a Binary Tree
 
 // Runtime: 92 ms
 // Memory Usage: 48.9 MB
