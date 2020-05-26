@@ -30,7 +30,7 @@ class Solution {
 
         for (int i = 1; i <= N - length; ++i) {
             hash = (hash - V[i - 1] * P[length - 1] % M + M) % M;
-            hash = (hash * BASE + V[i + length - 1]) % M;
+            hash = (hash * BASE % M + V[i + length - 1]) % M;
             
             // hash = 0;
             // for (int j = 0; j < length; ++j)
