@@ -1,8 +1,64 @@
 // 719. Find K-th Smallest Pair Distance
 
+// Runtime: 88 ms, faster than 16.75% of C++ online submissions for Find K-th Smallest Pair Distance.
+// Memory Usage: 10.2 MB, less than 8.33% of C++ online submissions for Find K-th Smallest Pair Distance.
+
+class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {
+        const int N = nums.size();
+        sort(begin(nums), end(nums));
+        int lo = 0;
+        int hi = nums[N - 1] - nums[0];
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            
+            int cnt = 0;
+            int val = 0;
+            for (int i = 0; i < N - 1; ++i) {
+                auto it = upper_bound(begin(nums) + i + 1, end(nums), nums[i] + mid);
+                int j = it - begin(nums) - 1;
+                val = max(val, nums[j] - nums[i]);
+                cnt += j - i;
+            }
+            
+            if (cnt == k) return val;
+            if (cnt < k) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        return lo;
+    }
+};
+
+// Time Limit Exceeded
+// 18 / 19 test cases passed.
+/*class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {
+        const int N = nums.size();
+        sort(begin(nums), end(nums));
+        int lo = 0;
+        int hi = nums[N - 1] - nums[0];
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            
+            int cnt = 0;
+            int val = 0;
+            for (int i = 0; i < N; ++i) 
+                for (int j = i - 1; j >= 0 && nums[i] - nums[j] <= mid; --j) 
+                    ++cnt, val = max(val, nums[i] - nums[j]);
+            
+            if (cnt == k) return val;
+            if (cnt < k) lo = mid + 1;
+            else hi = mid - 1;
+        }
+        return lo;
+    }
+};*/
+
 // Time Limit Exceeded
 // 12 / 19 test cases passed.
-class Solution {
+/*class Solution {
 public:
     int smallestDistancePair(vector<int>& nums, int k) {
         const int N = nums.size();
@@ -30,4 +86,4 @@ public:
         }
         return max_distance;
     }
-};
+};*/
