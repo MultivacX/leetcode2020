@@ -1,29 +1,28 @@
 // 665. Non-decreasing Array
+// https://leetcode.com/problems/non-decreasing-array/submissions/
+
+// Runtime: 48 ms, faster than 65.63% of C++ online submissions for Non-decreasing Array.
+// Memory Usage: 26.9 MB, less than 5.00% of C++ online submissions for Non-decreasing Array.
 
 class Solution {
 public:
     bool checkPossibility(vector<int>& nums) {
         const int N = nums.size();
-        int minv = INT_MIN;
-        int maxv = INT_MAX;
-        for (int i = 0, cnt = 0; i < N; ++i) {
-            int& a = i == 0 ? minv : nums[i - 1];
-            int& b = nums[i];
-            int& c = i == N - 1 ? maxv : nums[i + 1];
-            if (a <= b && b <= c) continue;
+        int idx = -1;
+        // nums[i] <= nums[i + 1] 
+        for (int i = 0; i + 1 < N; ++i) {
+            if (nums[i] <= nums[i + 1]) continue;
+            if (idx >= 0) return false;
             
-            if (a > b) {
-                if (b > c) return false;
-                // nums[i-2] <= a > b <= c
-                ++cnt;
-            } else if (a > c) {
-                
-            } else if (b > c) {
-                
+            if (i == 0) {
+                idx = 0;
+            } else if (i == N - 2) {
+                idx = N - 1;    
+            } else {
+                idx = i;
             }
-            
-            if (cnt > 1) return false;
         }
-        return true;
+        // cout << idx << endl;
+        return idx < 0 || idx == 0 || idx == N - 1 || nums[idx - 1] <= nums[idx + 1] || nums[idx] <= nums[idx + 2];
     }
 };
