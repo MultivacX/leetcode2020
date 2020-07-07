@@ -13,18 +13,7 @@
  * };
  */
 class Solution {
-public:
-    // TODO: iteratively
-    /*vector<int> postorderTraversal(TreeNode* root) {
-        if (!root) return {};
-        stack<TreeNode*> s;
-        s.push(root);
-        auto curr = root;
-        while (!s.empty() || curr) {
-            
-        }
-    }*/
-    
+public:    
     vector<int> postorderTraversal(TreeNode* root) {
         if (!root) return {};
         vector<int> ans;
@@ -39,3 +28,25 @@ public:
         ans.push_back(root->val);
     }
 };
+
+// Runtime: 4 ms, faster than 44.47% of C++ online submissions for Binary Tree Postorder Traversal.
+// Memory Usage: 8.4 MB, less than 78.38% of C++ online submissions for Binary Tree Postorder Traversal.
+// iteratively
+/*class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        if (!root) return {};
+        vector<int> ans;
+        stack<TreeNode*> s;
+        s.push(root);
+        while (!s.empty()) {
+            auto cur = s.top();
+            s.pop();
+            ans.push_back(cur->val);
+            if (cur->left) s.push(cur->left);
+            if (cur->right) s.push(cur->right);
+        }
+        reverse(begin(ans), end(ans));
+        return ans;
+    }
+};*/

@@ -24,7 +24,22 @@ public:
 */
 class Solution {
 public:
-	// TODO: iteratively
+	// iteratively
+    /*vector<int> postorder(Node* root) {
+        vector<int> ans;
+        if (!root) return ans;
+        stack<Node*> s;
+        s.push(root);
+        while (!s.empty()) {
+            auto cur = s.top();
+            s.pop();
+            ans.push_back(cur->val);
+            for (auto* c : cur->children)
+                s.push(c);
+        }
+        reverse(begin(ans), end(ans));
+        return ans;
+    }*/
 
     vector<int> postorder(Node* root) {
         vector<int> ans;
