@@ -4,7 +4,7 @@
 // Runtime: 112 ms, faster than 77.78% of C++ online submissions for Subarray Sums Divisible by K.
 // Memory Usage: 30.3 MB, less than 73.24% of C++ online submissions for Subarray Sums Divisible by K.
 
-// Time Complexity: O(N)O, where N is the length of A.
+// Time Complexity: O(N), where N is the length of A.
 // Space Complexity: O(K).
 
 class Solution {
