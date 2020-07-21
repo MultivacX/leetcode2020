@@ -1,80 +1,57 @@
 // 421. Maximum XOR of Two Numbers in an Array
+// https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/submissions/
+
+// Runtime: 204 ms, faster than 28.77% of C++ online submissions for Maximum XOR of Two Numbers in an Array.
+// Memory Usage: 43.8 MB, less than 22.97% of C++ online submissions for Maximum XOR of Two Numbers in an Array.
 
 class Solution {
-    struct Node {
-        Node(int v = -1) : val(v), zero(nullptr), one(nullptr) {}  
-        int val;
-        Node* zero;
-        Node* one;
+    class Trie {
+    public:
+        vector<Trie*> nodes{nullptr, nullptr};
     };
     
-    void build(int num, int i, Node* node) {
-        if (i < 0) {
-            node->val = num;
-            return;
-        }
-        if (num & (1 << i)) {
-            if (!node->one) node->one = new Node();
-            build(num, i - 1, node->one);
+    Trie root;
+    
+    void build(Trie* node, int num, int position) {
+        if (position < 0) return;
+        if (num & (1 << position)) {
+            if (!node->nodes[1]) node->nodes[1] = new Trie;
+            build(node->nodes[1], num, position - 1);
         } else {
-            if (!node->zero) node->zero = new Node();
-            build(num, i - 1, node->zero);
+            if (!node->nodes[0]) node->nodes[0] = new Trie;
+            build(node->nodes[0], num, position - 1);
         }
     }
     
-    Node root;
-    
-    void print() {
-        deque<Node*> nodes;
-        nodes.push_back(&root);
-        while (!nodes.empty()) {
-            int size = nodes.size();
-            while (size--) {
-                auto node = nodes.front();
-                nodes.pop_front();
-                if (node->zero) nodes.push_back(node->zero);
-                if (node->one) nodes.push_back(node->one);
-                
-                cout << (node && node->zero ? "0" : "?") << (node && node->one ? "1" : "?") << " ";
+    void find(Trie* node, int num, int position, int& val) {
+        if (position < 0) return;
+        if (num & (1 << position)) {
+            if (node->nodes[0]) {
+                val |= 1 << position;
+                find(node->nodes[0], num, position - 1, val);
+            } else {
+                find(node->nodes[1], num, position - 1, val);
             }
-            cout << endl;
+        } else {
+            if (node->nodes[1]) {
+                val |= 1 << position;
+                find(node->nodes[1], num, position - 1, val);
+            } else {
+                find(node->nodes[0], num, position - 1, val);
+            }
         }
     }
     
 public:
     int findMaximumXOR(vector<int>& nums) {
-        // for (int num : nums) cout << bitset<32>(num) << "  " << num <<endl;
-        for (int num : nums) build(num, 30, &root);
-        // print();
-        
-        Node* node = &root;
-        while (node) {
-            if (node->zero && node->one) break;
-            node = node->zero ? node->zero : node->one;
+        for (int num : nums)
+            build(&root, num, 31);
+        int ans = 0;
+        for (int num : nums) {
+            int val = 0;
+            find(&root, num, 31, val);
+            ans = max(ans, val);
         }
-        if (!node) return 0;
-        return get_xor(node->zero, node->one);
-    }
-    
-    int get_xor(Node* zero, Node* one) {
-        if (zero->val >= 0 && one->val >= 0) return zero->val ^ one->val;
-        
-        auto L0 = zero->zero;
-        auto L1 = zero->one;
-        
-        auto R0 = one->zero;
-        auto R1 = one->one;
-        
-        if (!L1) {
-            if (R1) return get_xor(L0, R1);
-            else return get_xor(L0, R0);
-        }
-        
-        if (!L0) {
-            if (R0) return get_xor(L1, R0);
-            else return get_xor(L1, R1);
-        }
-        
-        return max(get_xor(L0, R1), get_xor(L1, R0));
+        return ans;
     }
 };
