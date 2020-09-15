@@ -31,15 +31,15 @@ public:
 
         reverse(begin(right), end(right));
 
-        for (int v : left) cout << v << ", ";
-        cout << "     ";
-        for (int v : right) cout << v << ", ";
-        cout << endl;
+        // for (int v : left) cout << v << ", ";
+        // cout << "     ";
+        // for (int v : right) cout << v << ", ";
+        // cout << endl;
 
         // 3. arr[0, i]...arr[j, N) & 0 <= i < j < N & i + 1 <= j - 1 & remove subarray arr[i+1, j-1]
         for (int i = 0; i < left.size(); ++i) {
             int l = left[i];
-            auto it = lower_bound(begin(right), end(right), l);
+            auto it = lower_bound(begin(right), end(right), l); // optim: use stack
             if (it == end(right)) break;
             int j = it - begin(right) + (N - right.size());
             ans = min(ans, j - i - 1);
