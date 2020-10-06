@@ -1,83 +1,50 @@
 // 731. My Calendar II
+// https://leetcode.com/problems/my-calendar-ii/
 
+// Wrong Answer
+// 89 / 98 test cases passed.
 class MyCalendarTwo {
-public:
-
-    /* WRONG
-    // start, end, count
-    map<int, pair<int, int>> events;
+    map<int, int> one;
+    map<int, int> two;
     
+    map<int, int>::iterator findOverlap(map<int, int>& events, int start, int end) {
+        if (events.empty()) return events.end();
+        
+        auto it = events.lower_bound(end);
+        if (it == events.begin()) return events.end();
+        
+        --it;
+        int cur_start = it->first;
+        int cur_end = it->second;
+        if (cur_end <= start) return events.end();
+        return it;
+    }
+    
+public:
     MyCalendarTwo() {
         
     }
     
     bool book(int start, int end) {
-        auto it = lower_bound(events.begin(), events.end(), start);
+        auto it2 = findOverlap(two, start, end);
+        if (it2 != two.end()) return false;
         
-        if (it == events.end()) {
-            // empty
-            if (it == events.begin()) {
-                events.insert({start, {end, 1}});
-                return true;
-            } 
+        auto it1 = findOverlap(one, start, end);
+        while (it1 != one.end()) {
+            int cur_start = it1->first;
+            int cur_end = it1->second;
             
-            --it;
-            int preS = it->first;
-            int preE = it->second.first;
-            int cnt = it->second.second;
-            
-            if (preE <= start) {
-                events.insert({start, {end, 1}});
-                return true;
-            } else if (cnt > 1) {
-                return false;
-            } 
-            
-            events.erase(it);
-            events.insert({preS, {start, 1}});
-            events.insert({start, {min(preE, end), 2}});
-            if (preE != end) {
-                events.insert({min(preE, end), {max(preE, end), 1}});
+            int s = max(cur_start, start);
+            int e = min(cur_end, end);
+            if (s < e) {
+                two.emplace(s, e);
             }
-            return true;
+
+            if (it1 == one.begin()) break;
+            --it1;
         }
-        
-        if (it == events.begin()) {
-            int nextS = it->first;
-            int nextE = it->second.first;
-            int cnt = it->second.second;
-            
-            if (end <= nextS) {
-                events.insert({start, {end, 1}});
-                return true;
-            } else if (cnt > 1) {
-                return false;
-            } 
-            
-            events.erase(it);
-            if (start == nextS) {
-                events.insert({start, {min(nextE, end), 2}});
-                if (end != nextE) {
-                    events.insert({min(nextE, end), {max(nextE, end), 1}});
-                }
-                return true;
-            }
-            
-            events.insert({start, {nextS, 1}});
-            events.insert({nextS, {min(nextE, end), 2}});
-            if (end != nextE) {
-                events.insert({min(nextE, end), {max(nextE, end), 1}});
-            }
-            return true;
-        }
-        
-        // pre_s < start <= next_s
-        // end > start
-    }*/
+        one.emplace(start, end);
+        return true;
+    }
 };
 
-/**
- * Your MyCalendarTwo object will be instantiated and called as such:
- * MyCalendarTwo* obj = new MyCalendarTwo();
- * bool param_1 = obj->book(start,end);
- */
