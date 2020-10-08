@@ -1,61 +1,89 @@
 // 391. Perfect Rectangle
+// https://leetcode.com/problems/perfect-rectangle
 
-// WRONG
-class Solution {    
+// Runtime: 244 ms, faster than 79.56% of C++ online submissions for Perfect Rectangle.
+// Memory Usage: 36.9 MB, less than 13.35% of C++ online submissions for Perfect Rectangle.
+
+class Solution {
     unordered_map<string, int> m;
     
-    bool count(vector<int>& rect) {
+    bool count(const vector<int>& rect) {
         string x0(to_string(rect[0]) + ",");
         string y0(to_string(rect[1]));
         string x1(to_string(rect[2]) + ",");
         string y1(to_string(rect[3]));
         
-        if (++m[x0+y0] > 4) return false;
-        if (++m[x0+y1] > 4) return false;
-        if (++m[x1+y0] > 4) return false;
-        if (++m[x1+y1] > 4) return false;
+        if (m[x0 + y0] & 0b0001) return false;
+        if (m[x0 + y1] & 0b0010) return false;
+        if (m[x1 + y0] & 0b0100) return false;
+        if (m[x1 + y1] & 0b1000) return false;
+
+        m[x0 + y0] |= 0b0001;
+        m[x0 + y1] |= 0b0010;
+        m[x1 + y0] |= 0b0100;
+        m[x1 + y1] |= 0b1000;
+
         return true;
     }
-    
-    bool count_corners(int x0_, int y0_, int x1_, int y1_) {
-        string x0(to_string(x0_) + ",");
-        string y0(to_string(y0_));
-        string x1(to_string(x1_) + ",");
-        string y1(to_string(y1_));
+
+    bool count4Coners(int minX, int minY, int maxX, int maxY) {
+        string x0(to_string(minX) + ",");
+        string y0(to_string(minY));
+        string x1(to_string(maxX) + ",");
+        string y1(to_string(maxY));
         
-        if (m[x0+y0] != 1) return false;
-        if (m[x0+y1] != 1) return false;
-        if (m[x1+y0] != 1) return false;
-        if (m[x1+y1] != 1) return false;
-        m.erase(x0+y0);
-        m.erase(x0+y1);
-        m.erase(x1+y0);
-        m.erase(x1+y1);
+        if (m[x0 + y0] != 0b0001) return false;
+        if (m[x0 + y1] != 0b0010) return false;
+        if (m[x1 + y0] != 0b0100) return false;
+        if (m[x1 + y1] != 0b1000) return false;
+
+        m.erase(x0 + y0);
+        m.erase(x0 + y1);
+        m.erase(x1 + y0);
+        m.erase(x1 + y1);
+
         return true;
     }
     
 public:
     bool isRectangleCover(vector<vector<int>>& rectangles) {
-        int i = 0;
-        int area = (rectangles[i][2] - rectangles[i][0]) * (rectangles[i][3] - rectangles[i][1]);
-        int x0 = rectangles[i][0];
-        int y0 = rectangles[i][1];
-        int x1 = rectangles[i][2];
-        int y1 = rectangles[i][3];
-        
-        for (i = 1; i < rectangles.size(); ++i) {
-            area += (rectangles[i][2] - rectangles[i][0]) * (rectangles[i][3] - rectangles[i][1]);
-            x0 = min(x0, rectangles[i][0]);
-            y0 = min(y0, rectangles[i][1]);
-            x1 = max(x1, rectangles[i][2]);
-            y1 = max(y1, rectangles[i][3]);
+        int64_t areaSum = 0;
+        int minX = INT_MAX;
+        int maxX = INT_MIN;
+        int minY = INT_MAX;
+        int maxY = INT_MIN;
+        for (const auto& rect : rectangles) {
+            if (!count(rect)) return false;
+
+            int x0 = rect[0];
+            int y0 = rect[1];
+            int x1 = rect[2];
+            int y1 = rect[3];
             
-            if (!count(rectangles[i])) return false;
+            minX = min(minX, x0);
+            maxX = max(maxX, x1);
+            minY = min(minY, y0);
+            maxY = max(maxY, y1);
+
+            areaSum += (int64_t)(x1 - x0) * (int64_t)(y1 - y0);
         }
-        
-        if (area != (x1 - x0) * (y1 - y0)) return false;
-        if (!count_corners(x0, y0, x1, y1)) return false;
-        for (auto& it : m) if (it.second != 4) return false;
+        int64_t area = (int64_t)(maxX - minX) * (int64_t)(maxY - minY);
+        if (area != areaSum || !count4Coners(minX, minY, maxX, maxY)) return false;
+
+        for (auto it : m) {
+            int val = it.second;
+            
+            if (val == 0b0001) return false;
+            if (val == 0b0010) return false;
+            if (val == 0b0100) return false;
+            if (val == 0b1000) return false;
+
+            if (val == 0b0111) return false;
+            if (val == 0b1011) return false;
+            if (val == 0b1101) return false;
+            if (val == 0b1110) return false;
+        }
+
         return true;
     }
 };
