@@ -33,3 +33,31 @@ public:
         return ans;
     }
 };
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        const int N = nums.size();
+        if (N <= 2) return max(nums.front(), nums.back());
+        
+        int ans = 0;
+        
+        vector<int> dp(N, 0);
+        for (int i = 0; i < N - 1; ++i) {
+            if (i == 0) dp[i] = nums[i];
+            else if (i == 1) dp[i] = max(nums[i], dp[i - 1]);
+            else dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
+            ans = max(ans, dp[i]);
+        }
+        
+        fill(dp.begin(), dp.end(), 0);
+        for (int i = 1; i < N; ++i) {
+            if (i == 1) dp[i] = nums[i];
+            else if (i == 2) dp[i] = max(nums[i], dp[i - 1]);
+            else dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
+            ans = max(ans, dp[i]);
+        }
+        
+        return ans;
+    }
+};
