@@ -1,4 +1,5 @@
 // 664. Strange Printer
+// https://leetcode.com/problems/strange-printer/
 
 // Runtime: 244 ms, faster than 13.05% of C++ online submissions for Strange Printer.
 // Memory Usage: 9 MB, less than 5.48% of C++ online submissions for Strange Printer.
