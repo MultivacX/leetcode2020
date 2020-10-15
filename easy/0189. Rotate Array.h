@@ -29,3 +29,15 @@ public:
         // for (int i : nums) cout << i << " "; cout << endl;
     }
 };
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        const int N = nums.size();
+        k %= N;
+        if (k == 0) return;
+        reverse(begin(nums), begin(nums) + N - k);
+        reverse(begin(nums) + N - k, end(nums));
+        reverse(begin(nums), end(nums));
+    }
+};

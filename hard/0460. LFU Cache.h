@@ -1,91 +1,85 @@
 // 460. LFU Cache
+// https://leetcode.com/problems/lfu-cache/
 
-struct KeyNode {
-    int key;
-    KeyNode *prev, *next;
-    
-    KeyNode(int k) : key(k), prev(nullptr), next(nullptr) {}
-};
-
-struct FrqNode {
-    int frq;
-    KeyNode head, tail; 
-    FrqNode *prev, *next;
-    
-    FrqNode(int f) : frq(f), head(-1), tail(-1), prev(nullptr), next(nullptr) {}
-
-    
-};
+// Runtime: 156 ms, faster than 92.88% of C++ online submissions for LFU Cache.
+// Memory Usage: 43.4 MB, less than 6.27% of C++ online submissions for LFU Cache.
 
 class LFUCache {
-public:
-    /*void print() {
-        auto li = head;
-        while (li) {
-            cout << li->frq << ": ";
-            auto kv = li->head;
-            while (kv) {
-                printf("(%d,%d,%d) ", kv->key, kv->val, kv->frq);
-                kv = kv->next;
-            }
-            cout << endl;
-            li = li->next;
+    int _capacity;
+    int _minfrq;
+    
+    // {frq, {kvs}}
+    unordered_map<int, list<pair<int, int>>> _frqs;
+    
+    // {key, it2kv}
+    unordered_map<int, list<pair<int, int>>::iterator> _datas;
+    // {key, frq}
+    unordered_map<int, int> _data2frq;
+    
+    int update(int key, int* newVal = nullptr) {
+        auto it2kv = _datas[key];
+        int val = newVal ? *newVal : it2kv->second;
+        int frq = _data2frq[key];
+        
+        // add 2 new list
+        _frqs[frq + 1].emplace_back(key, val);
+        _datas[key] = _frqs[frq + 1].end();
+        --_datas[key];
+        _data2frq[key] = frq + 1;
+        
+        // erase from old list
+        _frqs[frq].erase(it2kv);
+        if (_frqs[frq].empty()) {
+            _frqs.erase(frq);
+            if (_minfrq == frq) 
+                ++_minfrq;
         }
-    }*/
-
-    /* struct Data {
-        Data(int k, int v) : key(k), val(v) {}
-
-        int key{-1};
-        int val{-1};
-        int frq{0};
-
-        list<int>* pList{nullptr};
-        int* pKey{nullptr};
-    };
+        
+        return val;
+    }
     
-    unordered_map<int, Data> key2data;
-    unordered_map<int, list<int>*> frq2list;
-
-    list<list<int>> l; */
-
-    int cap;
+    void tryEvict() {
+        if (_datas.size() != _capacity) return;
+        
+        auto it2kv = _frqs[_minfrq].begin();
+        int key = it2kv->first;
+        int val = it2kv->second;
+        
+        _datas.erase(key);
+        _data2frq.erase(key);
+        _frqs[_minfrq].pop_front();
+        if (_frqs[_minfrq].empty())
+            _frqs.erase(_minfrq);
+    }
     
-    LFUCache(int capacity) : cap(capacity) {
+public:
+    LFUCache(int capacity)
+    : _capacity(capacity)
+    , _minfrq(0) {
         
     }
     
     int get(int key) {
-        /* Data* pData = visit(key);
-        return pData ? pData->val : -1; */
-        return -1;
+        if (_capacity <= 0 || _datas.count(key) == 0) return -1;
+        return update(key);
     }
     
     void put(int key, int value) {
-        /* Data* pData = visit(key);
-        if (pData) {
-            pData->val = value;
-        } else {
-            key2data.insert({key, Data(key, value)});
-            pData = &key2data[key];
-        } */
+        if (_capacity <= 0) return;
+        
+        if (_datas.count(key)) {
+            update(key, &value);
+            return;
+        }
+        
+        tryEvict();
+        
+        _minfrq = 1;
+        _frqs[_minfrq].emplace_back(key, value);
+        _datas[key] = _frqs[_minfrq].end();
+        --_datas[key];
+        _data2frq[key] = _minfrq;
     }
-
-    /* Data* visit(int key) {
-        if (!key2data.count(key)) return nullptr;
-
-        auto& data = key2data[key];
-
-        data.pList->remove(*data.pKey);
-        if (data.pList->empty()) l.remove(*data.pList);
-        data.pList = nullptr;
-        data.pKey = nullptr;
-
-        ++data.frq;
-        data.pList = 
-
-        return &data;
-    } */
 };
 
 /**
