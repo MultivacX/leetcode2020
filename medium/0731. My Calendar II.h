@@ -1,6 +1,37 @@
 // 731. My Calendar II
 // https://leetcode.com/problems/my-calendar-ii/
 
+// Runtime: 232 ms, faster than 76.51% of C++ online submissions for My Calendar II.
+// Memory Usage: 34.2 MB, less than 5.24% of C++ online submissions for My Calendar II.
+
+class MyCalendarTwo {
+    vector<array<int, 2>> events;
+    vector<array<int, 2>> overlaps;
+    
+public:
+    MyCalendarTwo() {
+        
+    }
+    
+    bool book(int start, int end) {
+        for (auto& e : overlaps) {
+            int s_ = max(e[0], start);
+            int e_ = min(e[1], end);
+            if (s_ < e_) return false;
+        }
+        
+        for (auto& e : events) {
+            int s_ = max(e[0], start);
+            int e_ = min(e[1], end);
+            if (s_ < e_) overlaps.push_back(array<int, 2>{s_, e_});
+        }
+        
+        events.push_back(array<int, 2>{start, end});
+        
+        return true;
+    }
+};
+
 // Wrong Answer
 // 89 / 98 test cases passed.
 class MyCalendarTwo {
