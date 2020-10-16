@@ -1,6 +1,37 @@
 // 1504. Count Submatrices With All Ones
 // https://leetcode.com/problems/count-submatrices-with-all-ones/
 
+// Runtime: 52 ms, faster than 98.90% of C++ online submissions for Count Submatrices With All Ones.
+// Memory Usage: 13.7 MB, less than 7.33% of C++ online submissions for Count Submatrices With All Ones.
+
+class Solution {
+public:
+    int numSubmat(vector<vector<int>>& mat) {
+        const int M = mat.size();
+        const int N = mat[0].size();
+        
+        int ans = 0;
+        vector<int> heights(N, 0);
+        for (int i = 0; i < M; ++i) {
+            for (int j = 0, width = 0; j < N; ++j) {
+                if (mat[i][j] == 0) {
+                    heights[j] = 0;
+                    width = 0;
+                } else {
+                    // count submatrices: mat[i][j] as right bottom, curW as width, curH as max height
+                    ++width;
+                    ++heights[j];
+                    for (int k = j, curW = 1, curH = heights[j]; k > j - width; --k, ++curW) {
+                        curH = min(curH, heights[k]);
+                        ans += curH;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
 // Wrong Answer
 // 24 / 72 test cases passed.
 class Solution {
