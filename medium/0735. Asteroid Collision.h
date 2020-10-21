@@ -18,3 +18,37 @@ public:
         return ans;
     }
 };
+
+// Runtime: 24 ms
+// Memory Usage: 17.6 MB
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        vector<int> ans;
+        for (int i : asteroids) {
+            if (ans.empty() || ans.back() < 0 || i > 0) 
+                ans.push_back(i);
+            else {
+                int j = (int)ans.size() - 1;
+                while (j >= 0) {
+                    if (ans[j] + i == 0) {
+                        ans.pop_back();
+                        break;
+                    }
+                    
+                    if (ans[j] + i > 0) break;
+                    
+                    if (ans[j] < 0) {
+                        ans.push_back(i);
+                        break;
+                    }
+                    
+                    ans.pop_back();
+                    --j;
+                }
+                if (j < 0) ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
