@@ -1,16 +1,19 @@
 // 780. Reaching Points
+// https://leetcode.com/problems/reaching-points/
+
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Reaching Points.
+// Memory Usage: 6.3 MB, less than 100.00% of C++ online submissions for Reaching Points.
 
 class Solution {
 public:
     bool reachingPoints(int sx, int sy, int tx, int ty) {
-        // tx - sx = A * sx + B * sy    A >= 0, B >= 0   
-        // ty - sy = C * sx + D * sy    C >= 0, D >= 0
-        
-        if (sx > tx || sy > ty) return false;
-        if (sx == tx && sy == ty) return true;
-        if (sx == tx) return ty / sx * sx + sy == ty;
-        if (sy == ty) return tx / sy * sy + sx == tx;
-        
-        return reachingPoints(sx + sy, sy, tx, ty) || reachingPoints(sx, sx + sy, tx, ty);
+        while (sx < tx && sy < ty) {
+            if (tx > ty) tx %= ty;
+            else ty %= tx;
+        }
+        // sx == tx and k * sx + sy == ty, k >= 0
+        // sy == ty and k * sy + sx == tx, k >= 0
+        return (sx == tx && sy <= ty && (ty - sy) % sx == 0) ||
+               (sy == ty && sx <= tx && (tx - sx) % sy == 0);
     }
 };
