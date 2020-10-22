@@ -33,3 +33,27 @@ public:
         return d;
     }
 };
+
+// Runtime: 336 ms
+// Memory Usage: 144.4 MB
+class Solution {
+    int ans = INT_MAX;
+    
+    void minDepth(TreeNode* root, int d) {
+        if (!root) return;
+        ++d;
+        if (ans < d) return;
+        if (!root->left && !root->right) {
+            ans = min(ans, d);
+            return;
+        }
+        minDepth(root->left, d);
+        minDepth(root->right, d);
+    }
+    
+public:
+    int minDepth(TreeNode* root) {
+        minDepth(root, 0);
+        return ans == INT_MAX ? 0 : ans;
+    }
+};
