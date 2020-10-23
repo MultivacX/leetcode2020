@@ -28,3 +28,30 @@ public:
         return false;
     }
 };
+
+// Runtime: 44 ms
+// Memory Usage: 14 MB
+class Solution {
+public:
+    bool find132pattern(vector<int>& nums) {
+        const int N = nums.size();
+        if (N <= 2) return false;
+        
+        map<int, int> m;
+        for (int k = 2; k < N; ++k) ++m[nums[k]];
+        
+        for (int i = 0, j = 1; j < N - 1; ++j) {
+            if (j >= 2 && --m[nums[j]] == 0) 
+                m.erase(nums[j]); 
+            
+            if (nums[i] < nums[j]) {
+                auto it = m.upper_bound(nums[i]);
+                if (it != m.end() && it->first < nums[j]) 
+                    return true;
+            } else {
+                i = j;
+            }
+        }
+        return false;
+    }
+};
