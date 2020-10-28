@@ -1,42 +1,42 @@
 // 1631. Path With Minimum Effort
 // https://leetcode.com/problems/path-with-minimum-effort/
 
-// 8 / 74 test cases passed.
-// Status: Time Limit Exceeded
-class Solution {
-    int M;
-    int N;
-    int ans = 1000000;
-    
-    void travel(vector<vector<int>>& heights, int i, int j, int pre_h, int max_e) {
-        if (i < 0 || i >= M || j < 0 || j >= N || heights[i][j] == 0) return;
-        
-        int effort = abs(heights[i][j] - pre_h);
-        if (effort >= ans) return;
+// Runtime: 680 ms, faster than 39.92% of C++ online submissions for Path With Minimum Effort.
+// Memory Usage: 25.1 MB, less than 5.01% of C++ online submissions for Path With Minimum Effort.
 
-        max_e = max(max_e, effort);
-        // printf("[%d][%d] : %d %d\n", i, j, effort, max_e);
-        if (i == M - 1 && j == N - 1) {
-            ans = min(ans, max_e);
-            return;
-        }
-        
-        pre_h = heights[i][j];
-        heights[i][j] = 0;
-        
-        travel(heights, i, j + 1, pre_h, max_e);
-        travel(heights, i + 1, j, pre_h, max_e);
-        travel(heights, i, j - 1, pre_h, max_e);
-        travel(heights, i - 1, j, pre_h, max_e);
-        
-        heights[i][j] = pre_h;
-    }
-    
+class Solution { 
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
-        M = heights.size();
-        N = heights[0].size();
-        travel(heights, 0, 0, heights[0][0], 0);
-        return ans;
+        const int M = heights.size();
+        const int N = heights[0].size();
+        
+        vector<vector<int>> efforts(M, vector<int>(N, INT_MAX));
+        
+        auto cmp = [](array<int, 3>& left, array<int, 3>& right) { return left[2] > right[2]; };
+        priority_queue<array<int, 3>, vector<array<int, 3>>, decltype(cmp)> q(cmp);
+        q.push({0, 0, 0});        
+        
+        while (!q.empty()) {
+            int i = q.top()[0];
+            int j = q.top()[1];
+            int e = q.top()[2];
+            q.pop();
+            // cout << i << ", " << j << ": " << e << endl;
+            if (i == M - 1 && j == N - 1) return e;
+            
+            if (efforts[i][j] <= e) continue; 
+            efforts[i][j] = e;
+            
+            static const int D[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+            for (int k = 0; k < 4; ++k) {
+                int ii = i + D[k][0];
+                int jj = j + D[k][1];
+                if ((ii == 0 && jj == 0) || ii < 0 || ii >= M || jj < 0 || jj >= N) continue;
+                int curE = max(e, abs(heights[ii][jj] - heights[i][j]));
+                // cout << "  " << ii << ", " << jj << ": " << curE << endl;
+                q.push({ii, jj, curE});
+            }
+        }
+        return 0;
     }
 };
