@@ -1,7 +1,28 @@
 // 1039. Minimum Score Triangulation of Polygon
 // https://leetcode.com/problems/minimum-score-triangulation-of-polygon/
 
+// Runtime: 12 ms, faster than 38.55% of C++ online submissions for Minimum Score Triangulation of Polygon.
+// Memory Usage: 9 MB, less than 8.57% of C++ online submissions for Minimum Score Triangulation of Polygon.
 
+class Solution {
+    int getScore(vector<int>& A, vector<vector<int>>& dp, int start, int end) {
+        if (start + 1 >= end) return 0;
+        if (dp[start][end] > 0) return dp[start][end];
+        
+        int score = INT_MAX;
+        for (int k = start + 1; k < end; ++k)
+            score = min(score, getScore(A, dp, start, k) + getScore(A, dp, k, end) + A[start] * A[k] * A[end]);
+        dp[start][end] = score;
+        return score;
+    }
+    
+public:
+    int minScoreTriangulation(vector<int>& A) {
+        const int N = A.size();
+        vector<vector<int>> dp(N, vector<int>(N, 0));
+        return getScore(A, dp, 0, N - 1);
+    }
+};
 
 // Time Limit Exceeded
 class Solution {
