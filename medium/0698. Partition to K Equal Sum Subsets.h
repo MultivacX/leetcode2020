@@ -27,13 +27,43 @@ public:
         if (sum % k) return false;
         if (sum == 0) return true;
         
-        sort(nums.begin(), nums.end());
+        sort(nums.rbegin(), nums.rend());
         vector<bool> visited(nums.size(), false);
         return partition(nums, k, sum / k, 0, 0, visited);
     }
 };
 
 /*class Solution {    
+    bool partition(vector<int>& nums, int k, int target, int curSum, int start, vector<bool>& visited) {
+        if (k == 1) return true;
+        if (target < curSum) return false;
+        
+        // start to find a new 1 subset
+        if (target == curSum) return partition(nums, k - 1, target, 0, 0, visited);
+        
+        for (int i = start; i < nums.size(); ++i) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            if (partition(nums, k, target, curSum + nums[i], i + 1, visited))
+                return true;
+            visited[i] = false;
+        }
+        return false;
+    }
+    
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int sum = accumulate(begin(nums), end(nums), 0);
+        if (sum % k) return false;
+        if (sum == 0) return true;
+        
+        sort(nums.begin(), nums.end());
+        vector<bool> visited(nums.size(), false);
+        return partition(nums, k, sum / k, 0, 0, visited);
+    }
+};
+
+class Solution {    
     bool test(vector<int>& nums, int targetSum, int currentSum, int k, int& used) {
         if (targetSum == currentSum) {
             if (--k == 0) return true;

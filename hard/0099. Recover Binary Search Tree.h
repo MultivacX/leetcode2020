@@ -33,3 +33,37 @@ public:
         inorder(root->right, nodes);
     }
 };
+
+// 1918 / 1918 test cases passed.
+// Status: Accepted
+// Runtime: 36 ms
+// Memory Usage: 58.8 MB
+class Solution {
+    vector<TreeNode*> nodes;
+    vector<int> vals;
+    
+    TreeNode* pre = nullptr;
+    
+    void inorder(TreeNode* root) {
+        if (!root) return;
+        
+        inorder(root->left);
+        if (pre && pre->val > root->val) {
+            nodes.push_back(pre);
+            nodes.push_back(root);
+            vals.push_back(pre->val);
+            vals.push_back(root->val);
+        }
+        pre = root;
+        inorder(root->right);
+    }
+    
+public:
+    void recoverTree(TreeNode* root) {
+        inorder(root);
+        // nodes.size() = [2, 4]
+        sort(begin(vals), end(vals));
+        for (int i = 0; i < nodes.size(); ++i) 
+            nodes[i]->val = vals[i];
+    }
+};
