@@ -22,11 +22,11 @@ public:
         // ..XX
         vector<int64_t> rects4(N + 1, 0);
         
-        // ..O
-        // ..OO
+        // ..O          ..X           
+        // ..OO         ..OO          
         vector<int64_t> L1(N + 1, 0); L1[2] = 1;
-        // ..OO
-        // ..O
+        // ..OO         ..OO
+        // ..O          ..X
         vector<int64_t> L2(N + 1, 0); L2[2] = 1;
         
         for (int i = 3; i <= N; ++i) {
