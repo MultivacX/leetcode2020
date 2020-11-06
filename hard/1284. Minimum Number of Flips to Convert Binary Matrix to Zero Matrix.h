@@ -1,8 +1,8 @@
 // 1284. Minimum Number of Flips to Convert Binary Matrix to Zero Matrix
 // https://leetcode.com/problems/minimum-number-of-flips-to-convert-binary-matrix-to-zero-matrix/
 
-// Runtime: 416 ms, faster than 5.23% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.
-// Memory Usage: 16.1 MB, less than 5.85% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.
+// Runtime: 140 ms, faster than 6.46% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.
+// Memory Usage: 11.3 MB, less than 5.85% of C++ online submissions for Minimum Number of Flips to Convert Binary Matrix to Zero Matrix.
 
 class Solution {
     unordered_map<int, int> pathes;
@@ -32,9 +32,9 @@ class Solution {
     }
     
     void find(int steps) {
+        if (ans <= steps) return;
         if (num == 0) {
-            if (ans > steps)
-                ans = steps;
+            ans = steps;
             return;
         }
 
