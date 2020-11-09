@@ -1,35 +1,45 @@
 // 805. Split Array With Same Average
 // https://leetcode.com/problems/split-array-with-same-average/
 
-class Solution {
-    unordered_map<int, bool> memo;
-    // sum, len
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Split Array With Same Average.
+// Memory Usage: 8.5 MB, less than 5.06% of C++ online submissions for Split Array With Same Average.
+
+class Solution {    
+    int N;
+    int sum;
+    
+    bool split(vector<int>& A, int sumB, int cntB, int i) {
+        if (sumB * N == sum * cntB) return true;
         
-    bool split(vector<int>& A, int sumA, int sumB, int cntB, int i, int used) {
-        const int cntA = A.size();
-        // cout << sumB << "/" << cntB << "=" << sumB/(double)cntB << endl;
-        bool found = cntB != cntA && sumB * cntA == sumA * cntB;
-        if (i >= cntA) return found;
-        if (found) return true;
-        if (memo.count(used)) return memo[used];
+        if (i >= N || cntB + 1 >= N) return false;
         
-        memo[used] = split(A, sumA, sumB + A[i], cntB + 1, i + 1, used | (1 << (i - 1))) || 
-                     split(A, sumA, sumB,        cntB,     i + 1, used);
-        return memo[used];
+        if ((sumB + A[i]) / (cntB + 1) > sum / N) return false;
+        
+        if (split(A, sumB + A[i], cntB + 1, i + 1)) return true;
+        
+        // skip val == A[i]
+        int j = i + 1;
+        while (j < N && A[i] == A[j]) ++j;
+        return split(A, sumB, cntB, j);
     }
     
 public:
     bool splitArraySameAverage(vector<int>& A) {
-        // sumA = sumB + sumC
-        // cntA = cntB + cntC
-        //   
-        //   sumB        / cntB       <> sumC        / cntC
-        //   (sumB + Ai) / (cntB + 1) <> (sumC - Ai) / (cntC - 1)
-        //   (sumB + Ai) * (cntC - 1) <> (sumC - Ai) * (cntB + 1)
-        //   
-        //   sumB        * cntA <> sumA * cntB
-        //   (sumB + Ai) * cntA <> sumA * (cntB + 1)
+        // sum = sumB + sumC
+        // N = cntB + cntC
+        // sumB / cntB <> sumC / cntC
+        // sumB * N <> sum * cntB
         
-        return split(A, accumulate(begin(A), end(A), 0), A[0], 1, 1, 1);
+        N = A.size();
+        sum = accumulate(begin(A), end(A), 0);
+        
+        // sumB = sum * cntB / N
+        bool isPossible = false;
+        for (int cntB = 1; cntB < N - 1 && !isPossible; ++cntB)
+            isPossible = sum * cntB % N == 0;
+        if (!isPossible) return false;
+        
+        sort(begin(A), end(A));
+        return split(A, A[0], 1, 1);
     }
 };
