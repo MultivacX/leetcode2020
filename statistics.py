@@ -116,5 +116,5 @@ with open(os.path.join(SCRIPT_PATH, 'problems.html'), 'r') as fi:
         print('    Todo Locked:   ' + str(len(ps.TodoLocked)))
         print('    Todo Unlocked: ' + str(len(ps.TodoUnlocked)))
         for p in ps.TodoUnlocked:
-            print('    # ' + str(p.No) + '.' + str(p.Title))
+            print('    # ' + str(p.No) + '. ' + str(p.Title))
         pass
