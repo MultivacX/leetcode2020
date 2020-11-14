@@ -1,24 +1,23 @@
 // 354. Russian Doll Envelopes
 
+// Runtime: 1876 ms, faster than 5.15% of C++ online submissions for Russian Doll Envelopes.
+// Memory Usage: 16.7 MB, less than 47.70% of C++ online submissions for Russian Doll Envelopes.
+    
 class Solution {
 public:
-    /*int maxEnvelopes(vector<vector<int>>& envelopes) {
-        // 1. sort by w
-        // sort(envelopes.begin(), envelopes.end(), [](const vector<int>& a, const vector<int>& b){ return a[0] < b[0] || (a[0] == b[0] && a[1] < b[1]); });
-        set<vector<int>> s(envelopes.begin(), envelopes.end());
-        // for (const auto& k : s) cout << k[0] << ", " << k[1] << endl;
-        // 2. count envelope[i] as last envelope
-        vector<vector<int>> cnt;
-        for (const auto& k : s) {
-            auto it = lower_bound(cnt.begin(), cnt.end(), k, [](const vector<int>& a, const vector<int>& b){ 
-                return a[0] < b[0]; 
-            });
-            if (it == cnt.end()) {
-                cnt.push_back(k);
-            } else if ((*it)[0] == k[0] && (*it)[1] > k[1]) {
-                (*it)[1] = k[1];
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        sort(rbegin(envelopes), rend(envelopes));
+        const int N = envelopes.size();
+        int ans = 0;
+        vector<int> dp(N, 0);
+        for (int i = N - 1; i >= 0; --i) {
+            dp[i] = 1;
+            for (int j = i + 1; j < N; ++j) {
+                if (envelopes[i][0] > envelopes[j][0] && envelopes[i][1] > envelopes[j][1])
+                    dp[i] = max(dp[i], 1 + dp[j]);
             }
+            ans = max(ans, dp[i]);
         }
-        return cnt.size();
-    }*/
+        return ans;
+    }
 };
