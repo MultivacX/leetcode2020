@@ -5,17 +5,20 @@ class Solution {
 public:
     int maxProfit(vector<int>& inventory, int orders) {
         int64_t N = inventory.size();
+        // {cnt, colors}
         map<int, int> m;
         int64_t K = 0;
-        for (int i : inventory) ++m[i], k += i;
+        for (int i : inventory) ++m[i], K += i;
         
         int64_t v = 0;
         while (orders > 0) {
             // [1, r] [r+1, i]
             int64_t r = ceil((double)(K - orders) / N);
+
             N = 0;
             map<int, int> tmp;
             K = 0;
+            
             for (auto it = m.rbegin(); it != m.rend(); ++it) {
                 if (it->first < r) break;
                 if (it->first == r) {
