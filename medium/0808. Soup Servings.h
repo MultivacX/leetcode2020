@@ -1,6 +1,9 @@
 // 808. Soup Servings
 // https://leetcode.com/problems/soup-servings/
 
+// Runtime: 12 ms, faster than 47.27% of C++ online submissions for Soup Servings.
+// Memory Usage: 10.4 MB, less than 38.18% of C++ online submissions for Soup Servings.
+
 class Solution {
     unordered_map<int, unordered_map<int, double>> memo;
     
@@ -11,10 +14,10 @@ class Solution {
         if (memo.count(A) && memo[A].count(B)) return memo[A][B];
         
         double ans = 0.25 * (
-            serve(A - 100, B) + 
-            serve(A - 75, B - 25) +
-            serve(A - 50, B - 50) +
-            serve(A - 25, B - 75)
+            serve(A - 4, B) + 
+            serve(A - 3, B - 1) +
+            serve(A - 2, B - 2) +
+            serve(A - 1, B - 3)
         );
         memo[A][B] = ans;
         return memo[A][B];
@@ -22,6 +25,8 @@ class Solution {
     
 public:
     double soupServings(int N) {
-        return serve(N, N);
+        if (N >= 5000) return 1;
+        int n = N / 25 + (N % 25 ? 1 : 0);
+        return serve(n, n);
     }
 };
