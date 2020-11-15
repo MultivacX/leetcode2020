@@ -1,19 +1,23 @@
 # -*- coding: UTF-8 -*-
 
-import os, sys
+import os, sys, shutil
 
 SCRIPT_PATH = os.path.split(os.path.realpath(__file__))[0]
 
-problems = ['easy', 'medium', 'hard']
+problem_files = {}
 result = {}
 all = 0
-for p in problems:
+for p in ['easy', 'medium', 'hard']:
+    problem_files[p] = []
     result[p] = []
     todo = []
     for root, dirs, files in os.walk(os.path.join(SCRIPT_PATH, p)):
         for f in files:
             if f.find('.h') > 0 or f.find('.py') > 0 :
-                with open(os.path.join(root, f), 'r') as fi:
+                fn, fe = os.path.splitext(f)
+                fp = os.path.join(root, f)
+                problem_files[p].append([fn.lstrip('0'), fp])
+                with open(fp, 'r') as fi:
                     content = fi.read()
                     if content.find('Runtime: ') > 0:
                         result[p].append(f)
@@ -115,6 +119,17 @@ with open(os.path.join(SCRIPT_PATH, 'problems.html'), 'r') as fi:
         print('    Attempted:     ' + str(len(ps.Attempted)))
         print('    Todo Locked:   ' + str(len(ps.TodoLocked)))
         print('    Todo Unlocked: ' + str(len(ps.TodoUnlocked)))
-        for p in ps.TodoUnlocked:
-            print('    # ' + str(p.No) + '. ' + str(p.Title))
-        pass
+        # for p in ps.TodoUnlocked:
+        #     print('    # ' + str(p.No) + '. ' + str(p.Title))
+        # pass
+
+        all = []
+        for p in ps.All:
+            all.append(str(p.No) + '. ' + str(p.Title))
+        cur_d = ps.Difficulty.lower()
+        for d, pfs in problem_files.items():
+            for pf in pfs:
+                if pf[0] in all and pf[1].find(cur_d + '/') < 0:
+                    dst = pf[1].replace(d + '/', cur_d + '/')
+                    print(pf, dst)
+                    shutil.move(pf[1], dst)
