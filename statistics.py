@@ -112,6 +112,7 @@ with open(os.path.join(SCRIPT_PATH, 'problems.html'), 'r') as fi:
     parser = MyHTMLParser()
     parser.init()
     parser.feed(fi.read())
+    todo = {}
     for _, ps in parser.problemStatistics.items():
         print(ps.Difficulty + ': ')
         print('    All:           ' + str(len(ps.All)))
@@ -119,17 +120,31 @@ with open(os.path.join(SCRIPT_PATH, 'problems.html'), 'r') as fi:
         print('    Attempted:     ' + str(len(ps.Attempted)))
         print('    Todo Locked:   ' + str(len(ps.TodoLocked)))
         print('    Todo Unlocked: ' + str(len(ps.TodoUnlocked)))
-        # for p in ps.TodoUnlocked:
-        #     print('    # ' + str(p.No) + '. ' + str(p.Title))
-        # pass
+        
+        cur_d = ps.Difficulty.lower()
 
         all = []
         for p in ps.All:
             all.append(str(p.No) + '. ' + str(p.Title))
-        cur_d = ps.Difficulty.lower()
         for d, pfs in problem_files.items():
             for pf in pfs:
                 if pf[0] in all and pf[1].find(cur_d + '/') < 0:
                     dst = pf[1].replace(d + '/', cur_d + '/')
                     print(pf, dst)
                     shutil.move(pf[1], dst)
+
+        zeros = ['000', '00', '0', '']
+        todo[cur_d] = []
+        for p in ps.Attempted:
+            todo[cur_d].append(zeros[len(str(p.No)) - 1] + str(p.No) + '. ' + str(p.Title))
+        for p in ps.TodoUnlocked:
+            todo[cur_d].append(zeros[len(str(p.No)) - 1] + str(p.No) + '. ' + str(p.Title))
+        todo[cur_d].sort()
+
+    print('')
+    for d in ['easy', 'medium', 'hard']:
+        print(d + ' ' + str(len(todo[d])))
+        for p in todo[d]:
+            print('    ' + p)
+        print('')
+        
