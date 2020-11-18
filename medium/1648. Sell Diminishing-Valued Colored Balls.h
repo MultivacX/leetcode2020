@@ -4,32 +4,35 @@
 class Solution {
 public:
     int maxProfit(vector<int>& inventory, int orders) {
-        int64_t N = inventory.size();
+        int64_t TotalColors = inventory.size();
         // {cnt, colors}
-        map<int, int> m;
-        int64_t K = 0;
-        for (int i : inventory) ++m[i], K += i;
+        map<int64_t, int64_t> m;
+        int64_t TotalBalls = 0;
+        for (int i : inventory) ++m[i], TotalBalls += i;
         
-        int64_t v = 0;
+        int64_t ans = 0;
         while (orders > 0) {
-            // [1, r] [r+1, i]
-            int64_t r = ceil((double)(K - orders) / N);
+            int64_t cnt = m.rbegin().first;
+            int64_t colors = m.rbegin().second;
+            m.erase(cnt);
 
-            N = 0;
-            map<int, int> tmp;
-            K = 0;
-            
-            for (auto it = m.rbegin(); it != m.rend(); ++it) {
-                if (it->first < r) break;
-                if (it->first == r) {
-
-                } else {
-                    
-                }
+            // [1, left] [left+1, cnt]
+            int64_t left = ceil((double)(TotalBalls - orders) / TotalColors);
+            if (left == cnt) {
+                int64_t sell = min(colors, orders);
+                ans = (ans + cnt * sell) % 1000000007;
+                orders -= sell;
+                TotalBalls -= sell;
+                if (cnt - 1 > 0) m[cnt - 1] += sell;
+                if (colors - sell > 0) m[cnt] += colors - sell;
+            } else if (left == 0) {
+                ans = (ans + (1 + cnt) * cnt / 2 * colors) % 1000000007;
+            } else {
+                ans = (ans + (left + 1 + cnt) * (cnt - left) / 2 * colors) % 1000000007;
+                m[left] += colors;
             }
-            m = tmp;
         }
-        return v;
+        return ans;
     }
 };
 
