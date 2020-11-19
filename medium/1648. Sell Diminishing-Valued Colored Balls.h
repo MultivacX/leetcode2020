@@ -1,35 +1,38 @@
 // 1648. Sell Diminishing-Valued Colored Balls
 // https://leetcode.com/problems/sell-diminishing-valued-colored-balls/
 
+// Runtime: 476 ms, faster than 45.85% of C++ online submissions for Sell Diminishing-Valued Colored Balls.
+// Memory Usage: 87.5 MB, less than 21.21% of C++ online submissions for Sell Diminishing-Valued Colored Balls.
+    
 class Solution {
 public:
     int maxProfit(vector<int>& inventory, int orders) {
-        int64_t TotalColors = inventory.size();
         // {cnt, colors}
         map<int64_t, int64_t> m;
-        int64_t TotalBalls = 0;
-        for (int i : inventory) ++m[i], TotalBalls += i;
+        for (int i : inventory) ++m[i];
         
         int64_t ans = 0;
         while (orders > 0) {
-            int64_t cnt = m.rbegin().first;
-            int64_t colors = m.rbegin().second;
-            m.erase(cnt);
+            int64_t R = m.rbegin()->first;
+            int64_t colors = m.rbegin()->second;
+            m.erase(R);
 
-            // [1, left] [left+1, cnt]
-            int64_t left = ceil((double)(TotalBalls - orders) / TotalColors);
-            if (left == cnt) {
-                int64_t sell = min(colors, orders);
-                ans = (ans + cnt * sell) % 1000000007;
-                orders -= sell;
-                TotalBalls -= sell;
-                if (cnt - 1 > 0) m[cnt - 1] += sell;
-                if (colors - sell > 0) m[cnt] += colors - sell;
-            } else if (left == 0) {
-                ans = (ans + (1 + cnt) * cnt / 2 * colors) % 1000000007;
+            int64_t L = !m.empty() ? m.rbegin()->first : 0;
+            // max_sell_balls: (L, R] * colors
+            int64_t max_sell_balls = (R - L) * colors;
+            if (orders >= max_sell_balls) {
+                orders -= max_sell_balls;
+                ans = (ans + (L + 1 + R) * max_sell_balls / 2) % 1000000007;
+                if (L > 0) m[L] += colors;
             } else {
-                ans = (ans + (left + 1 + cnt) * (cnt - left) / 2 * colors) % 1000000007;
-                m[left] += colors;
+                int64_t rows = orders / colors;
+                int64_t sell_balls = rows * colors;
+                ans = (ans + (R - rows + 1 + R) * sell_balls / 2) % 1000000007;
+
+                int64_t left = orders % colors;
+                ans = (ans + left * (R - rows)) % 1000000007;
+
+                orders = 0;
             }
         }
         return ans;
