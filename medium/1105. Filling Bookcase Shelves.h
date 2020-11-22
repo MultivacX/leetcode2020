@@ -1,8 +1,36 @@
 // 1105. Filling Bookcase Shelves
 // https://leetcode.com/problems/filling-bookcase-shelves/
 
-// TLE
+// Runtime: 8 ms, faster than 90.89% of C++ online submissions for Filling Bookcase Shelves.
+// Memory Usage: 8.6 MB, less than 40.89% of C++ online submissions for Filling Bookcase Shelves.
+    
 class Solution {
+public:
+    int minHeightShelves(vector<vector<int>>& books, int shelf_width) {
+        const int N = books.size();
+        vector<int> dp(N, INT_MAX);
+        dp[0] = books[0][1];
+        for (int i = 1; i < N; ++i) {
+            int w = books[i][0];
+            int h = books[i][1];
+            dp[i] = dp[i - 1] + h;
+
+            int j = i - 1;
+            while (j >= 0) {
+                // put books[j, i] in last row
+                w += books[j][0];
+                if (w > shelf_width) break;
+                h = max(h, books[j][1]);
+                dp[i] = min(dp[i], h + (j > 0 ? dp[j - 1] : 0));
+                --j;
+            }
+        }
+        return dp.back();
+    }
+};
+
+// TLE
+/*class Solution {
 public:
     int minHeightShelves(vector<vector<int>>& books, int shelf_width) {
         // w, t, b 
@@ -30,4 +58,4 @@ public:
         for (auto& a : v) if (a[2] < ans) ans = a[2];
         return ans;
     }
-};
+};*/
