@@ -1,56 +1,50 @@
 // 1625. Lexicographically Smallest String After Applying Operations
 // https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/
 
+// Runtime: 4 ms, faster than 99.58% of C++ online submissions for Lexicographically Smallest String After Applying Operations.
+// Memory Usage: 7.2 MB, less than 95.05% of C++ online submissions for Lexicographically Smallest String After Applying Operations.
+
 class Solution {
-    void add_a(string& s, int a, vector<vector<int>>& nums) {
-        const int N = s.length();
-        for (int k = 1, idx = -1; k < N; k += 2) {
-            int num = s[k] - '0';
-            if (k == 1) {
-                idx = 0;
-                int v = nums[num][0];
-                for (int j = 1; j < 10; ++j) {
-                    if (v > nums[num][j]) {
-                        idx = j;
-                        v = nums[num][j];
-                    }
-                }
-            } 
-            s[k] = nums[num][idx] + '0';
-        }    
+    vector<int> getAOps(int a) {
+        // (i + aOps[i] * a) % 10 -> min
+        vector<int> aOps(10, 0);
+        for (int i = 0; i < 10; ++i) {
+            vector<int> cnt(10, -1); cnt[i] = 0;
+            int k = 1; int v = (i + k * a) % 10;
+            while (v != i) {
+                cnt[v] = k++;
+                v = (i + k * a) % 10;
+            }
+            for (int j = 0; j < 10; ++j) {
+                if (cnt[j] < 0) continue;
+                aOps[i] = cnt[j]; break;
+            }
+            // cout << '(' << i << '+' << aOps[i] * a << ")%10=" << (i + aOps[i] * a) % 10 << endl;
+        }
+        return aOps;
     }
     
 public:
     string findLexSmallestString(string s, int a, int b) {
-        vector<vector<int>> nums(10, vector<int>(10));
-        for (int i = 0; i < 10; ++i) {
-            for (int j = 0; j < 10; ++j) {
-                nums[i][j] = (i + j * a) % 10;
-            }
-        }
-        
-        set<string> strs;
         const int N = s.length();
+        vector<int> aOps(getAOps(a));
+        // cout << s << endl;
+        string ans(s);
         int i = 0;
         do {
-            cout << s << ": ";
-            add_a(s, a, nums);
-            strs.insert(s);
-            cout << s << "   ";
-            
-            reverse(begin(s), begin(s) + N - b);
-            reverse(begin(s) + N - b, end(s));
-            reverse(begin(s), end(s));
-            cout << s << endl;
-            
+            for (int i = 1, k = aOps[s[1] - '0']; i < N; i += 2) {
+                s[i] = (s[i] - '0' + k * a) % 10 + '0';
+            }
+            if (b & 1) 
+                for (int i = 0, k = aOps[s[0] - '0']; i < N; i += 2) {
+                    s[i] = (s[i] - '0' + k * a) % 10 + '0';
+                }
+            if (s < ans) ans = s;
+            // cout << s << endl;
+            s = s.substr(N - b) + s.substr(0, N - b);
             i = (i + b) % N;
         } while (i);
         
-        cout << s << ": ";
-        add_a(s, a, nums);
-        strs.insert(s);
-        cout << s << endl;
-        
-        return *strs.begin();
+        return ans;
     }
 };

@@ -123,17 +123,22 @@ with open(os.path.join(SCRIPT_PATH, 'problems.html'), 'r') as fi:
         
         cur_d = ps.Difficulty.lower()
 
-        all = []
+        zeros = ['000', '00', '0', '']
+        allNo = []
         for p in ps.All:
-            all.append(str(p.No) + '. ' + str(p.Title))
+            allNo.append(str(p.No))
         for d, pfs in problem_files.items():
             for pf in pfs:
-                if pf[0] in all and pf[1].find(cur_d + '/') < 0:
-                    dst = pf[1].replace(d + '/', cur_d + '/')
-                    print(pf, dst)
-                    shutil.move(pf[1], dst)
+                if not pf[0].split('.')[0] in allNo:
+                    continue
+                if pf[1].find(cur_d + '/') > 0:
+                    continue
+                if pf[1].find(cur_d + '\\') > 0:
+                    continue
+                dst = pf[1].replace(d + '/', cur_d + '/').replace(d + '\\', cur_d + '\\')
+                print(pf, dst)
+                shutil.move(pf[1], dst)
 
-        zeros = ['000', '00', '0', '']
         todo[cur_d] = []
         for p in ps.Attempted:
             todo[cur_d].append(zeros[len(str(p.No)) - 1] + str(p.No) + '. ' + str(p.Title))
