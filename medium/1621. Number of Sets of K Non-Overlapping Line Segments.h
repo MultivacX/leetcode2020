@@ -8,6 +8,8 @@ class Solution {
 public:
     int numberOfSets(int n, int k) {
         // k line segments : k+1 points or 2*k points (k pairs point)
+
+        // draw k line segments no share point: 2*k points (k pairs point)
         
         // 1. choose 2*k points from n+k-1 points
         // 2. using 2*k points (pair [x, y]) make k line segments, 0 <= x < y < n+k-1
