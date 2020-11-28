@@ -3,6 +3,8 @@
 
 // Runtime: 60 ms, faster than 16.51% of C++ online submissions for Encode and Decode Strings.
 // Memory Usage: 27.2 MB, less than 38.53% of C++ online submissions for Encode and Decode Strings.
+
+// optim : [length_i][str_i]
     
 class Codec {
 public:
