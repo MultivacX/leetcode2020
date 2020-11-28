@@ -4,6 +4,8 @@
 // Runtime: 4 ms, faster than 62.50% of C++ online submissions for Plus One Linked List.
 // Memory Usage: 9.1 MB, less than 33.87% of C++ online submissions for Plus One Linked List.
     
+// optim : if last nj->val == 9, find [ni(<9), ni+1(9) ..., nj(9)]
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
