@@ -41,6 +41,7 @@ public:
     vector<string> findStrobogrammatic(int n) {
         if (n <= 0) return {};
         // if (n == 1) return {"0", "1", "8"};
+        // optim : for-loop & string s(n)
         dfs(n, 0);
         return ans;
     }
