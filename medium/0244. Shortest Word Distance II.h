@@ -32,6 +32,17 @@ public:
         }
         return ans;
     }
+
+    // optim
+    /*int shortest(string word1, string word2) {
+        int i1 = 0;
+        int i2 = 0;
+        int ans = INT_MAX;
+        while (i1 < m[word1].size() && i2 < m[word2].size()) {
+            ans = min(ans, abs(m[word1][i1] - m[word2][i2]));
+            m[word1][i1] < m[word2][i2] ? ++i1 : ++i2;
+        }
+    }*/
 };
 
 /**
