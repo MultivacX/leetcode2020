@@ -2,12 +2,12 @@
 // https://leetcode.com/problems/tree-diameter/
 
 // Runtime: 136 ms, faster than 15.86% of C++ online submissions for Tree Diameter.
-// Memory Usage: 31.1 MB, less than 8.50% of C++ online submissions for Tree Diameter.
+// Memory Usage: 31.1 MB, less than 8.04% of C++ online submissions for Tree Diameter.
     
 class Solution {
     int ans = 0;
     
-    int bfs(unordered_map<int, unordered_set<int>>& es, int i) {
+    int dfs(unordered_map<int, unordered_set<int>>& es, int i) {
         auto children = move(es[i]);
         es.erase(i);
         int cnt1 = 0, cnt2 = 0;
@@ -15,14 +15,11 @@ class Solution {
             if (es.count(j) == 0) 
                 continue;
             es[j].erase(i);
-            int c = bfs(es, j);
-            if (cnt1 <= 0) cnt1 = c;
-            else if (cnt2 <= 0) cnt2 = c;
-            else if (c >= cnt1) {
+            int c = dfs(es, j);
+            if (c >= cnt1) {
                 if (cnt1 > cnt2) cnt2 = cnt1;
                 cnt1 = c;
             } else if (c >= cnt2) {
-                if (cnt2 > cnt1) cnt1 = cnt2;
                 cnt2 = c;
             }
         }
@@ -43,7 +40,7 @@ public:
             es[e[0]].insert(e[1]);
             es[e[1]].insert(e[0]);
         }
-        bfs(es, 0);
+        dfs(es, 0);
         return ans;
     }
 };
