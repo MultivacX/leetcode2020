@@ -3,6 +3,8 @@
 
 // Runtime: 1532 ms, faster than 9.56% of C++ online submissions for Minimum Knight Moves.
 // Memory Usage: 53.3 MB, less than 29.15% of C++ online submissions for Minimum Knight Moves.
+
+// optim: greedy
     
 // A*
 class Solution {

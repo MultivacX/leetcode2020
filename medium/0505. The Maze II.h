@@ -1,6 +1,66 @@
 // 505. The Maze II
 // https://leetcode.com/problems/the-maze-ii/
 
+// Runtime: 88 ms, faster than 67.08% of C++ online submissions for The Maze II.
+// Memory Usage: 20.3 MB, less than 84.62% of C++ online submissions for The Maze II.
+    
+class Solution {
+public:
+    int shortestDistance(vector<vector<int>>& maze, vector<int>& start, vector<int>& destination) {
+        if (start[0] == destination[0] && start[1] == destination[1]) return 0;
+        
+        const int M = maze.size();
+        const int N = maze[0].size();
+        const int ti = destination[0];
+        const int tj = destination[1];
+        
+        auto isWall = [&](int i, int j) {
+            if (i < 0 || i >= M || j < 0 || j >= N) return true;
+            if (maze[i][j] == 1) return true;
+            return false;
+        };
+        
+        if (isWall(ti - 1, tj) && isWall(ti + 1, tj) && 
+            !isWall(ti, tj - 1) && !isWall(ti, tj + 1))
+            return -1;
+        if (!isWall(ti - 1, tj) && !isWall(ti + 1, tj) && 
+            isWall(ti, tj - 1) && isWall(ti, tj + 1))
+            return -1;
+        
+        const vector<vector<int>> ds = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        vector<vector<int>> costs(M, vector<int>(N, INT_MAX));
+        costs[start[0]][start[1]] = 0;
+        
+        using a3 = array<int, 3>;
+        auto cmp = [](a3& l, a3& r) { return l[2] > r[2]; };
+        priority_queue<a3, vector<a3>, decltype(cmp)> q(cmp);
+        q.push({start[0], start[1], 0});
+        
+        while (!q.empty()) {
+            int i = q.top()[0];
+            int j = q.top()[1];
+            int s = q.top()[2];
+            q.pop();
+            
+            if (i == ti && j == tj) return s;
+            
+            for (int a = 0; a < 4; ++a) {
+                const auto& d = ds[a];
+                int ni = i, nj = j;
+                while (!isWall(ni + d[0], nj + d[1]))
+                    ni += d[0], nj += d[1];
+                int ns = s + abs(ni - i) + abs(nj - j);
+                if (ns < costs[ni][nj]) {
+                    costs[ni][nj] = ns;
+                    q.push({ni, nj, ns});
+                }
+            }
+        }
+        
+        return costs[ti][tj] != INT_MAX ? costs[ti][tj] : -1;
+    }
+};
 
 // TLE 78 / 78 test cases passed, but took too long.
 class Solution {
