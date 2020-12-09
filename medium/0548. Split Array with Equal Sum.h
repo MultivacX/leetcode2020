@@ -1,4 +1,50 @@
 // 548. Split Array with Equal Sum
+// https://leetcode.com/problems/split-array-with-equal-sum/
+
+// Runtime: 512 ms, faster than 29.79% of C++ online submissions for Split Array with Equal Sum.
+// Memory Usage: 12.7 MB, less than 15.60% of C++ online submissions for Split Array with Equal Sum.
+    
+class Solution {
+public:
+    bool splitArray(vector<int>& nums) {
+        const int N = nums.size();
+        vector<int> ps(N, 0);
+        for (int i = 0, sum = 0; i < nums.size(); ++i) {
+            sum += nums[i];
+            ps[i] = sum;
+        }
+        
+        // [0,i-1] i [i+1,j-1] j [j+1,k-1] k [k+1,N-1]
+        
+        //   [0,i-1]  :  sum == ps[i-1]
+        //         i  : 
+        // [i+1,j-1]  :  sum == ps[j-1] - ps[i]
+        //         j
+        // [j+1,k-1]  :  sum == ps[k-1] - ps[j]
+        //         k
+        // [k+1,N-1]  :  sum == ps[N-1] - ps[k]
+        
+        // j = [i+2, N-4]
+        // k = [j+2, N-2]
+        for (int j = 2; j <= N - 4; ++j) {
+            unordered_set<int> sums;
+            for (int i = 1; i + 1 < j; ++i) {
+                int sum1 = ps[i - 1];
+                int sum2 = ps[j - 1] - ps[i];
+                if (sum1 == sum2) sums.insert(sum1);
+            }
+            
+            for (int k = j + 2; k <= N - 2; ++k) {
+                int sum3 = ps[k - 1] - ps[j];
+                int sum4 = ps[N - 1] - ps[k];
+                if (sum3 != sum4 || sums.count(sum3) == 0) 
+                    continue;
+                return true;
+            }
+        }
+        return false;
+    }
+};
 
 // TLE 111 / 120 test cases passed.
 class Solution {
