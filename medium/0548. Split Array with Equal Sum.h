@@ -24,9 +24,10 @@ public:
         //         k
         // [k+1,N-1]  :  sum == ps[N-1] - ps[k]
         
+        // i = [1,   N-6]
         // j = [i+2, N-4]
         // k = [j+2, N-2]
-        for (int j = 2; j <= N - 4; ++j) {
+        for (int j = 3; j <= N - 4; ++j) {
             unordered_set<int> sums;
             for (int i = 1; i + 1 < j; ++i) {
                 int sum1 = ps[i - 1];
