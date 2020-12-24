@@ -1,6 +1,10 @@
 // 839. Similar String Groups
+// https://leetcode.com/problems/similar-string-groups/
 
-/*class Solution {
+// Runtime: 32 ms, faster than 86.94% of C++ online submissions for Similar String Groups.
+// Memory Usage: 13.2 MB, less than 64.41% of C++ online submissions for Similar String Groups.
+    
+class Solution {
     bool anagram(const string& a, const string& b) {
         const int N = a.length();
         char ca = 0, cb = 0;
@@ -14,22 +18,37 @@
         return diff == 0 || diff == 2;
     }
     
+    int find(vector<int>& parents, int i) {
+        if (parents[i] != i) parents[i] = find(parents, parents[i]);
+        return parents[i];
+    }
+    
+    void connect(vector<int>& parents, int i, int j) {
+        parents[find(parents, i)] = parents[find(parents, j)];
+    }
+    
 public:
     int numSimilarGroups(vector<string>& strs) {
-        unordered_map<string, int> m;
-        for (auto s : strs) ++m[s];
-        int ans = 0;
-        for (auto i = m.cbegin(); i != m.cend(); ++i) {
-            bool found = false;
-            auto j = i;
-            for (++j; j != m.cend(); ++j) {
-                if (anagram(i->first, j->first)) {
-                    ++ans;
-                    found = true;
+        unordered_set<string> s(begin(strs), end(strs));
+        vector<string> strs_(begin(s), end(s));
+        
+        const int N = strs_.size();
+        vector<int> parents(N);
+        for (int i = 0; i < N; ++i)
+            parents[i] = i;
+        
+            
+        for (int i = 0; i + 1 < N; ++i) {
+            for (int j = i + 1; j < N; ++j) {
+                if (anagram(strs[i], strs[j])) {
+                    connect(parents, i, j);
                 }
-            }    
-            if (found && i->second > 1) ++ans;
+            }
         }
-        return ans;
+        // for (int i = 0; i < N; ++i) cout << i << " -> " << find(parents, i) << endl;
+        
+        unordered_set<int> ans;
+        for (int i = 0; i < N; ++i) ans.insert(find(parents, i));
+        return ans.size();
     }
-};*/
+};
