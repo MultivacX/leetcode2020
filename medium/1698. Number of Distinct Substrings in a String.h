@@ -59,3 +59,18 @@ public:
         return ans;
     }
 };
+
+// TLE
+class Solution {    
+public:
+    int countDistinct(string s) {
+        const int N = s.length();
+        unordered_set<string> strs;
+        for (int l = 1; l <= N; ++l) {
+            for (int i = 0; i + l <= N; ++i) {
+                strs.insert(s.substr(i, l));
+            }
+        }
+        return strs.size();
+    }
+};
