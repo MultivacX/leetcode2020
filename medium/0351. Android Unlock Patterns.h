@@ -1,7 +1,57 @@
 // 351. Android Unlock Patterns
+// https://leetcode.com/problems/android-unlock-patterns/
 
-// WRONG: 4
+// Runtime: 24 ms, faster than 82.87% of C++ online submissions for Android Unlock Patterns.
+// Memory Usage: 6.2 MB, less than 85.91% of C++ online submissions for Android Unlock Patterns.
+    
 class Solution {
+    bool canMove(int si, int sj, int ei, int ej, int used) {
+        if (si == ei && sj == ej) return false;
+        
+        if (si == ei && abs(sj - ej) == 2) {
+            int v = 1 << (si * 3 + (sj + ej) / 2);
+            return v & used;
+        }
+        
+        if (sj == ej && abs(si - ei) == 2) {
+            int v = 1 << ((si + ei) / 2 * 3 + sj);
+            return v & used;
+        }
+        
+        if (abs(si - ei) + abs(sj - ej) == 4) {
+            int v = 1 << 4;
+            return v & used;
+        }
+        
+        return true;
+    }
+    
+    void helper(int m, int n, int ci, int cj, int used, int l, int& ans) {
+        if (m <= l && l <= n) ++ans;
+        if (l >= n) return;
+
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                int k = i * 3 + j;
+                if ((1 << k) & used) continue;
+                if (!canMove(ci, cj, i, j, used)) continue;
+                helper(m, n, i, j, used + (1 << k), l + 1, ans);
+            }
+        }
+    }
+    
+public:
+    int numberOfPatterns(int m, int n) {
+        int ans = 0;
+        for (int i = 0; i < 3; ++i)
+            for (int j = 0; j < 3; ++j)
+                helper(m, n, i, j, 1 << (i * 3 + j), 1, ans);
+        return ans;
+    }
+};
+
+// WA: n == 4
+/*class Solution {
     void connect(int i, int j, int used, int l, int L, int& cnt) {
         if (l == L) {
             ++cnt;
@@ -93,4 +143,4 @@ public:
         }
         return ans;
     }
-};
+};*/
