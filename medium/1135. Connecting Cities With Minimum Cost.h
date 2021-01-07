@@ -1,48 +1,46 @@
 // 1135. Connecting Cities With Minimum Cost
 // https://leetcode.com/problems/connecting-cities-with-minimum-cost/
 
-// WA: 55 / 63 test cases passed.
+// Runtime: 356 ms, faster than 67.15% of C++ online submissions for Connecting Cities With Minimum Cost.
+// Memory Usage: 55.1 MB, less than 34.79% of C++ online submissions for Connecting Cities With Minimum Cost.
 
 class Solution {
 public:
     int minimumCost(int N, vector<vector<int>>& connections) {
         if (connections.size() < N - 1) return -1;
         
-        unordered_map<int, unordered_map<int, int>> m; 
+        // {city_i, {cost, city_j}}
+        unordered_map<int, vector<pair<int, int>>> m; 
         for (const auto& v : connections) {
-            m[v[0]][v[1]] = v[2];
-            m[v[1]][v[0]] = v[2];
+            m[v[0]].emplace_back(v[2], v[1]);
+            m[v[1]].emplace_back(v[2], v[0]);
         }
         
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> q;
-        q.push({0, 1, 1});
-        unordered_set<int> visited;
+        vector<int> minCostTo(N + 1, INT_MAX);
+        unordered_set<int> visitedCities;
         
-        auto addNextCities = [&](int i){
-            if (!visited.insert(i).second) 
-                return;
-            
-            for (auto it : m[i]) {
-                int j = it.first;
-                if (visited.count(j))
-                    continue;
-                int w = it.second;
-                q.push({w, i, j});
-            }
-        };
+        // {cost, city_i}
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> q;
+        q.push({0, 1});
         
-        int cost = 0;
-        while (!q.empty()) {
-            int i = q.top()[1];
-            int j = q.top()[2];
-            int w = q.top()[0];
+        int ans = 0;
+        while (visitedCities.size() < N && !q.empty()) {
+            int cur_cost = q.top().first;
+            int cur_city = q.top().second;
             q.pop();
-            if (visited.count(i) && visited.count(j))
+            if (!visitedCities.insert(cur_city).second)
                 continue;
-            cost += w;
-            addNextCities(i);
-            addNextCities(j);
+            ans += cur_cost;
+            
+            for (const auto& p : m[cur_city]) {
+                int cost = p.first;
+                int city = p.second;
+                if (minCostTo[city] > cost && !visitedCities.count(city)) {
+                    minCostTo[city] = cost;
+                    q.push(p);
+                }
+            }
         }
-        return visited.size() == N ? cost : -1;
+        return visitedCities.size() == N ? ans : -1;
     }
 };
