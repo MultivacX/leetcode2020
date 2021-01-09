@@ -19,64 +19,73 @@
 class Solution {
 public:
     int guessMajority(ArrayReader &reader) {
+        static const int s40 = 4;
+        static const int s31 = 2;
+        static const int s22 = 0;
         const int N = reader.length();
         
         int i = 0;
         int p = reader.query(i, i + 1, i + 2, i + 3);
         
-        vector<pair<int, int>> v{{0, -1}, {0, -1}};
-        int j = -1;
-        if (p == 4) {
-            v[0].first = 4;
-            v[0].second = 0;
-            j = 0;
-        } else if (p == 2) {
-            v[0].first = 3;
-            v[1].first = 1;
-            j = -1;
+        int cnt1 = 0; unordered_set<int> idx1;
+        int cnt2 = 0; unordered_set<int> idx2;
+        int* pre_max = nullptr;
+        if (p == s40) {
+            cnt1 = 4, idx1 = unordered_set<int>{0, 1, 2, 3};
+            cnt2 = 0;
+        } else if (p == s31) {
+            cnt1 = 3;
+            cnt2 = 1;
         } else {
-            v[0].first = 2;
-            v[1].first = 2;
-            j = -1;
+            cnt1 = 2;
+            cnt2 = 2;
         }
         
-        // 4 xxxx
-        // 2 xxxy / xxyx / xyxx / yxxx
-        // 0 xxyy / xyxy / xyyx
+        // s40 xxxx
+        // s31 xxxy / xxyx / xyxx / yxxx
+        // s22 xxyy / xyxy / xyyx
         for (i = 1; i + 3 < N; ++i) {
-            // 4->4 nums[i-1,i+0,i+1,i+2,i+3]
-            // 4->2 nums[i-1,i+0,i+1,i+2] != nums[i+3]
+            // 40->40 nums[i-1,i+0,i+1,i+2,i+3]
+            // 40->31 nums[i-1,i+0,i+1,i+2] != nums[i+3]
             
-            // 2->4 nums[i-1] != nums[i+0,i+1,i+2,i+3]
-            // 2->2 nums[i-1] == nums[i+3]
-            // 2->0 nums[i-1] != nums[i+3]
+            // 31->40 nums[i-1] != nums[i+0,i+1,i+2,i+3]
+            // 31->31 nums[i-1] == nums[i+3]
+            // 31->22 nums[i-1] != nums[i+3]
             
-            // 0->2 nums[i-1] != nums[i+3]
-            // 0->0 nums[i-1] == nums[i+3]
+            // 22->31 nums[i-1] != nums[i+3]
+            // 22->22 nums[i-1] == nums[i+3]
             
             int q = reader.query(i, i + 1, i + 2, i + 3);
-            if (p == 4) {
-                if (q == 4) {
-                    
-                } else { // q == 2
-                    
-                }
-            } else if (p == 2) {
-                if (q == 4) {
-                    
-                } else if (q == 2) {
-                    
-                } else { // q == 0
-                
-                }
+            int pre = i - 1, nxt = i + 3;
+            
+            if (p == s40 && q == s40) {
+                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
+                else cnt2 += 1, idx2.insert(nxt);
+            } else if (p == s40 && q == s31) {
+                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
+                else cnt1 += 1, idx1.insert(nxt);
+            } 
+            // TODO
+            else if (p == s31 && q == s40) {
+                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
+                else cnt1 += 1, idx1.insert(nxt);
+            } else if (p == s31 && q == s31) {
+                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
+                else cnt2 += 1, idx2.insert(nxt);
+            } else if (p == s31 && q == s22) {
+                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
+                else cnt1 += 1, idx1.insert(nxt);
+            } 
+            
+            else if (p == s22 && q == s31) {
+                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
+                else cnt1 += 1, idx1.insert(nxt);
             } else {
-                if (q == 2) {
-                    
-                } else { // q == 0
-                
-                }
+                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
+                else cnt2 += 1, idx2.insert(nxt);
             }
         }
-        
+        if  (cnt1 == cnt2) return -1;
+        return cnt1 > cnt2 ? *idx1.begin() : *idx2.begin();
     }
 };
