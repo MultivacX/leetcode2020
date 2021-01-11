@@ -1,4 +1,8 @@
 // 1538. Guess the Majority in a Hidden Array
+// https://leetcode.com/problems/guess-the-majority-in-a-hidden-array/
+
+// Runtime: 536 ms, faster than 5.26% of C++ online submissions for Guess the Majority in a Hidden Array.
+// Memory Usage: 31.2 MB, less than 57.89% of C++ online submissions for Guess the Majority in a Hidden Array.
 
 /**
  * // This is the ArrayReader's API interface.
@@ -19,73 +23,72 @@
 class Solution {
 public:
     int guessMajority(ArrayReader &reader) {
-        static const int s40 = 4;
-        static const int s31 = 2;
-        static const int s22 = 0;
         const int N = reader.length();
         
-        int i = 0;
-        int p = reader.query(i, i + 1, i + 2, i + 3);
+        int cnt1 = 0, idx1 = -1;
+        int cnt2 = 0, idx2 = -1;
         
-        int cnt1 = 0; unordered_set<int> idx1;
-        int cnt2 = 0; unordered_set<int> idx2;
-        int* pre_max = nullptr;
-        if (p == s40) {
-            cnt1 = 4, idx1 = unordered_set<int>{0, 1, 2, 3};
-            cnt2 = 0;
-        } else if (p == s31) {
-            cnt1 = 3;
-            cnt2 = 1;
+        int p = reader.query(0, 1, 2, 3);
+        int q = reader.query(0, 1, 2, 4);
+        
+        if (p == q) {
+            // arr[3] == arr[4]
+            cnt1 += 2, idx1 = 3;
         } else {
-            cnt1 = 2;
-            cnt2 = 2;
+            // arr[3] != arr[4]
+            cnt1 += 1, idx1 = 3;
+            cnt2 += 1, idx2 = 4;
         }
         
-        // s40 xxxx
-        // s31 xxxy / xxyx / xyxx / yxxx
-        // s22 xxyy / xyxy / xyyx
-        for (i = 1; i + 3 < N; ++i) {
-            // 40->40 nums[i-1,i+0,i+1,i+2,i+3]
-            // 40->31 nums[i-1,i+0,i+1,i+2] != nums[i+3]
+        // arr[0], arr[1], arr[2]
+        if (p == 4) {
+            // arr[0] == arr[1] == arr[2] == arr[3]
+            cnt1 += 3;
+        } else if (p == 2) {
+            int bit3 = 1 << 3, bit4 = 1 << 4;
             
-            // 31->40 nums[i-1] != nums[i+0,i+1,i+2,i+3]
-            // 31->31 nums[i-1] == nums[i+3]
-            // 31->22 nums[i-1] != nums[i+3]
+            int t = reader.query(0, 1, 3, 4);
+            if (p == t) bit4 |= 1 << 2; // arr[2] ?= arr[4]
+            if (q == t) bit3 |= 1 << 2; // arr[2] ?= arr[3]
             
-            // 22->31 nums[i-1] != nums[i+3]
-            // 22->22 nums[i-1] == nums[i+3]
+            t = reader.query(0, 2, 3, 4);
+            if (p == t) bit4 |= 1 << 1; // arr[1] ?= arr[4]
+            if (q == t) bit3 |= 1 << 1; // arr[1] ?= arr[3]
             
-            int q = reader.query(i, i + 1, i + 2, i + 3);
-            int pre = i - 1, nxt = i + 3;
+            t = reader.query(1, 2, 3, 4);
+            if (p == t) bit4 |= 1 << 0; // arr[0] ?= arr[4]
+            if (q == t) bit3 |= 1 << 0; // arr[0] ?= arr[3]
             
-            if (p == s40 && q == s40) {
-                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
-                else cnt2 += 1, idx2.insert(nxt);
-            } else if (p == s40 && q == s31) {
-                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
-                else cnt1 += 1, idx1.insert(nxt);
-            } 
-            // TODO
-            else if (p == s31 && q == s40) {
-                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
-                else cnt1 += 1, idx1.insert(nxt);
-            } else if (p == s31 && q == s31) {
-                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
-                else cnt2 += 1, idx2.insert(nxt);
-            } else if (p == s31 && q == s22) {
-                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
-                else cnt1 += 1, idx1.insert(nxt);
-            } 
+            // cout << bitset<5>(bit3) << endl;
+            // cout << bitset<5>(bit4) << endl;
             
-            else if (p == s22 && q == s31) {
-                if (idx1.count(pre)) cnt2 += 1, idx2.insert(nxt);
-                else cnt1 += 1, idx1.insert(nxt);
+            if (p == q) {
+                // arr[3] == arr[4]
+                int bits = bit3 | bit4;
+                for (int i = 0; i < 3; ++i) {
+                    if (bits & (1 << i)) cnt1 += 1;
+                    else cnt2 += 1, idx2 = i;
+                }
             } else {
-                if (idx1.count(pre)) cnt1 += 1, idx1.insert(nxt);
-                else cnt2 += 1, idx2.insert(nxt);
+                for (int i = 0; i < 3; ++i) {
+                    if (bit3 & (1 << i)) cnt1 += 1;
+                    else cnt2 += 1, idx2 = i;
+                }
             }
+        } else {
+            // 0 <= x, y, z <= 2
+            // arr[x] == arr[3]
+            // arr[y] == arr[z] 
+            cnt1 += 1, cnt2 += 2;
         }
-        if  (cnt1 == cnt2) return -1;
-        return cnt1 > cnt2 ? *idx1.begin() : *idx2.begin();
+        
+        for (int i = 5; i < N; ++i) {
+            int t = reader.query(0, 1, 2, i);
+            if (p == t) cnt1 += 1;
+            else cnt2 += 1, idx2 = i;
+        }
+        
+        if (cnt1 == cnt2) return -1;
+        return cnt1 > cnt2 ? idx1 : idx2;
     }
 };
