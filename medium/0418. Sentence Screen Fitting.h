@@ -1,66 +1,57 @@
 // 418. Sentence Screen Fitting
 // https://leetcode.com/problems/sentence-screen-fitting/
 
-// WA ["x"] 20 811
 class Solution {
-    struct Data {
-        Data() {}
-        Data(int er, int ec, int t) 
-        : end_row(er), end_col(ec), times(t) {}
-
-        int end_row;
-        int end_col;
-        int times;
+    struct Sentence {
+        int endRow; // last char of last word
+        int endCol;
     };
     
 public:
     int wordsTyping(vector<string>& sentence, int rows, int cols) {
-        int L = 0;
-        for (auto& word : sentence)
-            if (word.length() > cols)
-                return false;
-            else L += word.length() + 1;
-        L -= 1;
+        const int M = cols - (int)sentence[0].length() + 1;
+        if (M <= 0) return 0;
+        // sentence start from c
+        vector<Sentence> dp(M);
         
         const int N = sentence.size();
         
-        vector<Data> data;
-        for (int col = 0; col < cols; ++col) {
-            int r = 0;
-            int c = col;
-            
-            if (c + L <= cols) {
-                int k = (cols - c - L) / (L + 1);
-                c += L + (L + 1) * k;
-                data.push_back({r, c, 1 + k});
-                continue;
-            }
-            
-            for (int i = 0; i < N; ++i) {
-                int l = sentence[i].length() + (i + 1 < N ? 1 : 0);
-                if (c + l >= cols) {
-                    ++r;
-                    c = 0;
+        for (int c = 0; c < M; ++c) {
+            dp[c].endRow = 0;
+            dp[c].endCol = c + sentence[0].length() - 1;
+            for (int i = 1; i < N; ++i) {
+                const int L = sentence[i].length();
+                if (dp[c].endCol + 1 + L >= cols) {
+                    dp[c].endRow += 1;
+                    dp[c].endCol = L - 1;
+                } else {
+                    dp[c].endCol += L + 1;
                 }
-                c += l;
             }
-            data.push_back({r, c, 1});
         }
         
-        int times = 0;
-        int r = 0, c = 0;
-        while (r < rows) {
-            auto& d = data[c];
-            r += d.end_row;
-            c += d.end_col + 1;
-            if (r >= rows)
-                break;
-            if (c >= cols) {
-                ++r;
-                c %= cols;
+        const int L = dp[0].endRow * cols + dp[0].endCol + 1;
+        int ans = 0, r = 0, c = 0;
+        while (r + dp[c].endRow < rows) {
+            ans += 1;
+            r += dp[c].endRow;
+            c = dp[c].endCol;
+            
+            int remain = cols - c;
+            int cnt = remain / (L + 1);
+            if (cnt > 0) {
+                ans += cnt;
+                c += L + cnt * (L + 1);
             }
-            times += d.times;
+            
+            // append a space for next sentence
+            c += 2;
+
+            if (c >= M) {
+                r += 1;
+                c = 0;
+            }
         }
-        return times;
+        return ans;
     }
 };
