@@ -1,57 +1,30 @@
 // 418. Sentence Screen Fitting
 // https://leetcode.com/problems/sentence-screen-fitting/
 
-class Solution {
-    struct Sentence {
-        int endRow; // last char of last word
-        int endCol;
-    };
+// Runtime: 28 ms, faster than 47.56% of C++ online submissions for Sentence Screen Fitting.
+// Memory Usage: 7.4 MB, less than 99.19% of C++ online submissions for Sentence Screen Fitting.
     
+class Solution {
 public:
     int wordsTyping(vector<string>& sentence, int rows, int cols) {
-        const int M = cols - (int)sentence[0].length() + 1;
-        if (M <= 0) return 0;
-        // sentence start from c
-        vector<Sentence> dp(M);
-        
         const int N = sentence.size();
-        
-        for (int c = 0; c < M; ++c) {
-            dp[c].endRow = 0;
-            dp[c].endCol = c + sentence[0].length() - 1;
-            for (int i = 1; i < N; ++i) {
-                const int L = sentence[i].length();
-                if (dp[c].endCol + 1 + L >= cols) {
-                    dp[c].endRow += 1;
-                    dp[c].endCol = L - 1;
-                } else {
-                    dp[c].endCol += L + 1;
+        // {i, k}: sentence[i] ... sentence[i+k-1] in 1 row
+        unordered_map<int, int> m;
+        int i = 0, words = 0;
+        while (rows-- > 0) {
+            if (m.count(i) == 0) {
+                int j = i, k = 0;
+                int l = sentence[j].length();
+                while (l <= cols) {
+                    j = (j + 1) % N;
+                    ++k;
+                    l += 1 + sentence[j].length();
                 }
+                m[i] = k;
             }
+            words += m[i];
+            i = (i + m[i]) % N;
         }
-        
-        const int L = dp[0].endRow * cols + dp[0].endCol + 1;
-        int ans = 0, r = 0, c = 0;
-        while (r + dp[c].endRow < rows) {
-            ans += 1;
-            r += dp[c].endRow;
-            c = dp[c].endCol;
-            
-            int remain = cols - c;
-            int cnt = remain / (L + 1);
-            if (cnt > 0) {
-                ans += cnt;
-                c += L + cnt * (L + 1);
-            }
-            
-            // append a space for next sentence
-            c += 2;
-
-            if (c >= M) {
-                r += 1;
-                c = 0;
-            }
-        }
-        return ans;
+        return words / N;
     }
 };
