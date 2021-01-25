@@ -30,7 +30,7 @@ public:
     }
 };
 
-// swift
+// Swift
 // Runtime Error : if V < min(root)
 /*
 [4,2,6,1,3,5,7]
