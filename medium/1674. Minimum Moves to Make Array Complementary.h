@@ -14,8 +14,8 @@ public:
         for (int i = 0, j = n - 1; i < j; ++i, --j) {
             int x = min(nums[i], nums[j]);
             int y = max(nums[i], nums[j]);
-            min_nums[i] = {x, y};
-            max_nums[i] = {y, x};
+            min_nums[i] = {x, y}; // optim: vector<int> min_nums and min_nums[i] = x
+            max_nums[i] = {y, x}; // optim: vector<int> max_nums and max_nums[i] = y
             ++sums[x + y];
         }
         auto min_comp = [](const vector<int>& l, const vector<int>& r){
