@@ -25,3 +25,31 @@ public:
         return stk.empty();
     }
 };
+
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> t;
+        for (char c : s) {
+            if (c == '(') t.push(c);
+            else if (c == '[') t.push(c);
+            else if (c == '{') t.push(c);
+            else if (c == ')') { 
+                if (t.empty() || t.top() != '(') 
+                    return false; 
+                t.pop();
+            }
+            else if (c == ']') { 
+                if (t.empty() || t.top() != '[') 
+                    return false; 
+                t.pop();
+            }
+            else if (c == '}') { 
+                if (t.empty() || t.top() != '{') 
+                    return false; 
+                t.pop();
+            }
+        }
+        return t.empty();
+    }
+};

@@ -29,3 +29,26 @@ public:
         return ans;
     }
 };
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        const int n = height.size();
+        if (n <= 2) return 0;
+        
+        int ans = 0;
+        vector<int> left;
+        for (int i = 0, h = INT_MIN; i < n; ++i) {
+            left.push_back(h);
+            h = max(h, height[i]);
+        }
+        for (int i = n - 2, r = height[n - 1]; i > 0; --i) {
+            int l = left[i];
+            int m = height[i];
+            if (l > m && m < r)
+                ans += min(l, r) - m;
+            r = max(r, m);
+        }
+        return ans;
+    }
+};

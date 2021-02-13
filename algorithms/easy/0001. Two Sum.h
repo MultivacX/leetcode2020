@@ -14,3 +14,36 @@ public:
         return {};
     }
 };
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, vector<int>> m;
+        for (int i = 0; i < nums.size(); ++i)
+            m[nums[i]].push_back(i);
+        for (const auto& it : m) {
+            int a = it.first;
+            int b = target - a;
+            if (a == b) {
+                if (it.second.size() > 1)
+                    return {it.second[0], it.second[1]};
+            } else if (m.count(b)) {
+                return {it.second[0], m[b][0]};
+            }
+        }
+        return {};
+    }
+};
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> m;
+        for (int i = 0; i < nums.size(); ++i) {
+            int b = target - nums[i];
+            if (m.count(b)) return {m[b], i};
+            m[b] = i;
+        }
+        return {};
+    }
+};

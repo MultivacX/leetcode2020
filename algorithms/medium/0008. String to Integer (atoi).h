@@ -35,3 +35,28 @@ public:
         return positive ? ans : -ans;
     }
 };
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        const int n = s.length();
+        int i = 0;
+        
+        while (i < n && s[i] == ' ') ++i;
+        if (i == n) return 0;
+        
+        int64_t sign = 1;
+        if (s[i] == '+') ++i;
+        else if (s[i] == '-') ++i, sign = -1;
+        if (i == n) return 0;
+        
+        int64_t ans = 0;
+        while (i < n && isdigit(s[i])) {
+            ans = ans * 10 + s[i++] - '0';
+            if (ans * sign < INT_MIN) return INT_MIN;
+            if (ans * sign > INT_MAX) return INT_MAX;
+        }
+        ans *= sign;
+        return ans;
+    }
+};

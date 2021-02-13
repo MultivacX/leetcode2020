@@ -23,3 +23,25 @@ public:
         return s;
     }
 };
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        while (!s.empty() && s.back() == ' ') s.pop_back();
+        const int n = s.length();
+        int i = 0, j = 1;
+        while (j <= n) {
+            if (j < n && s[j - 1] != ' ' && s[j] == ' ') {
+                reverse(begin(s) + i, begin(s) + j);
+                i = j + 1;
+                while (i >= 2 && s[i - 2] == ' ') --i;
+            } else if (j == n) {
+                reverse(begin(s) + i, end(s));
+            }
+            ++j;
+        }
+        while (!s.empty() && s.back() == ' ') s.pop_back();
+        reverse(begin(s), end(s));
+        return s;
+    }
+};

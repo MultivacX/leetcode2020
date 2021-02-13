@@ -24,3 +24,18 @@ public:
         return true;
     }
 };
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i = 0, j = (int)s.length() - 1;
+        while (i < j) {
+            if (!isalnum(s[i])) ++i;
+            else if (!isalnum(s[j])) --j;
+            else if (isdigit(s[i]) && isdigit(s[j]) && s[i] == s[j]) ++i, --j;
+            else if (isalpha(s[i]) && isalpha(s[j]) && tolower(s[i]) == tolower(s[j])) ++i, --j;
+            else return false;
+        }
+        return true;
+    }
+};
