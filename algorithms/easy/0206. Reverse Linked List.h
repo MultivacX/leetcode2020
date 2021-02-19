@@ -51,3 +51,16 @@ public:
         return reverseList(nullptr, head);
     }
 };
+
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head || !head->next) return head;
+        auto p = head->next;
+        head->next = nullptr;
+        auto q = reverseList(p);
+        p->next = head;
+        return q;
+    }
+};

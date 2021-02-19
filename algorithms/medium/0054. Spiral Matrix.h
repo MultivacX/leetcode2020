@@ -45,3 +45,30 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        const int m = matrix.size();
+        const int n = matrix[0].size();
+        int k = 0, R = m, C = n;
+        vector<int> v;
+        while (v.size() < m * n) {
+            for (int i = k, j = k, c = 0; c < C && v.size() < m * n; ++j, ++c) 
+                v.push_back(matrix[i][j]);
+            
+            for (int i = k + 1, j = k + C - 1, c = 0; c < R - 2 && v.size() < m * n; ++i, ++c) 
+                v.push_back(matrix[i][j]);
+            
+            for (int i = k + R - 1, j = k + C - 1, c = 0; c < C && v.size() < m * n; --j, ++c) 
+                v.push_back(matrix[i][j]);
+            
+            for (int i = k + R - 2, j = k, c = 0; c < R - 2 && v.size() < m * n; --i, ++c) 
+                v.push_back(matrix[i][j]);
+            
+            ++k, R -= 2, C -= 2;
+        }
+        return v;
+    }
+};
