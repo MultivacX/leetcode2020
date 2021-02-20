@@ -32,3 +32,20 @@ public:
         return a;
     }
 };
+
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        auto p = headA;
+        while (p) { p->val = -p->val; p = p->next; }
+        
+        auto q = headB;
+        while (q) { if (q->val < 0) break; q = q->next; }
+        
+        p = headA;
+        while (p) { p->val = -p->val; p = p->next; }
+        
+        return q;
+    }
+};
