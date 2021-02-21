@@ -26,3 +26,19 @@ public:
         return false;
     }
 };
+
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (!head) return false;
+        auto s = head, f = head;
+        while (s && f) {
+            s = s->next;
+            f = f->next;
+            if (f) f = f->next;
+            if (s == f) break;
+        }
+        return s && f;
+    }
+};

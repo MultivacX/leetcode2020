@@ -29,3 +29,20 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+    TreeNode* pre = nullptr;
+
+public:
+    bool isValidBST(TreeNode* root) {
+        if (!root) return true;
+        
+        if (!isValidBST(root->left)) return false;
+        if (pre && pre->val >= root->val) return false;
+        pre = root;
+        if (!isValidBST(root->right)) return false;
+        
+        return true;
+    }
+};

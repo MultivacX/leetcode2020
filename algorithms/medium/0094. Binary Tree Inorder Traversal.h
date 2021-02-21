@@ -36,3 +36,46 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    vector<int> ans;
+    
+    void inorder(TreeNode* root) {
+        if (!root) return;
+        
+        inorder(root->left);
+        ans.push_back(root->val);
+        inorder(root->right);
+    }
+    
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        inorder(root);
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        if (!root) return {};
+
+        vector<int> ans;
+        stack<TreeNode*> s;
+        auto p = root;
+        while (!s.empty() || p) {
+            if (p) {
+                s.push(p);
+                p = p->left;
+            } else {
+                p = s.top();
+                s.pop();
+                ans.push_back(p->val);
+                p = p->right;
+            }
+        }
+        return ans;
+    }
+};

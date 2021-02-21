@@ -22,3 +22,17 @@ public:
         return tp ? tp : tq;
     }
 };
+
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root) return root;
+        if (root == p) return p;
+        if (root == q) return q;
+        auto l = lowestCommonAncestor(root->left, p, q);
+        auto r = lowestCommonAncestor(root->right, p, q);
+        if (l && r) return root;
+        return l ? l : r;
+    }
+};

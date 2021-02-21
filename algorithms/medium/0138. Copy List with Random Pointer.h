@@ -37,3 +37,49 @@ public:
         return m[head];
     }
 };
+
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (!head) return nullptr;
+        
+        // oldA -> newA -> oldB -> newB -> ...
+        auto p = head;
+        while (p) {
+            auto oldA = p;
+            auto oldB = oldA->next;
+            
+            auto newA = new Node(oldA->val);
+            oldA->next = newA;
+            newA->next = oldB;
+            
+            p = oldB;
+        }
+        
+        p = head;
+        while (p) {
+            auto oldA = p;
+            auto newA = oldA->next;
+            auto oldB = newA->next;
+            
+            if (oldA->random) newA->random = oldA->random->next;
+            
+            p = oldB;
+        }
+        
+        auto ans = head->next;
+        p = head;
+        while (p) {
+            auto oldA = p;
+            auto newA = oldA->next;
+            auto oldB = newA->next;
+            
+            oldA->next = oldB;
+            newA->next = oldB ? oldB->next : nullptr;
+            
+            p = oldB;
+        }
+        return ans;
+    }
+};

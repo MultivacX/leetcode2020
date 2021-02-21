@@ -70,3 +70,48 @@ public:
         findNext(node->left);
     }
 };
+
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if (!root) return root;
+        Node* pre_leftest = root;
+        Node* leftest = root->left ? root->left : root->right;
+        while (leftest) {
+            Node* tmp_pre_leftest = leftest;
+            
+            Node* pre_lv = pre_leftest;
+            Node* l = pre_lv->left; 
+            Node* r = pre_lv->right;
+            Node* cur_lv = leftest;
+            while (pre_lv && cur_lv) {
+                if (!l && !r) {
+                    pre_lv = pre_lv->next;
+                    if (pre_lv) l = pre_lv->left, r = pre_lv->right;
+                } else if (l) {
+                    if (cur_lv != l) {
+                        cur_lv->next = l;
+                        cur_lv = cur_lv->next;
+                    }
+                    l = nullptr;
+                } else if (r) {
+                    if (cur_lv != r) {
+                        cur_lv->next = r;
+                        cur_lv = cur_lv->next;
+                    }
+                    r = nullptr;
+                }
+            }
+            
+            pre_leftest = tmp_pre_leftest;
+            leftest = nullptr;
+            while (!leftest && tmp_pre_leftest) {
+                if (tmp_pre_leftest->left) leftest = tmp_pre_leftest->left;
+                else if (tmp_pre_leftest->right) leftest = tmp_pre_leftest->right;
+                else tmp_pre_leftest = tmp_pre_leftest->next;
+            }
+        }
+        return root;
+    }
+};
