@@ -34,3 +34,34 @@ public:
         }
     }
 };
+
+
+class Solution {
+    string s;
+    vector<string> ans;
+    
+    void comb(const string& digits, int i) {
+        static unordered_map<char, string> m{
+            {'2', "abc"}, {'3', "def"}, {'4', "ghi"},
+            {'5', "jkl"}, {'6', "mno"}, {'7', "pqrs"},
+            {'8', "tuv"}, {'9', "wxyz"}
+        };
+        
+        if (i >= digits.length()) {
+            if (!s.empty()) ans.push_back(s);
+            return;
+        }
+        
+        for (char d : m[digits[i]]) {
+            s.push_back(d);
+            comb(digits, i + 1);
+            s.pop_back();
+        }
+    }
+    
+public:
+    vector<string> letterCombinations(string digits) {
+        comb(digits, 0);
+        return ans;
+    }
+};
