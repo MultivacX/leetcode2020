@@ -56,6 +56,7 @@ public:
             for (int j = n - 1; j >= 0; --j) {
                 if (word1[i] != word2[j]) continue;
                 ans = max(ans, 2 + helper(word1, word2, i + 1, j - 1));
+                // break; // optim
             }
         }
         return ans;

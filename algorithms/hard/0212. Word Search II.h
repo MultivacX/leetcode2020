@@ -91,6 +91,50 @@ public:
     }
 };
 
+
+class Solution {
+    bool findWord(vector<vector<char>>& board, int i, int j, const string& word, int k) {
+        const int l = word.length();
+        if (k >= l) return true;
+        
+        const int m = board.size();
+        const int n = board[0].size();
+        if (i < 0 || i >= m || j < 0 || j >= n) return false;
+        
+        char c = board[i][j];
+        if (c == '#' || c != word[k]) return false;
+        
+        board[i][j] = '#';
+        bool b = false;
+        if (!b && findWord(board, i - 1, j, word, k + 1)) b = true;
+        if (!b && findWord(board, i + 1, j, word, k + 1)) b = true;
+        if (!b && findWord(board, i, j - 1, word, k + 1)) b = true;
+        if (!b && findWord(board, i, j + 1, word, k + 1)) b = true;
+        board[i][j] = c;
+        return b;
+    }
+    
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        const int m = board.size();
+        const int n = board[0].size();
+        vector<string> ans;
+        for (const string& word : words) {
+            bool b = false;
+            for (int i = 0; i < m && !b; ++i) {
+                for (int j = 0; j < n && !b; ++j) {
+                    if (findWord(board, i, j, word, 0)) {
+                        ans.push_back(word);
+                        b = true;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+
 // Time Limit Exceeded
 // 34 / 36 test cases passed.
 /*class Solution {
