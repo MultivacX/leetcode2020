@@ -22,3 +22,18 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    int find(const vector<int>& nums, int i, int j) {
+        // [i, j)
+        if (nums[i] <= nums[j - 1]) return nums[i];
+        int m = i + (j - i) / 2;
+        return min(find(nums, i, m), find(nums, m, j));
+    }
+    
+public:
+    int findMin(vector<int>& nums) {
+        return find(nums, 0, nums.size());
+    }
+};

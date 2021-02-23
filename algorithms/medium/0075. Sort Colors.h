@@ -25,3 +25,32 @@ public:
         }
     }
 };
+
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int i = 0, j = nums.size() - 1;
+        while (i < j) {
+            if (nums[i] == 0) {
+                ++i;
+                continue;
+            }
+            if (nums[j] == 2) {
+                --j;
+                continue;
+            }
+            bool swaped = false;
+            for (int k = i; k <= j && !swaped; ++k) {
+                if (nums[k] == 0) {
+                    swap(nums[i], nums[k]);
+                    swaped = true;
+                } else if (nums[k] == 2) {
+                    swap(nums[j], nums[k]);
+                    swaped = true;
+                }
+            }
+            if (!swaped) break;
+        }
+    }
+};

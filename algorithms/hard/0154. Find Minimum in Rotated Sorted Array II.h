@@ -38,3 +38,20 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    int find(const vector<int>& nums, int i, int j) {
+        // [i, j)
+        int val = nums[i];
+        while (i < j - 1 && nums[i] == nums[j - 1]) ++i, --j;
+        if (nums[i] <= nums[j - 1]) return min(val, nums[i]);
+        int m = i + (j - i) / 2;
+        return min(val, min(find(nums, i, m), find(nums, m, j)));
+    }
+    
+public:
+    int findMin(vector<int>& nums) {
+        return find(nums, 0, nums.size());
+    }
+};
