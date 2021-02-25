@@ -21,3 +21,20 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> tmp{INT_MIN};
+        for (int i = 0; i < nums.size(); ++i) {
+            if (tmp.back() < nums[i]) {
+                tmp.push_back(nums[i]);
+            } else {
+                auto it = lower_bound(begin(tmp), end(tmp), nums[i]);
+                if (*it != nums[i]) *it = nums[i];
+            }
+        }
+        return tmp.size() - 1;
+    }
+};

@@ -1,30 +1,34 @@
 // 10. Regular Expression Matching
 // https://leetcode.com/problems/regular-expression-matching/
 
+// Runtime: 4 ms, faster than 88.95% of C++ online submissions for Regular Expression Matching.
+// Memory Usage: 7 MB, less than 59.64% of C++ online submissions for Regular Expression Matching.
+
 class Solution {
 public:
     bool isMatch(string s, string p) {
         const int M = s.length();
         const int N = p.length();
 
-        // 1. 
-        // dp[i][j] = A: s[i]==p[j] and dp[i-1][j-1]
-        //            B:  '.'==p[j] and dp[i-1][j-1]
-        //            C:  '*'==p[j]
-        //                c1: dp[i][j-2]                      zero p[j-1]
-        //
         vector<vector<bool>> dp(M + 1, vector<bool>(N + 1, false));
         dp[0][0] = true;
-        auto DP = [&dp](int i, int j){ return dp[i + 1][j + 1]; }
-        auto T = [&dp](int i, int j){ dp[i + 1][j + 1] = true; }
-        for (int i = 0; i < M; ++i) {
-            for (int j = 0; j < N; ++j) {
-                if ((s[i] == p[j] || '.' == p[j]) && DP(i - 1, j - 1)) {
-                    T(i, j);
+        
+        for (int I = 0; I <= M; ++I) {
+            int i = I - 1; // [-1, M-1]
+            for (int J = 1; J <= N; ++J) {
+                int j = J - 1; // [0, N-1]
+                if (i >= 0 && (s[i] == p[j] || '.' == p[j])) {
+                    dp[I][J] = dp[I - 1][J - 1];
                 } else if ('*' == p[j]) {
-                    if (s[i] == p[j - 1] || '.' == p[j - 1]) {
-
-                    } else if (DP(i, j - 2)) T(i, j);
+                    // Matches 0 of the preceding element.
+                    if (J >= 2) dp[I][J] = dp[I][J] || dp[I][J - 2];
+                    
+                    // Matches 1 of the preceding element.
+                    dp[I][J] = dp[I][J] || dp[I][J - 1];
+                    
+                    // Matches more than 1 of the preceding element.
+                    if (i >= 0 && j >= 1 && (s[i] == p[j - 1] || '.' == p[j - 1]))
+                        dp[I][J] = dp[I][J] || dp[I - 1][J];
                 }
             }
         }

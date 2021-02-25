@@ -1,8 +1,9 @@
 // 297. Serialize and Deserialize Binary Tree
+// https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
 
-// Runtime: 588 ms, faster than 5.00% of C++ online submissions for Serialize and Deserialize Binary Tree.
-// Memory Usage: 154.8 MB, less than 6.90% of C++ online submissions for Serialize and Deserialize Binary Tree.
-
+// Runtime: 36 ms, faster than 98.37% of C++ online submissions for Serialize and Deserialize Binary Tree.
+// Memory Usage: 30.6 MB, less than 88.60% of C++ online submissions for Serialize and Deserialize Binary Tree.
+    
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -12,6 +13,72 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (!root) return "";
+        
+        ostringstream data;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                auto node = q.front();
+                q.pop();
+                data << node->val << ' ';
+                data << (node->left ? 1 : 0) << ' ';
+                data << (node->right ? 1 : 0);
+                if (size > 0) data << ' ';
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
+            data << '\n';
+        }
+        cout << data.str() << endl;
+        return data.str();
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if (data.empty()) return nullptr;
+        
+        TreeNode* root = nullptr;
+        vector<tuple<TreeNode*, int, int>> nodes;
+        istringstream s(data);
+        string line;
+        while (getline(s, line, '\n')) {
+            vector<tuple<TreeNode*, int, int>> tmp;
+            istringstream t(line);
+            while (!t.eof()) {
+                int val, left, right; t >> val >> left >> right;
+                tmp.push_back({new TreeNode(val), left, right});
+            }
+            cout << tmp.size() << endl;
+            if (!root) {
+                root = get<0>(tmp[0]);
+            } else {
+                for (int i = 0, j = 0; i < nodes.size(); ++i) {
+                    if (get<1>(nodes[i]) && j < tmp.size()) get<0>(nodes[i])->left = get<0>(tmp[j++]);
+                    if (get<2>(nodes[i]) && j < tmp.size()) get<0>(nodes[i])->right = get<0>(tmp[j++]);
+                }
+            }
+            nodes = tmp;
+        }
+        return root;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
+
+
+// Runtime: 588 ms, faster than 5.00% of C++ online submissions for Serialize and Deserialize Binary Tree.
+// Memory Usage: 154.8 MB, less than 6.90% of C++ online submissions for Serialize and Deserialize Binary Tree.
+
 class Codec {
 public:
 	// Encodes a tree to a single string.
@@ -142,6 +209,53 @@ public:
     }*/
 };
 
-// Your Codec object will be instantiated and called as such:
-// Codec codec;
-// codec.deserialize(codec.serialize(root));
+
+// TLE
+/*class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (!root) return "";
+        
+        ostringstream data;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int n = 0;
+            int size = q.size();
+            while (size-- > 0) {
+                auto node = q.front();
+                q.pop();
+                int val = node ? node->val : 1001;
+                data << val << ' ';
+                q.push(node ? node->left : nullptr);
+                q.push(node ? node->right : nullptr);
+                if (node && (node->left || node->right)) ++n;
+            }
+            if (n == 0) break;
+        }
+        return data.str();
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        if (data.empty()) return nullptr;
+        
+        vector<TreeNode*> nodes;
+        istringstream s(data);
+        int i = 0;
+        while (!s.eof()) {
+            int val; s >> val;
+            nodes.push_back(val != 1001 ? new TreeNode(val) : nullptr);
+            while (i * 2 + 2 < nodes.size()) {
+                if (nodes[i]) {
+                    nodes[i]->left = nodes[i * 2 + 1];
+                    nodes[i]->right = nodes[i * 2 + 2];
+                }
+                ++i;
+            }
+        }
+        return nodes[0];
+    }
+};*/
