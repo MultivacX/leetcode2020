@@ -39,3 +39,37 @@ public:
         return dp[M][N];
     }
 };
+
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        const int M = s.length();
+        const int N = p.length();
+
+        vector<vector<bool>> dp(M + 1, vector<bool>(N + 1, false));
+        dp[0][0] = true;
+        
+        for (int I = 0; I <= M; ++I) {
+            int i = I - 1; // [-1, M-1]
+            for (int J = 1; J <= N; ++J) {
+                int j = J - 1; // [0, N-1]
+                
+                // '*' Matches empty
+                if (p[j] == '*') dp[I][J] = dp[I][J - 1];
+                if (dp[I][J] || i < 0) continue;
+                
+                // '*' Matches 1
+                if (p[j] == '*') dp[I][J] = dp[I - 1][J - 1];
+                if (dp[I][J]) continue;
+                
+                // '*' Matches > 1
+                if (p[j] == '*') dp[I][J] = dp[I - 1][J];
+                if (dp[I][J]) continue;
+                
+                if (s[i] == p[j] || p[j] == '?') dp[I][J] = dp[I - 1][J - 1];
+            }
+        }
+        return dp[M][N];
+    }
+};
