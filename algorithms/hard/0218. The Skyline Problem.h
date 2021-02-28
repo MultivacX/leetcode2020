@@ -50,3 +50,43 @@ public:
         return coordinates;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        const int n = buildings.size();
+        vector<vector<int>> edges(n * 2, vector<int>(2));
+        for (int i = 0, j = 0; i < n; ++i, ++j) {
+            edges[j][0] = buildings[i][0];
+            edges[j][1] = -buildings[i][2];
+            ++j;
+            edges[j][0] = buildings[i][1];
+            edges[j][1] = buildings[i][2];
+        }
+        sort(begin(edges), end(edges));
+        
+        vector<vector<int>> ans;
+        map<int, int> heights;
+        int pre_max_h = 0;
+        for (const auto& edge : edges) {
+            int x = edge[0];
+            int h = abs(edge[1]);
+            bool isLeft = edge[1] < 0;
+            if (isLeft) {
+                pre_max_h = heights.empty() ? 0 : heights.crbegin()->first;
+                ++heights[h];
+            } else {
+                if (--heights[h] == 0) heights.erase(h);
+                pre_max_h = heights.empty() ? 0 : heights.crbegin()->first;
+            }
+            
+            if (isLeft) {
+                if (pre_max_h < h) ans.push_back({x, h});
+            } else {
+                if (pre_max_h < h) ans.push_back({x, pre_max_h});
+            }
+        }
+        return ans;
+    }
+};

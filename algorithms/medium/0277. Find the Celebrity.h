@@ -32,3 +32,19 @@ public:
         return x;
     }
 };
+
+
+class Solution {
+public:
+    int findCelebrity(int n) {
+        int x = 0;
+        for (int i = 1; i < n; ++i) 
+            if (knows(x, i)) 
+                x = i;
+        
+        for (int i = 0; i < n; ++i) 
+            if (x != i && (!knows(i, x) || knows(x, i)))
+                return -1;
+        return x;
+    }
+};
