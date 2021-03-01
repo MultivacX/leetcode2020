@@ -25,3 +25,30 @@ public:
         return T;
     }
 };
+
+
+class Solution {
+    char helper(char c) {
+        if ('a' <= c && c <= 'z')
+            return c - 'a' + 'A';
+        return c;
+    }
+    
+public:
+    string licenseKeyFormatting(string S, int K) {
+        const int n = S.length();
+        string t;
+        for (int i = n - 1, cnt = 0; i >= 0; --i) {
+            if (S[i] != '-') {
+                t += helper(S[i]);
+                if (++cnt == K) {
+                    t += '-';
+                    cnt = 0;
+                }
+            }
+        }
+        while (t.back() == '-') t.pop_back();
+        reverse(begin(t), end(t));
+        return t;
+    }
+};

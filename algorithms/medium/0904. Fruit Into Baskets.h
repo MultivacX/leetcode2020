@@ -30,3 +30,36 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int totalFruit(vector<int>& tree) {
+        const int n = tree.size();
+        int ans = 1;
+        int type1 = -1, cnt1 = 0;
+        int type2 = tree[0], cnt2 = 0;
+        int i = 0;
+        while (i < n) {
+            if (tree[i] == type2) {
+                ++cnt2;
+            } else if (tree[i] == type1 || -1 == type1) {
+                type1 = tree[i];
+                ++cnt1;
+            } else {
+                ans = max(ans, cnt1 + cnt2);
+                int j = i - 1;
+                type1 = tree[j];
+                cnt1 = 0;
+                while (tree[j] == type1) {
+                    ++cnt1;
+                    --j;
+                }
+                type2 = tree[i];
+                cnt2 = 1;
+            }
+            ++i;
+        }
+        return max(ans, cnt1 + cnt2);
+    }
+};

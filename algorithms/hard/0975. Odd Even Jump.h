@@ -55,3 +55,27 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int oddEvenJumps(vector<int>& arr) {
+        const int n = arr.size();
+        map<int, int> m{{arr[n - 1], n - 1}};
+        vector<bool> dpOdd(n), dpEven(n);
+        dpOdd[n - 1] = dpEven[n - 1] = true;
+        int ans = 1;
+        for (int i = n - 2; i >= 0; --i) {
+            // arr[i] <= it->first
+            auto it = m.lower_bound(arr[i]);
+            dpOdd[i] = it == m.end() ? false : dpEven[it->second];
+            if (dpOdd[i]) ++ans;
+            if (it != m.end() && it->first == arr[i])
+                dpEven[i] = dpOdd[it->second];
+            else if (it != m.begin())
+                dpEven[i] = dpOdd[(--it)->second];
+            m[arr[i]] = i;
+        }
+        return ans;
+    }
+};

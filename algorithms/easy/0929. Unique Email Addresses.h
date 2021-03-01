@@ -28,3 +28,25 @@ public:
         return s.size();
     }
 };
+
+
+class Solution {
+public:
+    int numUniqueEmails(vector<string>& emails) {
+        unordered_set<string> s;
+        for (const auto& e : emails) {
+            string t;
+            const int n = e.length();
+            int i = 0;
+            while (e[i] != '@') {
+                if (e[i] == '+') break;
+                if (e[i] == '.') { ++i; continue; }
+                t += e[i++];
+            }
+            while (e[i] != '@') ++i;
+            t += e.substr(i);
+            s.insert(t);
+        }
+        return s.size();
+    }
+};
