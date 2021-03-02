@@ -104,3 +104,43 @@ public:
         return dp(prefix_sums, 0, n - 1, m, memo);
     }
 };
+
+
+class Solution {
+    bool check(const vector<int>& nums, int m, int targetSum) {
+        int curParts = 0;
+        int curSum = 0;
+        for (int i : nums) {
+            curSum += i;
+            if (curSum == targetSum) {
+                if (++curParts > m)
+                    return false;
+                curSum = 0;
+            } else if (curSum > targetSum) {
+                if (++curParts >= m)
+                    return false;
+                curSum = i;
+            }
+        }
+        if (curSum > 0 && ++curParts > m)
+            return false;
+        return true;
+    }
+
+public:
+    int splitArray(vector<int>& nums, int m) {
+        const int n = nums.size();
+        int l = 0, r = 1;
+        for (int i : nums) {
+            l = max(l, i);
+            r += i;
+        }
+        
+        while (l < r) {
+            int t = l + (r - l) / 2;
+            if (check(nums, m, t)) r = t;
+            else l = t + 1;
+        }
+        return l;
+    }
+};

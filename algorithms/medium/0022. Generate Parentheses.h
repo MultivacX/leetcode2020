@@ -43,3 +43,33 @@ public:
         }
     }
 };
+
+
+class Solution {
+    vector<string> ans;
+    
+    void helper(const int n, int l, int r, string& s) {
+        if (n * 2 == l + r) {
+            ans.push_back(s);
+            return;
+        }
+        
+        if (l < n) {
+            s.push_back('(');
+            helper(n, l + 1, r, s);
+            s.pop_back();
+        }
+        if (l > r) {
+            s.push_back(')');
+            helper(n, l, r + 1, s);
+            s.pop_back();
+        }
+    }
+    
+public:
+    vector<string> generateParenthesis(int n) {
+        string s;
+        helper(n, 0, 0, s);
+        return ans;
+    }
+};

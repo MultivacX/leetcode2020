@@ -46,3 +46,42 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    const vector<char> same{'0', '1', '8'};
+    const vector<vector<char>> rotated{{'0', '0'}, {'1', '1'}, {'6', '9'}, {'8', '8'}, {'9', '6'}};
+    
+    void find(const int n, int i, string& s, vector<string>& ans) {
+        int j = n - i - 1;
+        if (i > j) {
+            ans.push_back(s);
+        } else if (i == j) {
+            for (char c : same) {
+                s[i] = c;
+                ans.push_back(s);
+            }
+        } else {
+            for (const auto& v : rotated) {
+                s[i] = v[0];
+                s[j] = v[1];
+                find(n, i + 1, s, ans);
+            }
+        }
+    }
+    
+public:
+    vector<string> findStrobogrammatic(int n) {
+        if (n == 0) return {};
+        if (n == 1) return {"0", "1", "8"};
+        
+        vector<string> ans;
+        string s(n, '#');
+        for (int i = 1; i < rotated.size(); ++i) {
+            s[0] = rotated[i][0];
+            s[n - 1] = rotated[i][1];
+            find(n, 1, s, ans);
+        }
+        return ans;
+    }
+};

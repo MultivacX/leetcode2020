@@ -24,3 +24,33 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        const int n = nums.size();
+        sort(begin(nums), end(nums));
+        
+        vector<vector<int>> ans;
+        for (int i = 0; i < n - 2; ++i) {
+            if (i != 0 && nums[i - 1] == nums[i])
+                continue;
+            int target = -nums[i];
+            int j = i + 1, k = n - 1;
+            while (j < k) {
+                if (nums[j] + nums[k] == target) {
+                    if (!(j > i + 1 && nums[j - 1] == nums[j])) {
+                       ans.push_back({nums[i], nums[j], nums[k]});
+                    }
+                    ++j; --k;
+                } else if (nums[j] + nums[k] > target) {
+                    --k;
+                } else {
+                    ++j;
+                }
+            }
+        }
+        return ans;
+    }
+};

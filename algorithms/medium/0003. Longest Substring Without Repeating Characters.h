@@ -25,3 +25,24 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        const int n = s.length();
+        if (n <= 1) return n;
+        
+        int ans = 1;
+        vector<int> m(256, -1);
+        m[s[0]] = 0;
+        for (int i = 1, k = 0; i < s.length(); ++i) {
+            int j = s[i];
+            while (k <= m[j])  
+                m[s[k++]] = -1;
+            m[j] = i;
+            ans = max(ans, i - k + 1);
+        }
+        return ans;
+    }
+};

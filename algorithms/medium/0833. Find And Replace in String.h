@@ -30,3 +30,43 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    string findReplaceString(string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets) {
+        const int n = S.length();
+        const int m = indexes.size();
+        
+        vector<vector<int>> I(m, {0, 0});
+        for (int i = 0; i < m; ++i) {
+            I[i][0] = indexes[i];
+            I[i][1] = i;
+        }
+        sort(begin(I), end(I));
+        
+        string T;
+        int i = 0, j = 0;
+        while (i < n) {
+            if (j >= m) {
+                T += S.substr(i);
+                break;
+            }
+            
+            if (i == I[j][0]) {
+                int k = I[j][1];
+                const int l = sources[k].size();
+                if (S.substr(i, l) == sources[k]) {
+                    T += targets[k];
+                    i += l;
+                } else {
+                    T += S[i++];
+                }
+                ++j;
+            } else {
+                T += S[i++];
+            }
+        }
+        return T;
+    }
+};
