@@ -77,3 +77,30 @@ public:
         return dp[N - 1][m];
     }
 };
+
+
+// TLE
+// 28 / 28 test cases passed, but took too long.
+class Solution {
+    int dp(const vector<int>& prefix_sums, int i, int j, int m, vector<vector<vector<int>>>& memo) {
+        int left = i == 0 ? 0 : prefix_sums[i - 1];
+        if (m == 1) return prefix_sums[j] - left;
+        if (memo[i][j][m] != -1) return memo[i][j][m];
+        
+        int ans = INT_MAX;
+        for (int k = i; k <= j - m + 1; ++k) 
+            ans = min(ans, max(prefix_sums[k] - left, dp(prefix_sums, k + 1, j, m - 1, memo)));
+        return memo[i][j][m] = ans;
+    }
+    
+public:
+    int splitArray(vector<int>& nums, int m) {
+        const int n = nums.size();
+        vector<int> prefix_sums(n);
+        prefix_sums[0] = nums[0];
+        for (int i = 1; i < n; ++i)
+            prefix_sums[i] = prefix_sums[i - 1] + nums[i];
+        vector<vector<vector<int>>> memo(n, vector<vector<int>>(n, vector<int>(m + 1, -1)));
+        return dp(prefix_sums, 0, n - 1, m, memo);
+    }
+};

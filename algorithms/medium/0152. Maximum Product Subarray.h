@@ -25,3 +25,21 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        const int n = nums.size();
+        int ans = nums[0];
+        int minProd = ans, maxProd = ans;
+        for (int i = 1; i < n; ++i) {
+            int _minProd = minProd * nums[i];
+            int _maxProd = maxProd * nums[i];
+            minProd = min(min(_minProd, _maxProd), nums[i]);
+            maxProd = max(max(_minProd, _maxProd), nums[i]);
+            ans = max(ans, max(minProd, maxProd));
+        }
+        return ans;
+    }
+};

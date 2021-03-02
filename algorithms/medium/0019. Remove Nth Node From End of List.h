@@ -31,3 +31,21 @@ public:
         return head;
     }
 };
+
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode tmp(0, head);
+        auto p = &tmp;
+        auto q = p->next;
+        int i = 0;
+        while (q) {
+            q = q->next;
+            if (i++ >= n) 
+                p = p->next;
+        }
+        p->next = p->next->next;
+        return tmp.next;
+    }
+};
