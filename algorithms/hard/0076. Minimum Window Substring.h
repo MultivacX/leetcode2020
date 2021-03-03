@@ -84,3 +84,30 @@ public:
         return ans;
     }*/
 };
+
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        const int TL = t.length();
+        vector<int> T(128, 0);
+        for (char c : t) ++T[c];
+        
+        int start = 0, l = INT_MAX;
+        int j = 0;
+        vector<int> S(128, 0);
+        int tl = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s[i];
+            if (++S[c] <= T[c]) ++tl;
+            while (tl == TL && S[s[j]] > T[s[j]]) 
+                --S[s[j++]];
+            if (tl == TL && i - j + 1 < l) {
+                // [j, i]
+                start = j;
+                l = i - j + 1;
+            }
+        }
+        return l == INT_MAX ? "" : s.substr(start, l);
+    }
+};

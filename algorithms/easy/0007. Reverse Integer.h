@@ -17,3 +17,25 @@ public:
         return ans > (int64_t)INT_MAX || ans < (int64_t)INT_MIN ? 0 : ans;
     }
 };
+
+
+class Solution {
+public:
+    int reverse(int x) {
+        static const string STR_MAX = to_string(INT_MAX);
+        static const string STR_MIN = to_string(INT_MIN);
+        
+        string str = to_string(x);
+        const int n = str.length();
+        const int offset = x >= 0 ? 0 : 1;
+        const auto& STR = x >= 0 ? STR_MAX : STR_MIN;
+        const int N = x >= 0 ? STR_MAX.length() : STR_MIN.length();
+        std::reverse(begin(str) + offset, end(str));
+        for (int i = offset; i < n && n == N; ++i) {
+            if (str[i] < STR[i]) break;
+            if (str[i] == STR[i]) continue;
+            return 0;
+        }
+        return stoi(str);
+    }
+};
