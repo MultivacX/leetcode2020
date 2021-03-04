@@ -33,3 +33,44 @@ public:
         return ans > (uint64_t)INT_MAX ? 0 : ans;
     }
 };
+
+
+class Solution {
+public:
+    int minAreaRect(vector<vector<int>>& points) {
+        // rect: {x1, y1}, {x1, y2}, {x2, y1}, {x2, y2}
+        // x1: {y1, y2, ...}
+        // y1 * 40001 + y2: {x1, x2, ...}
+        unordered_map<int, vector<int>> m_x;
+        for (const auto& p : points) 
+            m_x[p[0]].push_back(p[1]);
+        unordered_map<int, vector<int>> m_y1y2;
+        for (const auto& it : m_x) {
+            int x = it.first;
+            for (int i = 0; i + 1 < it.second.size(); ++i) {
+                int y1 = it.second[i];
+                for (int j = i + 1; j < it.second.size(); ++j) {
+                    int y2 = it.second[j];
+                    m_y1y2[min(y1, y2) * 40001 + max(y1, y2)].push_back(x);
+                }
+            }
+        }
+        
+        int ans = INT_MAX;
+        for (const auto& it : m_x) {
+            int x1 = it.first;
+            for (int i = 0; i + 1 < it.second.size(); ++i) {
+                int y1 = it.second[i];
+                for (int j = i + 1; j < it.second.size(); ++j) {
+                    int y2 = it.second[j];
+                    auto& v_x2 = m_y1y2[min(y1, y2) * 40001 + max(y1, y2)];
+                    for (int x2 : v_x2) {
+                        if (x1 == x2) continue;
+                        ans = min(ans, abs(x1 - x2) * abs(y1 - y2));
+                    }
+                }
+            }
+        }
+        return ans == INT_MAX ? 0 : ans;
+    }
+};

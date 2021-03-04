@@ -23,3 +23,24 @@ public:
         return to_string(A) + "A" + to_string(B) + "B";
     }
 };
+
+
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        vector<int> s(10);
+        for (char c : secret) 
+            ++s[c - '0'];
+        
+        const int n = secret.length();
+        int A = 0;
+        for (int i = 0 ; i < n; ++i)
+            if (secret[i] == guess[i])
+                --s[secret[i] - '0'], ++A;
+        int B = 0;
+        for (int i = 0 ; i < n; ++i)
+            if (secret[i] != guess[i] && --s[guess[i] - '0'] >= 0)
+                ++B;
+        return to_string(A) + 'A' + to_string(B) + 'B';
+    }
+};

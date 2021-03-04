@@ -66,3 +66,52 @@ public:
         return ans;
     }
 };*/
+
+
+class Solution {
+    struct segment_tree {
+        const int n;
+        vector<int> tree;
+
+        segment_tree(vector<int>& nums) : n(nums.size()), tree(nums.size() << 1, 0) {
+            for (int i = 0; i < n; ++i)
+                tree[n + i] = nums[i];
+            for (int i = n - 1; i > 0; --i)
+                tree[i] = tree[i << 1] + tree[i << 1 ^ 1];
+        }
+
+        void update(int i, int diff) {
+            for (int j = n + i; j > 0; j >>= 1)
+                tree[j] += diff;
+        }
+
+        int query(int l, int r) {
+            int sum = 0;
+            // [l, r)
+            for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+                if (l & 1) sum += tree[l++];
+                if (r & 1) sum += tree[--r];
+            }
+            return sum;
+        }
+        };
+    
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        map<int, int> m;
+        for (int i : nums) m[i];
+        int idx = 0;
+        for (auto& it : m) it.second = idx++;
+        const int N = m.size();
+        vector<int> v(N);
+        segment_tree tree(v);
+        
+        vector<int> ans(nums.size());
+        for (int j = nums.size() - 1; j >= 0; --j) {
+            int i = m[nums[j]];
+            tree.update(i, 1);
+            ans[j] = tree.query(0, i);
+        }
+        return ans;
+    }
+};

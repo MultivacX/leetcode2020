@@ -20,3 +20,24 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        sort(begin(intervals), end(intervals));
+        
+        vector<vector<int>> ans;
+        int pre_end = -1;
+        for (const auto& i : intervals) {
+            if (pre_end < i[0]) {
+                ans.push_back(i);
+                pre_end = i[1];
+            } else if (pre_end < i[1]) {
+                ans.back()[1] = i[1]; 
+                pre_end = i[1];
+            }
+        }
+        return ans;
+    }
+};

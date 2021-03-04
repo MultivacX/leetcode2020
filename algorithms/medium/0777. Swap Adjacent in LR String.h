@@ -25,3 +25,62 @@ public:
         return i == j;
     }
 };
+
+
+class Solution {    
+public:
+    bool canTransform(string start, string end) {
+        const int n = start.length();
+        int i = 0;
+        while (i < n) {
+            if (start[i] == end[i]) {
+                ++i;
+            } else if (end[i] == 'X') {
+                int j = i;
+                while (j < n) {
+                    if (start[j] == 'L')
+                        return false;
+                    if (start[j] == 'X') {
+                        swap(start[i++], start[j]);
+                        break;
+                    }
+                    if (++j == n) return false;
+                }
+            } else if (end[i] == 'L') {
+                int j = i;
+                while (j < n) {
+                    if (start[j] == 'R')
+                        return false;
+                    if (start[j] == 'L') {
+                        swap(start[i++], start[j]);
+                        break;
+                    }
+                    if (++j == n) return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+
+class Solution {    
+public:
+    bool canTransform(string start, string end) {
+        const int n = start.length();
+        int i = 0, j = 0;
+        while (true) {
+            while (i < n && start[i] == 'X') ++i;
+            while (j < n && end[j] == 'X') ++j;
+            if (i == n || j == n) return i == j;
+            if (start[i] != end[j]) return false;
+            
+            if (start[i] == 'L' && i < j) return false;
+            if (start[i] == 'R' && i > j) return false;
+            ++i; ++j;
+        }
+        return true;
+    }
+};

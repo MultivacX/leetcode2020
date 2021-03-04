@@ -18,3 +18,23 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        const int n = s.length();
+        vector<int> s2t(256, -1);
+        vector<int> t2s(256, -1);
+        for (int i = 0; i < n; ++i) {
+            int j = s[i], k = t[i];
+            if (s2t[j] == -1 && t2s[k] == -1) {
+                s2t[j] = k;
+                t2s[k] = j;
+            } else if (s2t[j] != k || t2s[k] != j) {
+                return false;
+            }
+        }
+        return true;
+    }
+};

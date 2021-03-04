@@ -15,3 +15,23 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        const int n = s.length();
+        if (n != t.length()) return false;
+        if (n == 0) return true;
+        
+        vector<int> cnt(26, 0);
+        for (int i = 0; i < n; ++i) 
+            ++cnt[s[i] - 'a'],
+            --cnt[t[i] - 'a'];
+
+        for (int i : cnt)
+            if (i != 0)
+                return false;
+        return true;
+    }
+};

@@ -25,3 +25,14 @@ public:
         return {-1, -1};
     }
 };
+
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        auto l = lower_bound(begin(nums), end(nums), target);
+        if (l == end(nums) || *l != target) return {-1, -1};
+        auto u = upper_bound(begin(nums), end(nums), target);
+        return {(int)(l - begin(nums)), (int)(u - begin(nums)) - 1};
+    }
+};

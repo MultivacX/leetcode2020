@@ -24,3 +24,28 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+public:
+    bool isStrobogrammatic(string num) {
+        const int n = num.length();
+        if (n == 0) return false;
+        int i = 0, j = n - 1;
+        while (i <= j) {
+            if (num[i] == '0' || num[i] == '1' || num[i] == '8') {
+                if (num[i] != num[j]) return false;
+                ++i; --j;
+            } else if (num[i] == '6') {
+                if ('9' != num[j]) return false;
+                ++i; --j;
+            } else if (num[i] == '9') {
+                if ('6' != num[j]) return false;
+                ++i; --j;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+};
