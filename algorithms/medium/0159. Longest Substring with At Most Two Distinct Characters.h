@@ -61,3 +61,39 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstringTwoDistinct(string s) {
+        int a = -1, cnt_a = 0;
+        int b = -1, cnt_b = 0;
+        int ans = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s[i];
+            if (a == -1 || a == c) {
+                a = c;
+                ++cnt_a;
+            } else if (b == -1 || b == c) {
+                b = c;
+                ++cnt_b;
+            } else {
+                int j = i - (cnt_a + cnt_b);
+                while (cnt_a > 0 && cnt_b > 0) {
+                    if (a == s[j]) --cnt_a;
+                    else if (b == s[j]) --cnt_b;
+                    ++j;
+                }
+                if (cnt_a == 0) {
+                    a = c;
+                    ++cnt_a;
+                } else if (cnt_b == 0) {
+                    b = c;
+                    ++cnt_b;
+                }
+            }
+            ans = max(ans, cnt_a + cnt_b);
+        }
+        return ans;
+    }
+};

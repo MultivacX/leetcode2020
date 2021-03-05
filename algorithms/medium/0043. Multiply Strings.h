@@ -84,3 +84,71 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    string add(const string& num1, const string& num2) {
+        const int len1 = num1.length();
+        const int len2 = num2.length();
+        
+        int carry = 0;
+        string ans;
+        int i = 0;
+        while (i < len1 && i < len2) {
+            int v = (num1[i] - '0') + (num2[i] - '0') + carry;
+            carry = v / 10;
+            v = v % 10;
+            ans += (v + '0');
+            ++i;
+        }
+        while (i < len1) {
+            int v = (num1[i] - '0') + carry;
+            carry = v / 10;
+            v = v % 10;
+            ans += (v + '0');
+            ++i;
+        }
+        while (i < len2) {
+            int v = (num2[i] - '0') + carry;
+            carry = v / 10;
+            v = v % 10;
+            ans += (v + '0');
+            ++i;
+        }
+        if (carry > 0) {
+            ans += (carry + '0');
+        }
+        return ans;
+    }
+    
+public:
+    string multiply(string num1, string num2) {
+        reverse(begin(num1), end(num1));
+        reverse(begin(num2), end(num2));
+        string ans("0");
+        for (int i = 0; i < num1.length(); ++i) {
+            int a = num1[i] - '0';
+            if (a == 0) continue;
+            string product(i, '0');
+            int carry = 0;
+            for (int j = 0; j < num2.length(); ++j) {
+                int v = a * (num2[j] - '0') + carry;
+                carry = v / 10;
+                v = v % 10;
+                product += (v + '0');
+            }
+            while (carry > 0) {
+                int v = carry;
+                carry = v / 10;
+                v = v % 10;
+                product += (v + '0');
+            }
+            // cout << product << endl;
+            ans = add(ans, product);
+        }
+        while (ans.size() > 1 && ans.back() == '0')
+            ans.pop_back();
+        reverse(begin(ans), end(ans));
+        return ans;
+    }
+};

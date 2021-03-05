@@ -19,3 +19,37 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        reverse(begin(digits), end(digits));
+        const int n = digits.size();
+        int carry = 1;
+        for (int i = 0; i < n; ++i) {
+            int v = digits[i] + carry;
+            carry = v / 10;
+            digits[i] = v % 10;
+        }
+        if (carry > 0) digits.push_back(carry);
+        reverse(begin(digits), end(digits));
+        return digits;
+    }
+};
+
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        const int n = digits.size();
+        int carry = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            int v = digits[i] + carry;
+            carry = v / 10;
+            digits[i] = v % 10;
+        }
+        if (carry > 0) digits.insert(digits.begin(), carry);
+        return digits;
+    }
+};

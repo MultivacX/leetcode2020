@@ -79,3 +79,31 @@ public:
     }
 };
 
+
+class MyCalendarTwo {
+    vector<vector<int>> booked;
+    vector<vector<int>> doubleBooked;
+    
+    bool overlap(int s1, int e1, int s2, int e2) {
+        return (s1 <= s2 && s2 < e1) || (s2 <= s1 && s1 < e2);
+    }
+    
+public:
+    MyCalendarTwo() {
+        
+    }
+    
+    bool book(int start, int end) {
+        for (const auto& b : doubleBooked) 
+            if (overlap(start, end, b[0], b[1]))
+                return false;
+        
+        for (const auto& b : booked) 
+            if (overlap(start, end, b[0], b[1]))
+                doubleBooked.push_back({max(start, b[0]), min(end, b[1])});
+        
+        booked.push_back({start, end});
+        
+        return true;
+    }
+};
