@@ -36,3 +36,34 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    vector<pair<char, int>> getGroups(const string& s) {
+        vector<pair<char, int>> ans;
+        for (int i = 0; i < s.length(); ++i) 
+            if (i > 0 && s[i] == ans.back().first) ++ans.back().second;
+            else ans.push_back({s[i], 1});
+        return ans;
+    }
+    
+    bool compare(const vector<pair<char, int>>& a, const vector<pair<char, int>>& b) {
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); ++i) 
+            if (a[i].first != b[i].first) return false;
+            else if (a[i].second < b[i].second) return false;
+            else if (a[i].second > b[i].second && a[i].second < 3) return false;
+        return true;
+    }
+    
+public:
+    int expressiveWords(string S, vector<string>& words) {
+        auto a = getGroups(S);
+        int ans = 0;
+        for (const string& w : words) {
+            auto b = getGroups(w);
+            if (compare(a, b)) ++ans;
+        }
+        return ans;
+    }
+};

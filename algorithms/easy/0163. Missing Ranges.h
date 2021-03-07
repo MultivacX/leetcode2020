@@ -21,3 +21,34 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<string> findMissingRanges(vector<int>& nums, int lower, int upper) {
+        if (nums.empty()) 
+            return lower == upper ? 
+                    vector<string>{to_string(lower)} : 
+                    vector<string>{to_string(lower) + "->" + to_string(upper)};
+        if (lower == upper) 
+            return {};
+        
+        const int n = nums.size();
+        vector<string> ans;
+        if (lower < nums[0]) {
+            if (lower == nums[0] - 1) ans.push_back(to_string(lower));
+            else ans.push_back(to_string(lower) + "->" + to_string(nums[0] - 1));
+        }
+        for (int i = 1; i < n; ++i) {
+            int diff = nums[i] - nums[i - 1];
+            if (diff == 1) continue;
+            if (diff == 2) ans.push_back(to_string(nums[i] - 1));
+            else ans.push_back(to_string(nums[i - 1] + 1) + "->" + to_string(nums[i] - 1));
+        }
+        if (nums[n - 1] < upper) {
+            if (nums[n - 1] == upper - 1) ans.push_back(to_string(upper));
+            else ans.push_back(to_string(nums[n - 1] + 1) + "->" + to_string(upper));
+        }
+        return ans;
+    }
+};

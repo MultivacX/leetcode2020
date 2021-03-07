@@ -41,3 +41,43 @@ public:
         return s;
     }
 };
+
+
+class Solution {
+    int getMinutes(char a, char b, char c, char d) {
+        return ((a - '0') * 10 + b - '0') * 60 + (c - '0') * 10 + d - '0';
+    }
+    
+public:
+    string nextClosestTime(string time) {
+        unordered_set<char> digits{time[0], time[1], time[3], time[4]};
+        if (digits.size() == 1) return time;
+        
+        const int l = 0, r = 24 * 60;
+        const int minutes = getMinutes(time[0], time[1], time[3], time[4]);
+        
+        string ans(time);
+        int diff = INT_MAX;
+        for (char a : digits) {
+            if (a > '2') continue;
+            for (char b : digits) {
+                if (a == '2' && b > '3') continue;
+                for (char c : digits) {
+                    if (c > '5') continue;
+                    for (char d : digits) {
+                        if (time[0] == a && time[1] == b && time[3] == c && time[4] == d)
+                            continue;
+                        int cur = getMinutes(a, b, c, d);
+                        if (cur < minutes) cur += r;
+                        // printf("%c%c:%c%c  %d\n", a, b, c, d, cur);
+                        if (cur - minutes < diff) {
+                            ans[0] = a, ans[1] = b, ans[3] = c, ans[4] = d;
+                            diff = cur - minutes;
+                        }
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};

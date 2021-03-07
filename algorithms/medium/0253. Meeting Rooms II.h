@@ -22,3 +22,23 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        map<int, int> m;
+        for (const auto& i : intervals) {
+            ++m[i[0]];
+            --m[i[1]];
+        }
+        
+        int ans = 0;
+        int cnt = 0;
+        for (auto it : m) {
+            cnt += it.second;
+            ans = max(ans, cnt);
+        }
+        return ans;
+    }
+};

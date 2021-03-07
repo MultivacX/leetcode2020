@@ -15,3 +15,13 @@ public:
         return q.top();
     }
 };
+
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int i = nums.size() - k;
+        nth_element(begin(nums), begin(nums) + i, end(nums));
+        return nums[i];
+    }
+};
