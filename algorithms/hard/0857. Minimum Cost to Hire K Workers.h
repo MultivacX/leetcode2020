@@ -26,6 +26,10 @@ public:
                 // remove current max quality
                 qualities -= q.top();
                 q.pop();
+
+                // if q.top() is quality[i]
+                //     1. ratio[i] >= ratio[i-1] >= ... >= ratio[0]
+                //     2. ratio[i] * qualities >= ratio[i-1] * qualities
             }
             if (q.size() == K) {
                 double ratio = (double)wage[i] / (double)quality[i];

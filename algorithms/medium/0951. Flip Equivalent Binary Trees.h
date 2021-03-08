@@ -21,3 +21,16 @@ public:
             || (flipEquiv(root1->left, root2->right) && flipEquiv(root1->right, root2->left));
     }
 };
+
+
+class Solution {
+public:
+    bool flipEquiv(TreeNode* root1, TreeNode* root2) {
+        // cout << (root1 ? to_string(root1->val) : "X") << " --- ";
+        // cout << (root2 ? to_string(root2->val) : "X") << endl;
+        if (!root1 || !root2) return root1 == root2;
+        if (root1->val != root2->val) return false;
+        return (flipEquiv(root1->left, root2->right) && flipEquiv(root1->right, root2->left)) or
+               (flipEquiv(root1->left, root2->left) && flipEquiv(root1->right, root2->right));
+    }
+};

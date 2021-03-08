@@ -41,3 +41,23 @@ public:
             countNodes(root->right, -1, rightLevel - 1); // root->right
     }
 };
+
+
+class Solution {
+    int getLevels(TreeNode* root, bool toLeft) {
+        if (!root) return 0;
+        return 1 + getLevels(toLeft ? root->left : root->right, toLeft);
+    }
+    
+public:
+    int countNodes(TreeNode* root, int preToLeft = -1) {
+        if (!root) return 0;
+        
+        int toLeft = preToLeft < 0 ? getLevels(root, true) : preToLeft;
+        int toRight = getLevels(root, false);
+        if (toLeft == toRight)
+            return (1 << toLeft) - 1;
+        
+        return 1 + countNodes(root->left, toLeft - 1) + countNodes(root->right);
+    }
+};

@@ -73,3 +73,34 @@ public:
         }
     }
 };
+
+
+class Solution {
+    int m;
+    int n;
+    vector<vector<int>> pathes;
+    
+    int walk(const vector<vector<int>>& matrix, int i, int j) {
+        if (pathes[i][j] != 0) return pathes[i][j];
+        
+        int ans = 0;
+        if (i - 1 >= 0 && matrix[i][j] < matrix[i - 1][j]) ans = max(ans, walk(matrix, i - 1, j));
+        if (i + 1 < m && matrix[i][j] < matrix[i + 1][j]) ans = max(ans, walk(matrix, i + 1, j));
+        if (j - 1 >= 0 && matrix[i][j] < matrix[i][j - 1]) ans = max(ans, walk(matrix, i, j - 1));
+        if (j + 1 < n && matrix[i][j] < matrix[i][j + 1]) ans = max(ans, walk(matrix, i, j + 1));
+        return pathes[i][j] = ans + 1;
+    }
+    
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        m = matrix.size();
+        n = matrix[0].size();
+        pathes = vector<vector<int>>(m, vector<int>(n, 0));
+
+        int ans = 0;
+        for (int i = 0; i < m; ++i) 
+            for (int j = 0; j < n; ++j) 
+                ans = max(ans, walk(matrix, i, j));
+        return ans;
+    }
+};

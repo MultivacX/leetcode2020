@@ -48,3 +48,56 @@ public:
         return -1.0;
     }
 };
+
+
+class Solution {
+    unordered_map<string, unordered_map<string, double>> g;
+    
+    double calc(const string& s, const string& e) {
+        if (g[s].count(e)) return g[s][e];
+        
+        unordered_set<string> visited;
+        queue<pair<string, double>> q;
+        q.push({s, 1});
+        
+        while (!q.empty()) {
+            int n = q.size();
+            while (n-- > 0) {
+                auto a = q.front().first;
+                auto x = q.front().second;
+                q.pop();
+                visited.insert(a);
+                for (const auto& it : g[a]) {
+                    auto b = it.first;
+                    if (visited.count(b)) continue;
+                    
+                    auto y = x * it.second;
+                    if (b == e) return y;
+                    
+                    q.push({b, y});
+                }
+            }
+        }
+        return -1;
+    }
+    
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        for (int i = 0; i < equations.size(); ++i) {
+            g[equations[i][0]][equations[i][1]] = values[i];
+            g[equations[i][1]][equations[i][0]] = 1.0 / values[i];
+        }
+        
+        vector<double> ans;
+        for (const auto& q : queries) {
+            if (g.count(q[0]) == 0 || g.count(q[1]) == 0) {
+                ans.push_back(-1);
+            } else if (q[0] == q[1]) {
+                ans.push_back(1);
+            } else {
+                ans.push_back(calc(q[0], q[1]));
+            }
+        }
+        return ans;
+    }
+};

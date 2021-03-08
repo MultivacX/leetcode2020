@@ -42,3 +42,33 @@ public:
         return order.size() == numCourses ? order : vector<int>();
     }
 };
+
+
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<unordered_set<int>> courses(numCourses);
+        vector<int> ins(numCourses);
+        for (const auto& p : prerequisites) {
+            courses[p[1]].insert(p[0]);
+            ++ins[p[0]];
+        }
+        
+        queue<int> q;
+        for (int i = 0; i < numCourses; ++i) if (ins[i] == 0) q.push(i);
+        
+        vector<int> ans;
+        while (!q.empty()) {
+            int n = q.size();
+            while (n-- > 0) {
+                int i = q.front(); q.pop();
+                ans.push_back(i);
+                for (int j : courses[i]) 
+                    if (--ins[j] == 0)
+                        q.push(j);
+                courses[i].clear();
+            }
+        }
+        return ans.size() == numCourses ? ans : vector<int>{};
+    }
+};

@@ -100,3 +100,42 @@ public:
         visited.erase(beginWord);
     }*/
 };
+
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        if (find(begin(wordList), end(wordList), endWord) == wordList.end()) return 0;
+        
+        unordered_set<string> words(begin(wordList), end(wordList));
+        
+        const int n = beginWord.length();
+        
+        unordered_set<string> p{beginWord}, q{endWord};
+        int level = 2;
+        while (!p.empty() && !q.empty()) {
+            if (p.size() > q.size()) swap(p, q);
+            
+            unordered_set<string> t;
+            for (string w : p) {
+                words.erase(w);
+                
+                for (int i = 0; i < n; ++i) {
+                    char o = w[i];
+                    for (char c = 'a'; c <= 'z'; ++c) {
+                        w[i] = c;
+                        if (q.count(w)) return level;
+                        if (words.count(w) == 0) continue;
+                        t.insert(w);
+                    }   
+                    w[i] = o;
+                }
+            }
+            
+            p = move(t);
+            ++level;
+        }
+        
+        return 0;
+    }
+};
