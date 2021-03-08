@@ -39,3 +39,21 @@ public:
         }
     }
 };
+
+
+class Solution {
+    vector<int> ans;
+    
+    void helper(Node* root) {
+        if (!root) return;
+        ans.push_back(root->val);
+        for (auto node : root->children)
+            helper(node);
+    }
+    
+public:
+    vector<int> preorder(Node* root) {
+        helper(root);
+        return ans;
+    }
+};

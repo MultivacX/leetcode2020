@@ -106,3 +106,62 @@ public:
 // Your Codec object will be instantiated and called as such:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
+
+
+class Codec {
+public:
+    // Encodes a tree to a single string.
+    string serialize(Node* root) {
+        if (!root) return "";
+        
+        ostringstream data;
+        queue<Node*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int n = q.size();
+            while (n-- > 0) {
+                Node* node = q.front();
+                q.pop();
+                data << node->val << ' ';
+                data << node->children.size();
+                if (n > 0) data << ' ';
+                for (auto child : node->children)
+                    q.push(child);
+            }
+            data << '\n';
+        }
+        // cout << data.str() << endl;
+        return data.str();
+    }
+	
+    // Decodes your encoded data to tree.
+    Node* deserialize(string data) {
+        if (data.empty()) return nullptr;
+        
+        Node* root = nullptr;
+        vector<pair<Node*, int>> cur;
+        istringstream s(data);
+        string line;
+        while (getline(s, line, '\n')) {
+            vector<pair<Node*, int>> tmp;
+            istringstream t(line);
+            while (!t.eof()) {
+                int val, cnt; t >> val >> cnt;
+                tmp.push_back({new Node(val), cnt});
+            }
+            if (!root) {
+                root = tmp[0].first;
+            } else {
+                int i = 0;
+                for (auto& p : cur) {
+                    auto node = p.first;
+                    auto cnt = p.second;
+                    while (cnt-- > 0) 
+                        node->children.push_back(tmp[i++].first);
+                }
+            }
+            cur = move(tmp);
+        }
+        return root;
+    }
+};
