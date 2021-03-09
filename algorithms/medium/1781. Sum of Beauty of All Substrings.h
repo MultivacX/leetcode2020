@@ -10,6 +10,7 @@ public:
         const int n = s.length();
         int ans = 0;
         map<int, int> m;
+        // optim: vector<int> a(26, 0) minmax_element
         for (int i = 0; i + 1 < n; ++i) {
             // reset
             m.clear();
