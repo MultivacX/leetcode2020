@@ -21,3 +21,19 @@ public:
         return tris;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans;
+        ans.push_back({1});
+        for (int size = 2; size <= numRows; ++size) {
+            vector<int> row(size, 1);
+            for (int i = 1; i + 1 < size; ++i)
+                row[i] = ans.back()[i - 1] + ans.back()[i];
+            ans.push_back(row);
+        }
+        return ans;
+    }
+};

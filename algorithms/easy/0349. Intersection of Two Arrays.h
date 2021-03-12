@@ -19,3 +19,25 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> m;
+        if (nums1.size() > nums2.size())
+            swap(nums1, nums2);
+        for (int i : nums1) ++m[i];
+        
+        vector<int> ans;
+        for (int i : nums2) {
+            auto it = m.find(i);
+            if (it != end(m)) {
+                if (--it->second == 0)
+                    m.erase(it);
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};

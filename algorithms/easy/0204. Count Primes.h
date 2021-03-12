@@ -19,3 +19,19 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n < 2) return 0;
+        vector<int> primes(n + 1, 1);
+        primes[0] = primes[1] = 0;
+        for (int i = 2; i <= n; ++i) {
+            for (int j = i; j <= n / i; ++j) {
+                primes[i * j] = 0;
+            }
+        }
+        return accumulate(begin(primes), end(primes), -primes[n]);
+    }
+};

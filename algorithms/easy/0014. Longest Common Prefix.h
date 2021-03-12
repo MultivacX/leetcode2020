@@ -33,3 +33,33 @@ public:
         return prefix;
     }
 };
+
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if (strs.empty()) return "";
+        while (strs.size() > 1) {
+            int i = 0, j = strs.size() - 1;
+            while (i < j) {
+                const int m = strs[i].length();
+                const int n = strs[j].length();
+                
+                if (m + n == 0) {
+                    
+                } else {
+                    if (m == 0 || n == 0 || strs[i][0] != strs[j][0]) 
+                        return "";
+                
+                    int l = 1;
+                    while (l < n && strs[i][l] == strs[j][l]) ++l;
+                    strs[i].resize(l);   
+                }
+                
+                ++i, --j;
+                strs.pop_back();
+            }
+        }
+        return strs[0];
+    }
+};

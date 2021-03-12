@@ -31,3 +31,34 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    int m;
+    int n;
+    
+    bool search(vector<vector<char>>& board, const string& word, int i, int j, int k) {
+        if (k >= word.length()) return true;
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != word[k]) return false;
+        
+        char t = board[i][j];
+        board[i][j] = '#';
+        if (search(board, word, i - 1, j, k + 1)) return true;
+        if (search(board, word, i + 1, j, k + 1)) return true;
+        if (search(board, word, i, j - 1, k + 1)) return true;
+        if (search(board, word, i, j + 1, k + 1)) return true;
+        board[i][j] = t;
+        return false;
+    }
+    
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        m = board.size();
+        n = board[0].size();
+        
+        for (int i = 0; i < m; ++i) 
+            for (int j = 0; j < n; ++j) 
+                if (search(board, word, i, j, 0)) return true;
+        return false;
+    }
+};

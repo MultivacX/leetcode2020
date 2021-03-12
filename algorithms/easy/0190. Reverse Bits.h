@@ -18,3 +18,18 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t m = 0;
+        int i = 0, j = 31;
+        while (i < j) {
+            m |= ((n & (1 << i)) ? 1 : 0) << j;
+            m |= ((n & (1 << j)) ? 1 : 0) << i;
+            ++i, --j;
+        }
+        return m;
+    }
+};

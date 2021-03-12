@@ -48,3 +48,43 @@ public:
         return head;
     }
 };
+
+
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head || !head->next || !head->next->next) return head;
+        
+        auto eh = head->next;
+        auto x = eh;
+        
+        auto p = head;
+        auto q = eh;
+        while (true) {
+            // p -> q -> pn -> qn
+            if (!q) {
+                p->next = eh;
+                x->next = nullptr;
+                break;
+            }
+            
+            auto pn = q->next;
+            if (!pn) {
+                p->next = eh;
+                x->next = q;
+                break;
+            }
+            
+            auto qn = pn->next;
+            if (!qn) {
+                p->next = pn; pn->next = eh;
+                x->next = q; q->next = nullptr;
+                break;
+            }
+            
+            p->next = pn; p = pn;
+            x->next = q; x = q; q = qn;
+        }
+        return head;
+    }
+};

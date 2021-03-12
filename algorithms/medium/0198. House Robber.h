@@ -25,3 +25,22 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    int rob(vector<int>& nums, int i) {
+        const int n = nums.size();
+        if (i >= n) return 0;
+        
+        vector<int> dp(n, 0);
+        dp[i] = nums[i];
+        while (++i < n) 
+            dp[i] = max(dp[i - 1], nums[i] + (i >= 2 ? dp[i - 2] : 0));
+        return dp[n - 1];
+    }
+    
+public:
+    int rob(vector<int>& nums) {
+        return max(rob(nums, 0), rob(nums, 1));
+    }
+};

@@ -28,3 +28,21 @@ public:
         return root;
     }
 };
+
+
+class Solution {
+    TreeNode* sortedArrayToBST(const vector<int>& nums, int i, int j) {
+        // [i, j)
+        // cout << i << " " << j << endl;
+        if (i >= j) return nullptr;
+        int m = i + (j - i) / 2;
+        return new TreeNode(nums[m], 
+                            sortedArrayToBST(nums, i, m), 
+                            sortedArrayToBST(nums, m + 1, j));
+    }
+    
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        return sortedArrayToBST(nums, 0, nums.size());
+    }
+};

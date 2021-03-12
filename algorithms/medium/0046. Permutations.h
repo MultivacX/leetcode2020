@@ -47,3 +47,30 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        const int n = nums.size();
+        int k = 1;
+        for (int i = 2; i <= n; ++i) k *= i;
+        vector<vector<int>> ans{nums};
+        while (--k > 0) {
+            auto cur = ans.back();
+            int j = n - 1;
+            while (j > 0 && cur[j - 1] > cur[j]) --j;
+            if (j == 0) {
+                reverse(begin(cur), end(cur));
+            } else {
+                // [j, n - 1]
+                int i = n - 1;
+                while (cur[j - 1] > cur[i]) --i;
+                swap(cur[j - 1], cur[i]);
+                reverse(begin(cur) + j, end(cur));
+            }
+            ans.push_back(move(cur));
+        }
+        return ans;
+    }
+};

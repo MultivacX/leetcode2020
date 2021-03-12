@@ -35,3 +35,27 @@ public:
         return q;
     }
 };
+
+
+class Solution {
+    TreeNode* pre = nullptr;
+    TreeNode* suc = nullptr;
+    
+    void inorder(TreeNode* root, TreeNode* p) {
+        if (!root) return;
+        
+        inorder(root->left, p);
+        if (pre == p && !suc) {
+            suc = root;
+            return;
+        }
+        pre = root;
+        inorder(root->right, p);
+    }
+    
+public:
+    TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+        inorder(root, p);
+        return suc;
+    }
+};

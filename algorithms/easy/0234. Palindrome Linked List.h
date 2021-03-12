@@ -52,3 +52,39 @@ public:
         return q;
     }
 };
+
+
+class Solution {
+    ListNode* reverse(ListNode* node) {
+        if (!node || !node->next) return node;
+        auto p = node;
+        auto q = node->next;
+        auto t = reverse(q);
+        p->next = nullptr;
+        q->next = p;
+        return t;
+    }
+    
+public:
+    bool isPalindrome(ListNode* head) {
+        if (!head || !head->next) return true;
+        
+        auto p = head;
+        int n = 0;
+        while (p) ++n, p = p->next;
+        
+        int h = n >> 1;
+        p = head;
+        while (h) --h, p = p->next;
+        
+        auto q = reverse((n & 1) ? p->next : p);
+        p = head;
+        while (p && q) {
+            if (p->val != q->val)
+                return false;
+            p = p->next;
+            q = q->next;
+        }
+        return true;
+    }
+};

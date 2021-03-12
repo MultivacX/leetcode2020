@@ -48,3 +48,15 @@ public:
         return -1;
     }
 };
+
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        const int m = haystack.length();
+        const int n = needle.length();
+        if (n == 0) return 0;
+        if (m < n) return -1;
+        return haystack.find(needle);
+    }
+};

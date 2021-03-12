@@ -11,3 +11,13 @@ public:
         return n == 1;
     }
 };
+
+
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        int64_t x = 1;
+        while (x < n) x *= 3;
+        return x == n;
+    }
+};

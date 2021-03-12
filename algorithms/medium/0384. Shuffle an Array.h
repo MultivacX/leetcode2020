@@ -34,3 +34,34 @@ public:
  * vector<int> param_1 = obj->reset();
  * vector<int> param_2 = obj->shuffle();
  */
+
+
+class Solution {
+    const vector<int>& nums_;
+    vector<array<int, 2>> rands_;
+        
+public:
+    Solution(vector<int>& nums) : nums_(nums), rands_(nums.size()) {
+        srand(time(nullptr));
+        for (int i = 0; i < nums.size(); ++i)
+            rands_[i][1] = nums[i];
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    vector<int> reset() {
+        return nums_;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    vector<int> shuffle() {
+        for (int i = 0; i < nums_.size(); ++i)
+            rands_[i][0] = rand();
+        sort(begin(rands_), end(rands_), [](const array<int, 2>& l, const array<int, 2>& r){
+            return l[0] < r[0];
+        });
+        vector<int> ans(nums_.size());
+        for (int i = 0; i < nums_.size(); ++i)
+            ans[i] = rands_[i][1];
+        return ans;
+    }
+};

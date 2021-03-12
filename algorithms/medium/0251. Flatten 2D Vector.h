@@ -39,3 +39,41 @@ public:
  * int param_1 = obj->next();
  * bool param_2 = obj->hasNext();
  */
+
+
+class Vector2D {
+    vector<vector<int>>& v_;
+    vector<vector<int>>::iterator i;
+    vector<int>::iterator j;
+    
+public:
+    Vector2D(vector<vector<int>>& v) 
+    : v_(v) {
+        if (v.empty()) {
+            i = v.end();
+        } else if (v[0].empty()) {
+            i = v.begin();
+            j = i->end();
+        } else {
+            i = v.begin();
+            j = i->begin();
+        }
+    }
+    
+    int next() {
+        hasNext();
+        int val = *j;
+        // cout << val << " ";
+        ++j;
+        return val;
+    }
+    
+    bool hasNext() {
+        if (i == v_.end()) return false;
+        while (j == i->end()) {
+            if (++i == v_.end()) return false;
+            j = i->empty() ? i->end() : i->begin();
+        }
+        return true;
+    }
+};

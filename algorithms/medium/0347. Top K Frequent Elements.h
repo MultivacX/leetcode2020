@@ -24,3 +24,29 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> m;
+        map<int, unordered_set<int>> f;
+        for (int i : nums) {
+            int freq = ++m[i];
+            if (freq != 1) {
+                f[freq - 1].erase(i);
+                if (f[freq - 1].empty())
+                    f.erase(freq - 1);
+            }
+            f[freq].insert(i);
+        }
+        vector<int> ans;
+        for (auto it = f.rbegin(); it != f.rend() && k > 0; ++it) {
+            for (int i : it->second) {
+                ans.push_back(i);
+                if (--k == 0) break;
+            }
+        }
+        return ans;
+    }
+};

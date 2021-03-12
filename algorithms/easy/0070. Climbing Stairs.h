@@ -17,3 +17,18 @@ public:
         return b;
     }
 };
+
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n <= 2) return n;
+        int s1 = 1, s2 = 2, s = 0;
+        for (int i = 3; i <= n; ++i) {
+            s = s1 + s2;
+            s1 = s2;
+            s2 = s;
+        }
+        return s;
+    }
+};

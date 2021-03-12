@@ -12,3 +12,11 @@ public:
         return sum;
     }
 };
+
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        return (nums.size() + 1) * nums.size() / 2 - accumulate(begin(nums), end(nums), 0);
+    }
+};

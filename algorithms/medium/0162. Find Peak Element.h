@@ -20,3 +20,23 @@ public:
         return -1;
     }
 };
+
+
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        const int n = nums.size();
+        int l = 0, r = n;
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            int64_t lv = m > 0 ? nums[m - 1] : (int64_t)INT_MIN - 1;
+            int64_t mv = nums[m];
+            int64_t rv = m + 1 < n ? nums[m + 1] : (int64_t)INT_MIN - 1;
+            if (lv < mv && mv > rv) return m;
+            // cout << l << " " << m << " " << r << endl;
+            if (lv > mv) r = m;
+            else l = m + 1;
+        }
+        return l;
+    }
+};

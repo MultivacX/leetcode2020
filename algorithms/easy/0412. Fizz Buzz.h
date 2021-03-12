@@ -16,3 +16,35 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<string> fizzBuzz(int n) {
+        vector<string> ans;
+        for (int i = 1; i <= n; ++i) {
+            bool a = i % 5, b = i % 3;
+            if (a + b == 0) ans.push_back("FizzBuzz");
+            else if (a == 0) ans.push_back("Buzz");
+            else if (b == 0) ans.push_back("Fizz");
+            else ans.push_back(to_string(i));
+        }
+        return ans;
+    }
+};
+
+
+class Solution {
+public:
+    vector<string> fizzBuzz(int n) {
+        vector<string> ans(n);
+        for (int i = 1; i <= n; ++i) {
+            bool a = i % 5, b = i % 3;
+            if (a + b == 0) ans[i - 1] = "FizzBuzz";
+            else if (a == 0) ans[i - 1] = "Buzz";
+            else if (b == 0) ans[i - 1] = "Fizz";
+            else ans[i - 1] = to_string(i);
+        }
+        return ans;
+    }
+};

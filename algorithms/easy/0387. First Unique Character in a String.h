@@ -16,3 +16,23 @@ public:
         return -1;
      }
 };
+
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        vector<int> idx(26, -1);
+        for (int i = 0; i < s.length(); ++i) {
+            int j = s[i] - 'a';
+            if (idx[j] == -1) idx[j] = i;
+            else idx[j] = -2;
+        }
+        int ans = -1;
+        for (int i = 0; i < 26; ++i) {
+            if (idx[i] >= 0 && (ans == -1 || ans > idx[i])) {
+                ans = idx[i];
+            }
+        }
+        return ans;
+    }
+};

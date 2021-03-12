@@ -30,3 +30,27 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    string countAndSay(int n) {
+        string cur("1");
+        for (int i = 2; i <= n; ++i) {
+            const int m = cur.length();
+            string tmp;
+            int j = 0, k = 1;
+            while (j < m) {
+                if (j + 1 == m || cur[j] != cur[j + 1]) {
+                    tmp += to_string(k) + cur[j];
+                    k = 1;
+                } else {
+                    ++k;
+                }
+                ++j;
+            }
+            cur = move(tmp);
+        }
+        return cur;
+    }
+};

@@ -49,3 +49,53 @@ public:
  * TicTacToe* obj = new TicTacToe(n);
  * int param_1 = obj->move(row,col,player);
  */
+
+
+class TicTacToe {
+    vector<vector<char>> board;
+    
+public:
+    /** Initialize your data structure here. */
+    TicTacToe(int n) : board(n, vector<char>(n, 0)) {
+        
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    int move(int row, int col, int player) {
+        const int n = board.size();
+        board[row][col] = player;
+        
+        int k = 0;
+        for (int i = 0; i < n && board[i][col] == player; ++i)
+            ++k;
+        if (k == n) return player;
+        
+        k = 0;
+        for (int j = 0; j < n && board[row][j] == player; ++j)
+            ++k;
+        if (k == n) return player;
+        
+        if (row == col) {
+            k = 0;
+            for (int i = 0; i < n && board[i][i] == player; ++i)
+                ++k;
+            if (k == n) return player;
+        } 
+        
+        if (row == n - 1 - col) {
+            k = 0;
+            for (int i = 0; i < n && board[i][n - 1 - i] == player; ++i)
+                ++k;
+            if (k == n) return player;
+        }
+        
+        return 0;
+    }
+};

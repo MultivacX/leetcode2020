@@ -44,3 +44,42 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        for (int i = 0; i < 9; ++i) {
+            int cnt[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+            for (int j = 0; j < 9; ++j) {
+                if (board[i][j] == '.') continue;
+                if (++cnt[board[i][j] - '1'] > 1) return false;
+            }
+        }
+        
+        for (int j = 0; j < 9; ++j) {
+            int cnt[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+            for (int i = 0; i < 9; ++i) {
+                if (board[i][j] == '.') continue;
+                if (++cnt[board[i][j] - '1'] > 1) return false;
+            }
+        }
+        
+        static const int SubBox[9][2] = {
+            {0, 0}, {0, 3}, {0, 6},
+            {3, 0}, {3, 3}, {3, 6},
+            {6, 0}, {6, 3}, {6, 6},
+        };
+        for (int k = 0; k < 9; ++k) {
+            int cnt[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+            for (int i = SubBox[k][0]; i < SubBox[k][0] + 3; ++i) {
+                for (int j = SubBox[k][1]; j < SubBox[k][1] + 3; ++j) {
+                    if (board[i][j] == '.') continue;
+                    if (++cnt[board[i][j] - '1'] > 1) return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+};

@@ -14,3 +14,16 @@ public:
         return cnt;
     }
 };
+
+
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        int d = 0;
+        for (int z = 1; z <= 1 << 30 && z > 0; z <<= 1) {
+            if ((z & x) != (z & y)) ++d;
+            if (z >= x && z >= y) return d;
+        }
+        return d;
+    }
+};

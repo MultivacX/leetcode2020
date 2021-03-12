@@ -77,3 +77,17 @@ public:
         return true;
     }
 };
+
+
+class Solution {
+    bool isSymmetric(TreeNode* a, TreeNode* b) {
+        if (!a || !b) return !a && !b;
+        if (a->val != b->val) return false;
+        return isSymmetric(a->left, b->right) && isSymmetric(a->right, b->left);
+    }
+    
+public:
+    bool isSymmetric(TreeNode* root) {
+        return !root || isSymmetric(root->left, root->right);
+    }
+};

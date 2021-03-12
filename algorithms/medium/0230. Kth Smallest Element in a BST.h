@@ -31,3 +31,24 @@ public:
         inorder(root->right, k, ans);
     }
 };
+
+
+class Solution {
+    int ans;
+    
+    void inorder(TreeNode* root, int& k) {
+        if (!root || k == 0) return;
+        inorder(root->left, k);
+        if (--k == 0) {
+            ans = root->val;
+            return;
+        }
+        inorder(root->right, k);
+    }
+    
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        inorder(root, k);
+        return ans;
+    }
+};
