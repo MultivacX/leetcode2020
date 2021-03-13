@@ -18,3 +18,22 @@ public:
         return ans[0] == '0' ? "0" : ans;
     }
 };
+
+
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        vector<string> strs(nums.size());
+        for (int i = 0; i < nums.size(); ++i)
+            strs[i] = to_string(nums[i]);
+        sort(begin(strs), end(strs), [](const string& l, const string& r){
+            return l + r > r + l;
+        });
+        
+        string ans;
+        for (const auto& s : strs) ans += s;
+        
+        if (ans[0] == '0') return "0";
+        return ans;
+    }
+};

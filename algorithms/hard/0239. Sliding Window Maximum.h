@@ -28,3 +28,25 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        if (k == 1) return nums;
+        const int n = nums.size();
+        if (k == n) return {*max_element(begin(nums), end(nums))};
+        
+        vector<int> ans;
+        map<int, int> m;
+        for (int i = 0; i < n; ++i) {
+            ++m[nums[i]];
+            if (i + 1 > k && --m[nums[i - k]] == 0) 
+                m.erase(nums[i - k]);
+            
+            if (i + 1 >= k) 
+                ans.push_back(m.crbegin()->first);
+        }
+        return ans;
+    }
+};

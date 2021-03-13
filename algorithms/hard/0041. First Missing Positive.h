@@ -39,3 +39,26 @@ public:
         return max_num + 1;
     }
 };
+
+
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        const int n = nums.size();
+        
+        for (int i = 0; i < n; ++i) {
+            int j = i;
+            while (nums[j] > 0 && nums[j] <= 300 && nums[j] != j + 1) {
+                int k = nums[j] - 1;
+                if (k < 0 || k >= n || nums[j] == nums[k]) 
+                    break;
+                swap(nums[j], nums[k]);
+            }
+        }
+        // for (int i = 0; i < n; ++i) cout << nums[i] << " ";
+        for (int i = 0; i < n; ++i) 
+            if (nums[i] != i + 1)
+                return i + 1;
+        return n + 1;
+    }
+};

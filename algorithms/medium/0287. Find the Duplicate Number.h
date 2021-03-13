@@ -22,3 +22,17 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        const int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            int j = (nums[i] < 0 ? -nums[i] : nums[i]) - 1;
+            if (nums[j] < 0) return j + 1;
+            nums[j] = -nums[j];
+        }
+        return 0;
+    }
+};

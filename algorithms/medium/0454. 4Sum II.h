@@ -18,3 +18,22 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        // {A[i] + B[j], cnt}
+        unordered_map<int, int> ab, cd;
+        for (int a : A) for (int b : B) ++ab[a + b];
+        for (int a : C) for (int b : D) ++cd[-(a + b)];
+        
+        int ans = 0;
+        for (const auto& [target, count] : ab) {
+            auto it = cd.find(target);
+            if (it == cd.end()) continue;
+            ans += count * it->second;
+        }
+        return ans;
+    }
+};

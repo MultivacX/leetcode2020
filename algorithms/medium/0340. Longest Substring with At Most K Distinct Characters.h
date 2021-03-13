@@ -24,3 +24,25 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        int ans = 0;
+        vector<int> m(256);
+        for (int i = 0, D = 0, L = 0; i < s.length(); ++i) {
+            if (++m[s[i]] == 1) 
+                ++D;
+            ++L;
+            while (D > k) {
+                if (--m[s[i + 1 - L]] == 0) 
+                    --D;
+                --L;
+            }
+            if (D <= k && ans < L) 
+                ans = L;
+        }
+        return ans;
+    }
+};

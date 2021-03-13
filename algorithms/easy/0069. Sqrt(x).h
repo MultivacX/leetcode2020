@@ -21,3 +21,27 @@ public:
         return x;
     }
 };
+
+
+class Solution {
+public:
+    int mySqrt(int t) {
+        // f(x) = x^2 - t
+        // f'(x) = 2*x
+        
+        // y - y0 = k * (x - x0)
+        // k = 2 * x0
+        // y0 = x0^2 - t
+        // target y = 0
+        
+        // if (t <= 1) return t;
+        
+        double x = t / 2.0;
+        while (abs(x * x - t) > 0.00001) {
+            // cout << x << endl;
+            double k = 2.0 * x;
+            x = x - (x * x - t) / k;
+        }
+        return x;
+    }
+};
