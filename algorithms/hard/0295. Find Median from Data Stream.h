@@ -43,3 +43,38 @@ public:
  * obj->addNum(num);
  * double param_2 = obj->findMedian();
  */
+
+
+class MedianFinder {
+    priority_queue<int> l;
+    priority_queue<int, vector<int>, greater<int>> r;
+    
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        if (l.empty() || l.top() >= num || (!r.empty() && r.top() >= num)) {
+            l.push(num);
+        } else {
+            r.push(num);
+        }
+        
+        while (l.size() > 1 + r.size()) {
+            r.push(l.top());
+            l.pop();
+        }
+        while (l.size() < r.size()) {
+            l.push(r.top());
+            r.pop();
+        }
+    }
+    
+    double findMedian() {
+        if (l.size() == r.size())
+            return (l.top() + r.top()) * 0.5;
+        return l.top();
+    }
+};

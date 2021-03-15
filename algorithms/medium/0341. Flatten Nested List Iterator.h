@@ -50,3 +50,46 @@ public:
  * NestedIterator i(nestedList);
  * while (i.hasNext()) cout << i.next();
  */
+
+
+class NestedIterator {
+    vector<NestedInteger>& nestedList_;
+    NestedIterator* it;
+    int i = 0;
+        
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) 
+    : nestedList_(nestedList)
+    , it(nullptr) {
+        
+    }
+    
+    ~NestedIterator() {
+        if (it != nullptr) delete it;
+    }
+    
+    int next() {
+        hasNext();
+        if (nestedList_[i].isInteger()) {
+            int val = nestedList_[i++].getInteger();
+            return val;
+        }
+        return it->next();
+    }
+    
+    bool hasNext() {
+        while (true) {
+            if (i >= nestedList_.size()) return false;
+            
+            if (nestedList_[i].isInteger()) return true;
+            
+            if (it == nullptr) it = new NestedIterator(nestedList_[i].getList());
+            
+            if (it->hasNext()) return true;
+            
+            delete it;
+            it = nullptr;
+            ++i;
+        }
+    }
+};
