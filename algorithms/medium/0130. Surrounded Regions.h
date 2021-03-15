@@ -47,3 +47,54 @@ public:
         change(board, i, j + 1, from, to);
     }
 };
+
+
+class Solution {
+public:
+    int m;
+    int n;
+    
+    void solve(vector<vector<char>>& board) {
+        m = board.size();
+        if (m == 0) return;
+        n = board[0].size();
+        if (n == 0) return;
+        
+        for (int i = 0; i < m; ++i) {
+            change(board, i, 0);
+            change(board, i, n - 1);
+        }
+        for (int j = 1; j < n - 1; ++j) {
+            change(board, 0, j);
+            change(board, m - 1, j);
+        }
+        
+        // for (int i = 0; i < m; ++i) {
+        //     for (int j = 0; j < n; ++j) {
+        //         cout << board[i][j] << " ";
+        //     }
+        //     cout << endl;
+        // }
+        
+        for (int i = 1; i < m - 1; ++i) 
+            for (int j = 1; j < n - 1; ++j) 
+                if (board[i][j] == 'O')
+                    board[i][j] = 'X';
+        
+        for (int i = 0; i < m; ++i) 
+            for (int j = 0; j < n; ++j) 
+                if (board[i][j] == 'I')
+                    board[i][j] = 'O';
+    }
+    
+    void change(vector<vector<char>>& board, int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != 'O') return;
+        
+        board[i][j] = 'I';
+        
+        change(board, i - 1, j);
+        change(board, i + 1, j);
+        change(board, i, j - 1);
+        change(board, i, j + 1);
+    }
+};

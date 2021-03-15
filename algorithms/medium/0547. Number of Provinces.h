@@ -35,3 +35,35 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        const int n = isConnected.size();
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            if (isConnected[i][i] == 1) ++ans;
+            else continue;
+            
+            queue<int> q;
+            q.push(i);
+            while (!q.empty()) {
+                int size = q.size();
+                while (size-- > 0) {
+                    int j = q.front(); q.pop();
+                    isConnected[j][j] = 0;
+                    
+                    for (int k = 0; k < n; ++k) {
+                        if (isConnected[j][k] != 1)
+                            continue;
+                        isConnected[j][k] = 0;
+                        isConnected[k][j] = 0;
+                        q.push(k);
+                    }
+                }
+            }    
+        }
+        return ans;
+    }
+};

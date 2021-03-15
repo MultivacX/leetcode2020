@@ -54,3 +54,37 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+    int getNum(const string& s, int n, int& i) {
+        while (i < n && s[i] == ' ') ++i;
+        int num = 0;
+        while (i < n && isdigit(s[i])) 
+            num = num * 10 - '0' + s[i++];
+        return num;
+    }
+    
+    char getOpt(const string& s, int n, int& i) {
+        while (i < n && s[i] == ' ') ++i;
+        return s[i++];
+    }
+    
+public:
+    int calculate(string s) {
+        int n = s.length();
+        while (n > 0 && s[n - 1] == ' ') --n;
+        
+        int i = 0;
+        vector<int> nums{getNum(s, n, i)};
+        while (i < n) {
+            char opt = getOpt(s, n, i);
+            int num = getNum(s, n, i);
+            if (opt == '+') nums.push_back(num);
+            else if (opt == '-') nums.push_back(-num);
+            else if (opt == '*') nums.back() *= num;
+            else nums.back() /= num;
+        }
+        return accumulate(begin(nums), end(nums), 0);
+    }
+};

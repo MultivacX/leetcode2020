@@ -38,3 +38,67 @@ public:
         return left == 0;
     }
 };
+
+
+class Solution {
+    // int left = 0;
+    // int right = 0;
+    int mustRemovedLeft = 0; 
+    int mustRemovedRight = 0;
+    unordered_set<string> strs;
+    
+    void dfs(const string& s, int i, string& t, int removedLeft, int removedRight, int score) {
+        if (i >= s.length()) {
+            if (removedLeft == mustRemovedLeft && 
+                removedRight == mustRemovedRight &&
+                score == 0)
+                strs.insert(t);
+            return;
+        }
+        
+        if (s[i] == '(') {
+            t.push_back(s[i]);
+            dfs(s, i + 1, t, removedLeft, removedRight, score + 1);
+            t.pop_back();
+            
+            if (removedLeft < mustRemovedLeft)
+                dfs(s, i + 1, t, removedLeft + 1, removedRight, score);
+        } else if (s[i] == ')') {
+            if (score > 0) {
+                t.push_back(s[i]);
+                dfs(s, i + 1, t, removedLeft, removedRight, score - 1);
+                t.pop_back();
+            }
+            
+            if (removedRight < mustRemovedRight)
+                dfs(s, i + 1, t, removedLeft, removedRight + 1, score);
+            
+        } else {
+            t.push_back(s[i]);
+            dfs(s, i + 1, t, removedLeft, removedRight, score);
+            t.pop_back();
+        }
+    }
+    
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        int score = 0;
+        for (char c : s) {
+            if (c == '(') {
+                // ++left;
+                ++score;
+            } else if (c == ')') {
+                // ++right;
+                if(--score < 0) 
+                    score = 0, ++mustRemovedRight;
+            }
+        }
+        if (score > 0) mustRemovedLeft = score;
+        if (mustRemovedLeft + mustRemovedRight == 0)
+            return {s};
+        
+        string t;
+        dfs(s, 0, t, 0, 0, 0);
+        return vector<string>(begin(strs), end(strs));
+    }
+};
