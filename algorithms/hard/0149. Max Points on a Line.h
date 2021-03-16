@@ -61,3 +61,58 @@ public:
         return {y / g, i * x / g};
     }
 };
+
+
+class Solution {
+    string getSlope(int x0, int y0, int x1, int y1) {
+        if (x0 == x1) return "x" + to_string(x0);
+        if (y0 == y1) return "y" + to_string(y0);
+        
+        int x = x0 - x1, y = y0 - y1;
+        string key;
+        if ((x < 0 && y > 0) || (x > 0 && y < 0))
+            key += '-';
+        x = abs(x), y = abs(y);
+        int z = gcd(x, y);
+        return key + to_string(x / z) + "," + to_string(y / z);
+    }
+    
+    int find(vector<int>& parents, int i) {
+        if (parents[i] == -1) parents[i] = i;
+        else if (parents[i] != i) parents[i] = find(parents, parents[i]);
+        return parents[i];
+    }
+    
+    void Union(vector<int>& parents, int i, int j) {
+        int pi = find(parents, i);
+        int pj = find(parents, j);
+        if (pi > pj) parents[i] = pj;
+        else if (pi < pj) parents[j] = pi;
+    }
+    
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        const int n = points.size();
+        if (n <= 1) return n;
+        unordered_map<string, vector<int>> m; 
+        for (int i = 0; i + 1 < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                string key = getSlope(points[i][0], points[i][1], points[j][0], points[j][1]);
+                // cout << key << endl;
+                auto it = m.find(key);
+                if (it == m.end()) it = m.insert({key, vector<int>(n, -1)}).first;
+                Union(it->second, i, j);
+            }
+        }
+        int ans = 0;
+        for (auto& [key, parents] : m) {
+            vector<int> cnt(n);
+            for (int i = 0; i < n; ++i) {
+                if (parents[i] < 0) continue;
+                int k = ++cnt[find(parents, i)];
+                if (k > ans) ans = k;
+            }
+        }
+        return ans;
+    }
+};

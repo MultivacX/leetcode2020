@@ -136,3 +136,31 @@ public:
         return wordBreak(s, i + 1, visited, words_length - 1, child);
     }
 };*/
+
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        const int n = s.length();
+        int min_len = n, max_len = 0;
+        for (const auto& w : wordDict) {
+            if (min_len > w.length()) min_len = w.length();
+            if (max_len < w.length()) max_len = w.length();
+        }
+        if (n < min_len) return false;
+        if (n == min_len) return find(begin(wordDict), end(wordDict), s) != end(wordDict);
+        
+        unordered_set<string> words(begin(wordDict), end(wordDict));
+        vector<bool> dp(n + 1);
+        dp[0] = true;
+        
+        for (int i = 1; i <= n; ++i) {
+            for (int l = min_len; l <= max_len && i - l >= 0 && !dp[i]; ++l) {
+                // cout << i - l << " " << s.substr(i - l, l) << endl;
+                dp[i] = dp[i] || (dp[i - l] && words.count(s.substr(i - l, l)));
+            }
+        }
+        
+        return dp[n];
+    }
+};

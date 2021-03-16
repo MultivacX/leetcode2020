@@ -136,3 +136,44 @@ public:
         return dp[s.length()];
     }
 };*/
+
+
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        const int n = s.length();
+        int min_len = n, max_len = 0;
+        for (const auto& w : wordDict) {
+            if (min_len > w.length()) min_len = w.length();
+            if (max_len < w.length()) max_len = w.length();
+        }
+        if (n < min_len) return {};
+        if (n == min_len) return find(begin(wordDict), end(wordDict), s) != end(wordDict) ?
+            vector<string>{s} : vector<string>();
+        
+        unordered_set<string> words(begin(wordDict), end(wordDict));
+        vector<bool> dp(n + 1);
+        dp[0] = true;
+        
+        unordered_map<int, vector<string>> m;
+        
+        for (int i = 1; i <= n; ++i) {
+            for (int l = min_len, j = i - min_len; l <= max_len && j >= 0; ++l, --j) {
+                if (!dp[j]) continue;
+                string str(s.substr(j, l));
+                if (!words.count(str)) continue;
+                
+                dp[i] = true;
+                
+                if (j == 0) {
+                    m[i].push_back(str);
+                } else {
+                    for (const string& pre : m[j]) 
+                        m[i].push_back(pre + " " + str);
+                }
+            }
+        }
+        
+        return m[n];
+    }
+};

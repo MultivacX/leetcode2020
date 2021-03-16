@@ -29,3 +29,31 @@ public:
         return dp[1][N];
     }
 };
+
+
+class Solution {
+    int maxCoins(const vector<int>& nums, int i, int j, vector<vector<int>>& memo) {
+        if (i > j) return 0;
+        if (memo[i][j] != 0) return memo[i][j];
+        
+        int ans = 0;
+        // [i,k-1] k [k+1,j]
+        for (int k = i; k <= j; ++k) {
+            int cur = maxCoins(nums, i, k - 1, memo) + 
+                      maxCoins(nums, k + 1, j, memo) +
+                      nums[i - 1] * nums[k] * nums[j + 1];
+            if (cur > ans) ans = cur;
+        }
+        memo[i][j] = ans;
+        return ans;
+    }
+    
+public:
+    int maxCoins(vector<int>& nums) {
+        const int n = nums.size();
+        nums.insert(begin(nums), 1);
+        nums.push_back(1);
+        vector<vector<int>> memo(n + 2, vector<int>(n + 2));
+        return maxCoins(nums, 1, n, memo);
+    }
+};

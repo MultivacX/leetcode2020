@@ -25,3 +25,24 @@ public:
         return dp[n];
     }
 };
+
+
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n + 1, n);
+        dp[1] = 1;
+        for (int i = 2; i <= n; ++i) {
+            int j = sqrt(i);
+            if (j * j == i) {
+                dp[i] = 1;
+                continue;
+            }
+            while (j > 0) {
+                dp[i] = min(dp[i], dp[j * j] + dp[i - j * j]);
+                --j;
+            }
+        }
+        return dp[n];
+    }
+};

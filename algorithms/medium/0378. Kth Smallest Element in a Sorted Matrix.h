@@ -18,3 +18,20 @@ public:
         return q.top();
     }
 };
+
+
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int l = matrix[0][0], r = matrix.back().back();
+        while (l < r) {
+            int m = l + (r - l) / 2;
+            int i = 0;
+            for (const auto& v : matrix) 
+                i += upper_bound(begin(v), end(v), m) - begin(v);
+            if (i >= k) r = m;
+            else l = m + 1;
+        }
+        return l;
+    }
+};
