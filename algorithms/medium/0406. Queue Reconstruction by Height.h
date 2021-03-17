@@ -24,3 +24,34 @@ public:
         return people;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        const int n = people.size();
+        if (n <= 1) return people;
+        
+        sort(begin(people), end(people), [](const vector<int>& l, const vector<int>& r){
+            return l[1] < r[1] || (l[0] < r[0] && l[1] == r[1]);
+        });
+        
+        vector<vector<int>> ans;
+        for (const auto& p : people) {
+            // cout << '[' << p[0] << ',' << p[1] << ']' << " ";
+            if (p[1] == 0) {
+                ans.push_back(p);
+            } else {
+                int i = 0, k = 0;
+                while (i < ans.size() && k < p[1]) {
+                    if (ans[i][0] >= p[0]) 
+                        ++k;
+                    ++i;
+                }
+                while (i < ans.size() && ans[i][0] < p[0]) ++i;
+                ans.insert(begin(ans) + i, p);
+            }
+        }
+        return ans;
+    }
+};
