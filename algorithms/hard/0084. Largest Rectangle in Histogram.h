@@ -40,3 +40,30 @@ public:
         return ans;
     }
 };
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        const int n = heights.size();
+        // stk[x, y]: x < y, heights[x] < heights[y], heights[x+1 ... y-1] >= heights[y]
+        stack<int> stk; stk.push(-1);
+        int ans = 0;
+        
+        auto updateArea = [&](const int right_bound){
+            int j = stk.top(); stk.pop();
+            int area = heights[j] * (right_bound - stk.top() - 1);
+            ans = max(ans, area);
+        };
+        
+        for (int i = 0; i < n; ++i) {
+            while (stk.top() != -1 && heights[stk.top()] >= heights[i]) 
+                updateArea(i);
+            stk.push(i);
+        }
+        while (stk.top() != -1) 
+            updateArea(n);
+        
+        return ans;
+    }
+};

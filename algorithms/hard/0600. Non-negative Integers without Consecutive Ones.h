@@ -15,6 +15,7 @@ public:
         int cnt = 0;
         for (int i = 30, prebit = 0; i >= 0; --i) {
             if ((1 << i) & num) {
+                // set bit_i to zero
                 cnt += f[i];
                 if (prebit) 
                     return cnt;
@@ -23,7 +24,7 @@ public:
                 prebit = 0;
             }
         }
-        return cnt + 1/* num self */;
+        return cnt + 1/* num itself */;
     }
 };
 

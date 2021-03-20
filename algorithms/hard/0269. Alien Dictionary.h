@@ -77,3 +77,163 @@ public:
         return ans;
     }
 };
+
+
+// WA: ["abc","ab"]
+class Solution {
+    unordered_map<char, unordered_set<char>> parents;
+    unordered_map<char, unordered_set<char>> children;
+    
+    void visit(const vector<string>& words, int i, int j, int k) {
+        while (i <= j && words[i].length() <= k) ++i;
+        while (i <= j && words[j].length() <= k) --j;
+        if (i >= j) return;
+        
+        for (int x = i, p = -1; x <= j; ++x) {
+            if (words[x].length() <= k) p = -1;
+            else if (p == -1) p = x;
+            else if (words[p][k] != words[x][k]) {
+                children[words[p][k]].insert(words[x][k]);
+                parents[words[x][k]].insert(words[p][k]);
+                p = x;
+            }
+        }
+        
+        for (int x = i, p = i; x <= j; ++x) {
+            if (words[x].length() <= k) {
+                if (x - p > 1) visit(words, p, x - 1, k + 1);
+                p = x + 1;
+            } else if (words[p][k] != words[x][k]) {
+                if (x - p > 1) visit(words, p, x - 1, k + 1);
+                p = x;
+            } else if (x == j) {
+                if (x > p) visit(words, p, x, k + 1);
+            }
+        }
+    }
+    
+public:
+    string alienOrder(vector<string>& words) {
+        unordered_set<char> letters;
+        for (const auto& w : words) for (char c : w) letters.insert(c);
+        
+        visit(words, 0, words.size() - 1, 0);
+        
+        // for (char c : letters) cout << c; cout << endl;
+        // for (const auto& it : children) {
+        //     cout << it.first << ": ";
+        //     for (char c : it.second) cout << c; cout << endl;
+        // }
+        
+        queue<char> q;
+        for (char c : letters) if (parents.count(c) == 0) q.push(c);
+        
+        string ans;
+        
+        while (!q.empty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                char cur = q.front(); q.pop();
+                ans += cur;
+                
+                if (children.count(cur) == 0) 
+                    continue;
+                
+                for (char nxt : children[cur]) {
+                    parents[nxt].erase(cur);
+                    if (parents[nxt].empty()) {
+                        parents.erase(nxt);
+                        q.push(nxt);
+                    }
+                }
+                children.erase(cur);
+            }
+        }
+        
+        return ans.length() == letters.size() ? ans : "";
+    }
+};
+
+
+class Solution {
+    unordered_map<char, unordered_set<char>> parents;
+    unordered_map<char, unordered_set<char>> children;
+    
+    bool visit(const vector<string>& words, int i, int j, int k) {
+        while (i <= j && words[i].length() <= k) ++i;
+        while (i <= j && words[j].length() <= k) --j;
+        if (i >= j) return true;
+        
+        for (int x = i, p = -1; x <= j; ++x) {
+            if (words[x].length() <= k) {
+                p = -1;
+            } else if (p == -1) {
+                p = x;
+            } else if (words[p][k] != words[x][k]) {
+                children[words[p][k]].insert(words[x][k]);
+                parents[words[x][k]].insert(words[p][k]);
+                p = x;
+            } else if (words[x - 1].length() > words[x].length() && words[x].length() == k + 1) {
+                return false;
+            }
+        }
+        
+        for (int x = i, p = i; x <= j; ++x) {
+            if (words[x].length() <= k) {
+                if (x - p > 1 && !visit(words, p, x - 1, k + 1))
+                    return false;
+                p = x + 1;
+            } else if (words[p][k] != words[x][k]) {
+                if (x - p > 1 && !visit(words, p, x - 1, k + 1))
+                    return false;
+                p = x;
+            } else if (x == j) {
+                if (x > p && !visit(words, p, x, k + 1))
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+    
+public:
+    string alienOrder(vector<string>& words) {
+        unordered_set<char> letters;
+        for (const auto& w : words) for (char c : w) letters.insert(c);
+        
+        if (!visit(words, 0, words.size() - 1, 0)) return "";
+        
+        // for (char c : letters) cout << c; cout << endl;
+        // for (const auto& it : children) {
+        //     cout << it.first << ": ";
+        //     for (char c : it.second) cout << c; cout << endl;
+        // }
+        
+        queue<char> q;
+        for (char c : letters) if (parents.count(c) == 0) q.push(c);
+        
+        string ans;
+        
+        while (!q.empty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                char cur = q.front(); q.pop();
+                ans += cur;
+                
+                if (children.count(cur) == 0) 
+                    continue;
+                
+                for (char nxt : children[cur]) {
+                    parents[nxt].erase(cur);
+                    if (parents[nxt].empty()) {
+                        parents.erase(nxt);
+                        q.push(nxt);
+                    }
+                }
+                children.erase(cur);
+            }
+        }
+        
+        return ans.length() == letters.size() ? ans : "";
+    }
+};

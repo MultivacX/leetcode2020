@@ -41,3 +41,36 @@ public:
         return order.size() == numCourses ? true : false;
     }
 };
+
+
+class Solution {
+    bool dfs(const vector<vector<int>>& courses, vector<bool>& visited, int i, vector<bool>& taken) {
+        if (visited[i]) return true;
+        if (taken[i]) return false;
+        taken[i] = true;
+        
+        for (int j : courses[i])
+            if (!dfs(courses, visited, j, taken))
+                return false;
+        
+        taken[i] = false;
+        visited[i] = true;
+        return true;
+    }
+    
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> courses(numCourses);
+        for (const auto& pre : prerequisites)
+            courses[pre[0]].push_back(pre[1]);
+        
+        vector<bool> visited(numCourses);
+        vector<bool> taken(numCourses);
+        
+        for (int i = 0; i < numCourses; ++i) {
+            if (!dfs(courses, visited, i, taken))
+                return false;
+        }
+        return true;
+    }
+};
