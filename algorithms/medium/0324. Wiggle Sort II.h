@@ -20,3 +20,35 @@ public:
         swap(nums, tmp);
     }
 };
+
+
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        const int n = nums.size();
+        nth_element(begin(nums), begin(nums) + n / 2, end(nums));
+        int m = nums[n / 2];
+        
+        vector<int> tmp(n, m);
+        
+        int i = 1, j = n - 1;
+        while (j >= n / 2) {
+            if (nums[j] > m) {
+                tmp[i] = nums[j];
+                i += 2;
+            }
+            --j;
+        }
+        
+        i = (n & 1) ? n - 1 : n - 2, j = 0;
+        while (j <= n / 2) {
+            if (nums[j] < m) {
+                tmp[i] = nums[j];
+                i -= 2;
+            }
+            ++j;
+        }
+        
+        nums = move(tmp);
+    }
+};
