@@ -36,7 +36,8 @@ public:
             //                       |+++++++++++++++|
             //                       min(c,d)        max(c,d)
             int a = nums[i], b = nums[i + 1];
-            maxv = max(maxv, min(a, b));
+            int c = nums[i], d = nums[i + 1];
+            maxv = max(maxv, min(c, d));
             minv = min(minv, max(a, b));
         }
         int64_t v = sum + (maxv - minv) * 2;
