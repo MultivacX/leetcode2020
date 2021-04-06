@@ -1,6 +1,37 @@
 // 761. Special Binary String
 // https://leetcode.com/problems/special-binary-string/
 
+// Runtime: 0 ms, faster than 100.00% of C++ online submissions for Special Binary String.
+// Memory Usage: 6.4 MB, less than 80.70% of C++ online submissions for Special Binary String.
+    
+class Solution {
+public:
+    string makeLargestSpecial(string S) {
+        // "1010" -> f"10" f"10"
+        // "110010" -> f"1100" f"10"
+        // "11011000" -> "1" f"101100" "0" 
+        //            -> "1" f(f"10" f"1100") "0"
+        //            -> "1" "1100" "10" "0"
+        const int n = S.length();
+        vector<string> strs;
+        for (int i = 0, j = 0, k = 0; j < n; ++j) {
+            S[j] == '1' ? ++k : --k;
+            if (k == 0) {
+                int l = i + 1, r = j - 1;
+                strs.emplace_back("1" + makeLargestSpecial(S.substr(l, r - l + 1)) + "0");
+                i = j + 1;
+            }
+        }
+        sort(rbegin(strs), rend(strs));
+        string T;
+        for (const auto& s : strs)
+            T.append(s);
+        return T;
+    }
+};
+
+
+// WA
 class Solution {
 public:
     string makeLargestSpecial(string S) {
