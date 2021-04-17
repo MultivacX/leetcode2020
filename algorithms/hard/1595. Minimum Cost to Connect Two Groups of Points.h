@@ -40,6 +40,7 @@ public:
         //             });
         //         }
         //     }
+        //     if (i == 0) pre[0] = M;
         //     swap(pre, cur);
         // }
         // return pre.back();
