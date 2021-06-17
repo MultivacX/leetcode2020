@@ -1,5 +1,9 @@
 # leetcode2020
 
+2021/06/17 
+* Algorithms: 1600/1722 Solved - Easy 417 Medium 929 Hard 254  
+* Concurrency: 6/9 Solved - Easy 1 Medium 5 Hard 0  
+
 2021/06/03 
 * Algorithms: 1583/1707 Solved - Easy 414 Medium 920 Hard 249  
 * Concurrency: 6/9 Solved - Easy 1 Medium 5 Hard 0  
