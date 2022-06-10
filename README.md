@@ -1,4 +1,4 @@
-# leetcode 2020 ~ 2021
+# leetcode 2020 ~ current
 
 2021/06/30 
 * Algorithms: 1612/1736 Solved - Easy 420 Medium 936 Hard 256  
